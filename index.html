@@ -1,28 +1,148 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <title>Pro Inka Switch</title>
-  <style>
-    body { margin:0; background:black; }
-    iframe { width:100vw; height:100vh; border:none; }
-  </style>
-</head>
-<body>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRO INKA SWITCH</title>
 
-<iframe id="stream"></iframe>
-
-<script>
-const params = new URLSearchParams(window.location.search);
-const room = params.get("room") || "SALA";
-const view = params.get("view") || "";
-
-let url = `https://vdo.ninja/?room=${room}&cleanoutput&autoplay`;
-
-if(view){
-  url += `&view=${view}`;
+<style>
+body {
+    margin: 0;
+    background: #0b0e14;
+    font-family: Arial, sans-serif;
+    overflow: hidden;
 }
 
-document.getElementById("stream").src = url;
+/* VIDEO */
+#videoFrame {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+/* HEADER */
+.header {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    padding: 10px;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.7), transparent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* LOGO */
+.logo {
+    color: white;
+    font-weight: bold;
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+/* TALLY */
+.tally {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.live {
+    background: red;
+    color: white;
+}
+
+.preview {
+    background: orange;
+    color: black;
+}
+
+/* STATUS */
+.status {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    color: #aaa;
+    font-size: 12px;
+    background: rgba(0,0,0,0.5);
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="logo">PRO INKA SWITCH</div>
+    <div id="tally" class="tally preview">PREVIEW</div>
+</div>
+
+<!-- VIDEO -->
+<iframe id="videoFrame" allow="autoplay;camera;microphone"></iframe>
+
+<!-- STATUS -->
+<div class="status" id="status">Conectando...</div>
+
+<script>
+// 🔧 PARAMETROS
+const params = new URLSearchParams(window.location.search);
+
+const room = params.get("room") || "SALA";
+const view = params.get("view") || "";
+const bitrate = params.get("bitrate") || "500";
+
+// 🎥 URL VDO.NINJA
+let url = `https://vdo.ninja/?room=${room}&cleanoutput&autoplay&bitrate=${bitrate}`;
+
+if (view) {
+    url += `&view=${view}&solo`;
+}
+
+// 🔗 CARGAR VIDEO
+const iframe = document.getElementById("videoFrame");
+iframe.src = url;
+
+// 🔄 AUTO RECONEXIÓN
+let retryCount = 0;
+
+function checkConnection() {
+    try {
+        if (!iframe.contentWindow || iframe.contentWindow.length === 0) {
+            throw "No video";
+        }
+
+        document.getElementById("status").innerText = "EN LÍNEA";
+        retryCount = 0;
+
+    } catch {
+        retryCount++;
+        document.getElementById("status").innerText = "Reconectando... (" + retryCount + ")";
+        
+        if (retryCount > 3) {
+            iframe.src = url + "&cachebuster=" + Date.now();
+            retryCount = 0;
+        }
+    }
+}
+
+setInterval(checkConnection, 3000);
+
+// 🔴 TALLY AUTOMÁTICO (simple)
+if(view){
+    document.getElementById("tally").className = "tally live";
+    document.getElementById("tally").innerText = "EN VIVO";
+}
+
+// 🖥 FULLSCREEN AUTO
+document.body.addEventListener("click", () => {
+    if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+    }
+});
 </script>
 
 </body>
