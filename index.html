@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Pro Inka Switch</title>
+  <style>
+    body { margin:0; background:black; }
+    iframe { width:100vw; height:100vh; border:none; }
+  </style>
+</head>
+<body>
+
+<iframe id="stream"></iframe>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const room = params.get("room") || "SALA";
+const view = params.get("view") || "";
+
+let url = `https://vdo.ninja/?room=${room}&cleanoutput&autoplay`;
+
+if(view){
+  url += `&view=${view}`;
+}
+
+document.getElementById("stream").src = url;
+</script>
+
+</body>
+</html>
