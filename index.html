@@ -1,134 +1,813 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VIDEOLLAMADAS PRO</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>VIDEOLLAMADAS PRO</title>
+  <style>
+    :root{
+      --bg:#07111f;
+      --bg2:#0b1728;
+      --card:rgba(16,24,39,.78);
+      --line:rgba(255,255,255,.10);
+      --text:#eaf2ff;
+      --muted:#9db0cf;
+      --blue:#4ea1ff;
+      --green:#2ddc86;
+      --amber:#ffbf47;
+      --red:#ff5d6c;
+      --radius:24px;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+    }
 
-<style>
-body {
-    margin:0;
-    background:#0b0e14;
-    color:white;
-    font-family:Arial;
-    text-align:center;
-}
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1000px 500px at 20% 0%, rgba(78,161,255,.18), transparent 55%),
+        radial-gradient(700px 400px at 100% 10%, rgba(45,220,134,.12), transparent 50%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      overflow-x: hidden;
+    }
 
-h2 {
-    margin-top:20px;
-}
+    .shell{
+      width: min(1080px, calc(100% - 20px));
+      margin: 0 auto;
+      padding: 14px 0 20px;
+    }
 
-#video {
-    width:100%;
-    max-width:800px;
-    height:auto;
-    background:black;
-    border-radius:12px;
-    margin-top:20px;
-}
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: rgba(10,16,28,.76);
+      backdrop-filter: blur(14px);
+      box-shadow: var(--shadow);
+    }
 
-.controls {
-    margin-top:20px;
-}
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width: 0;
+    }
 
-select, button {
-    padding:12px;
-    margin:5px;
-    border:none;
-    border-radius:8px;
-    font-size:16px;
-}
+    .logo{
+      width:44px;
+      height:44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--blue), var(--green));
+      color:#06111f;
+      display:grid;
+      place-items:center;
+      font-weight:900;
+      flex: 0 0 auto;
+    }
 
-button {
-    background:#22c55e;
-    color:black;
-    font-weight:bold;
-}
+    .brand h1{
+      margin:0;
+      font-size: clamp(18px, 2.2vw, 24px);
+      line-height:1.1;
+      letter-spacing:.4px;
+    }
 
-button:hover {
-    background:#16a34a;
-}
+    .brand p{
+      margin:4px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
-</style>
+    .chip{
+      border:1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--muted);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .hero{
+      margin-top: 16px;
+      padding: 18px;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(16,23,37,.94), rgba(11,18,30,.86));
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns: 1.25fr .95fr;
+      gap: 16px;
+    }
+
+    .hero-left, .hero-right, .card{
+      border:1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,.03);
+    }
+
+    .hero-left{
+      padding: 18px;
+    }
+
+    .hero-right{
+      padding: 16px;
+    }
+
+    .hero h2{
+      margin: 0 0 10px;
+      font-size: clamp(26px, 3.4vw, 44px);
+      line-height: 1.02;
+    }
+
+    .hero .desc{
+      margin:0;
+      color: var(--muted);
+      line-height:1.6;
+      font-size: 14px;
+      max-width: 60ch;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .stat{
+      padding: 14px;
+      border:1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.03);
+      min-height: 98px;
+    }
+
+    .stat .k{
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-bottom: 8px;
+    }
+
+    .stat .v{
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.18;
+    }
+
+    .stat small{
+      display:block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.35;
+    }
+
+    .layout{
+      margin-top: 16px;
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 16px;
+    }
+
+    .card{
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    .card-head{
+      padding: 16px 18px;
+      border-bottom: 1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+
+    .card-head h3{
+      margin:0;
+      font-size: 16px;
+      letter-spacing:.2px;
+    }
+
+    .card-head span{
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .card-body{
+      padding: 18px;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin-bottom: 12px;
+    }
+
+    label{
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    input, select{
+      width:100%;
+      background: rgba(6,10,18,.82);
+      color: var(--text);
+      border:1px solid var(--line);
+      border-radius: 16px;
+      padding: 13px 14px;
+      outline:none;
+      font-size: 14px;
+    }
+
+    input:focus, select:focus{
+      border-color: rgba(78,161,255,.75);
+      box-shadow: 0 0 0 4px rgba(78,161,255,.10);
+    }
+
+    .toggle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 12px 14px;
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,.03);
+      margin-bottom: 12px;
+    }
+
+    .toggle strong{
+      display:block;
+      margin-bottom: 2px;
+      font-size: 14px;
+    }
+
+    .toggle small{
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .switch{
+      width: 54px;
+      height: 32px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.10);
+      position: relative;
+      border:1px solid var(--line);
+      cursor:pointer;
+      flex: 0 0 auto;
+      transition: .2s ease;
+    }
+
+    .switch::after{
+      content:"";
+      position:absolute;
+      top:3px;
+      left:3px;
+      width:24px;
+      height:24px;
+      border-radius:50%;
+      background:white;
+      transition: .2s ease;
+    }
+
+    .switch.on{
+      background: rgba(45,220,134,.24);
+      border-color: rgba(45,220,134,.35);
+    }
+
+    .switch.on::after{
+      left:26px;
+      background:#eafff4;
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top: 14px;
+    }
+
+    .btn{
+      border:0;
+      border-radius: 16px;
+      min-height: 50px;
+      padding: 13px 16px;
+      font-weight: 800;
+      font-size: 14px;
+      cursor:pointer;
+      flex: 1 1 180px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 8px;
+      transition: transform .15s ease, opacity .15s ease;
+    }
+
+    .btn:active{ transform: translateY(1px); }
+    .btn-green{
+      background: linear-gradient(135deg, var(--green), #80ffbf);
+      color:#05130a;
+    }
+    .btn-blue{
+      background: linear-gradient(135deg, var(--blue), #7287ff);
+      color:#05111d;
+    }
+    .btn-dark{
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      border:1px solid var(--line);
+    }
+
+    .preview{
+      margin-top: 14px;
+      padding: 14px;
+      border:1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(6,10,18,.72);
+    }
+
+    .preview .title{
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+
+    .preview .url{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12px;
+      line-height: 1.45;
+      color: #cfe2ff;
+      word-break: break-all;
+    }
+
+    .rightlist{
+      display:grid;
+      gap:12px;
+    }
+
+    .info-box{
+      border:1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.03);
+      padding: 14px;
+    }
+
+    .info-box .t{
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .info-box .v{
+      font-size: 14px;
+      line-height: 1.5;
+      font-weight: 600;
+    }
+
+    .tally{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding: 14px;
+      border:1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255,255,255,.03);
+    }
+
+    .lamp{
+      width:14px;
+      height:14px;
+      border-radius:50%;
+      background: var(--amber);
+      box-shadow: 0 0 0 6px rgba(255,191,71,.14);
+      flex: 0 0 auto;
+    }
+
+    .lamp.live{
+      background: var(--red);
+      box-shadow: 0 0 0 6px rgba(255,93,108,.16);
+    }
+
+    .footer{
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align:center;
+      padding: 6px 0 2px;
+    }
+
+    .hidden{ display:none !important; }
+
+    @media (max-width: 920px){
+      .hero-grid,
+      .layout,
+      .row{
+        grid-template-columns: 1fr;
+      }
+      .topbar{
+        flex-direction: column;
+        align-items:flex-start;
+      }
+      .chip{
+        width:100%;
+      }
+    }
+  </style>
 </head>
-
 <body>
+  <div class="shell">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">V</div>
+        <div style="min-width:0">
+          <h1>VIDEOLLAMADAS PRO</h1>
+          <p>Hub personalizado para invitados, director y operación en vivo</p>
+        </div>
+      </div>
+      <div class="chip" id="topChip">Listo para abrir</div>
+    </div>
 
-<h2>🎥 SALA EN VIVO</h2>
+    <section class="hero">
+      <div class="hero-grid">
+        <div class="hero-left">
+          <h2>Diseño tipo app profesional</h2>
+          <p class="desc">
+            Esta portada se ve más como una aplicación y menos como un navegador. Desde aquí eliges sala, slot, calidad y modo. Luego abres VDO.Ninja con un solo toque.
+          </p>
+        </div>
 
-<video id="video" autoplay playsinline muted></video>
+        <div class="hero-right">
+          <div class="stats">
+            <div class="stat">
+              <div class="k">Modo actual</div>
+              <div class="v" id="statMode">INVITADO</div>
+              <small id="statModeSub">Acceso de cámara y micrófono</small>
+            </div>
+            <div class="stat">
+              <div class="k">Sala</div>
+              <div class="v" id="statRoom">PROINKASWITCH</div>
+              <small>Nombre de sala activo</small>
+            </div>
+            <div class="stat">
+              <div class="k">Slot</div>
+              <div class="v" id="statSlot">INV1</div>
+              <small>Identificador del usuario</small>
+            </div>
+            <div class="stat">
+              <div class="k">Calidad</div>
+              <div class="v" id="statQ">400 kbps</div>
+              <small>Retorno / monitoreo</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<div class="controls">
-    <select id="cameraSelect"></select>
-    <br>
-    <button onclick="startStream()">🚀 INICIAR TRANSMISIÓN</button>
-</div>
+    <section class="layout">
+      <div class="card">
+        <div class="card-head">
+          <h3>Acceso</h3>
+          <span>Configuración rápida</span>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="field">
+              <label for="mode">Modo</label>
+              <select id="mode">
+                <option value="guest" selected>Invitado</option>
+                <option value="presenter">Director / Presentador</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="room">Sala</label>
+              <input id="room" value="PROINKASWITCH" />
+            </div>
+          </div>
 
-<script>
+          <div class="row">
+            <div class="field">
+              <label for="slot">Slot / ID</label>
+              <input id="slot" value="INV1" />
+            </div>
+            <div class="field">
+              <label for="name">Nombre visible</label>
+              <input id="name" value="INV 1" />
+            </div>
+          </div>
 
-let localStream;
+          <div id="guestPanel">
+            <div class="row">
+              <div class="field">
+                <label for="bitrate">Roombitrate (kbps)</label>
+                <input id="bitrate" type="number" min="100" step="50" value="400" />
+              </div>
+              <div class="field">
+                <label for="maxheight">Max height</label>
+                <input id="maxheight" type="number" min="180" step="60" value="360" />
+              </div>
+            </div>
 
-// 🔥 INICIALIZAR (PEDIR PERMISOS PRIMERO)
-async function init(){
-    try{
-        // Pedir permisos
-        await navigator.mediaDevices.getUserMedia({video:true, audio:true});
+            <div class="row">
+              <div class="field">
+                <label for="framerate">Framerate</label>
+                <input id="framerate" type="number" min="10" step="1" value="20" />
+              </div>
+              <div class="field">
+                <label for="language">Idioma</label>
+                <input id="language" value="es" />
+              </div>
+            </div>
 
-        // Obtener cámaras
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const cams = devices.filter(d => d.kind === "videoinput");
+            <div class="toggle">
+              <div>
+                <strong>Silenciar retorno</strong>
+                <small>Útil para invitados en celular</small>
+              </div>
+              <div id="muteSwitch" class="switch on" role="switch" aria-checked="true" tabindex="0"></div>
+            </div>
 
-        const select = document.getElementById("cameraSelect");
-        select.innerHTML = "";
+            <div class="toggle">
+              <div>
+                <strong>Auto abrir acceso</strong>
+                <small>Entrar directo al presionar el botón</small>
+              </div>
+              <div id="autoSwitch" class="switch on" role="switch" aria-checked="true" tabindex="0"></div>
+            </div>
+          </div>
 
-        cams.forEach(cam=>{
-            let option = document.createElement("option");
-            option.value = cam.deviceId;
-            option.text = cam.label || "Cámara";
-            select.appendChild(option);
-        });
+          <div id="presenterPanel" class="hidden">
+            <div class="row">
+              <div class="field">
+                <label for="vlabel">Video label</label>
+                <input id="vlabel" value="vMix Video" />
+              </div>
+              <div class="field">
+                <label for="alabel">Audio label</label>
+                <input id="alabel" value="Line 1 (Virtual Audio Cable)" />
+              </div>
+            </div>
 
-    } catch(err){
-        alert("⚠️ Debes permitir cámara y micrófono");
-        console.error(err);
+            <div class="toggle">
+              <div>
+                <strong>Auto abrir director</strong>
+                <small>Abre el panel de director automáticamente</small>
+              </div>
+              <div id="autoPresenterSwitch" class="switch on" role="switch" aria-checked="true" tabindex="0"></div>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button class="btn btn-green" id="openBtn">Abrir acceso</button>
+            <button class="btn btn-blue" id="copyBtn">Copiar enlace</button>
+            <button class="btn btn-dark" id="resetBtn">Restablecer</button>
+          </div>
+
+          <div class="preview">
+            <div class="title">Enlace generado</div>
+            <div class="url" id="previewUrl">—</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rightlist">
+        <div class="card">
+          <div class="card-head">
+            <h3>Operación</h3>
+            <span>Estado del panel</span>
+          </div>
+          <div class="card-body">
+            <div class="tally">
+              <div>
+                <strong style="display:block;font-size:14px;margin-bottom:2px;">Tally</strong>
+                <small id="tallyText" style="color:var(--muted);font-size:12px;">PREVIEW</small>
+              </div>
+              <div id="tallyLamp" class="lamp"></div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <div class="info-box">
+              <div class="t">Estado</div>
+              <div class="v" id="connText">Enlace listo para abrir</div>
+            </div>
+
+            <div style="height:12px"></div>
+
+            <div class="info-box">
+              <div class="t">Cómo funciona</div>
+              <div class="v">
+                En modo invitado se genera un enlace limpio con cámara, micrófono y retorno controlado. En modo director se abre el acceso de presentación con marca propia.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-head">
+            <h3>Vista previa rápida</h3>
+            <span>Tu URL pública</span>
+          </div>
+          <div class="card-body">
+            <div class="info-box">
+              <div class="t">Base</div>
+              <div class="v" style="word-break:break-all;">
+                https://oscarabadvalverde2024-commits.github.io/VIDEOLLAMADASPRO/
+              </div>
+            </div>
+            <div style="height:12px"></div>
+            <div class="info-box">
+              <div class="t">Ejemplo invitado</div>
+              <div class="v" style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:13px; line-height:1.55;">
+                ?mode=guest&amp;room=PROINKASWITCH&amp;slot=INV1
+              </div>
+            </div>
+            <div style="height:12px"></div>
+            <div class="info-box">
+              <div class="t">Ejemplo director</div>
+              <div class="v" style="font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size:13px; line-height:1.55;">
+                ?mode=presenter&amp;room=PROINKASWITCH
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">Portal personalizado para acceso rápido y limpio</div>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const params = new URLSearchParams(window.location.search);
+
+    $("mode").value = params.get("mode") || "guest";
+    $("room").value = params.get("room") || "PROINKASWITCH";
+    $("slot").value = params.get("slot") || "INV1";
+    $("name").value = params.get("name") || "INV 1";
+    $("bitrate").value = params.get("bitrate") || "400";
+    $("maxheight").value = params.get("maxheight") || "360";
+    $("framerate").value = params.get("framerate") || "20";
+    $("language").value = params.get("language") || "es";
+    $("vlabel").value = params.get("vlabel") || "vMix Video";
+    $("alabel").value = params.get("alabel") || "Line 1 (Virtual Audio Cable)";
+
+    const switches = {
+      mute: { el: $("muteSwitch"), value: (params.get("mute") ?? "1") !== "0" },
+      auto: { el: $("autoSwitch"), value: (params.get("auto") ?? "1") !== "0" },
+      autoPresenter: { el: $("autoPresenterSwitch"), value: (params.get("autopresenter") ?? "1") !== "0" }
+    };
+
+    function setSwitch(sw, on){
+      sw.value = on;
+      sw.el.classList.toggle("on", on);
+      sw.el.setAttribute("aria-checked", on ? "true" : "false");
     }
-}
 
-// 🚀 INICIAR STREAM
-async function startStream(){
-    const deviceId = document.getElementById("cameraSelect").value;
-
-    try{
-        localStream = await navigator.mediaDevices.getUserMedia({
-            video:{ deviceId: deviceId ? { exact: deviceId } : undefined },
-            audio:true
-        });
-
-        document.getElementById("video").srcObject = localStream;
-
-        // 🔥 PARAMETROS
-        const params = new URLSearchParams(window.location.search);
-        const room = params.get("room") || "SALA";
-        const slot = params.get("slot") || "INV1";
-
-        // 🔥 VDO NINJA OCULTO
-        const iframe = document.createElement("iframe");
-        iframe.style.display="none";
-
-        iframe.src = `https://vdo.ninja/?push=${slot}&room=${room}&webcam&autostart&clean`;
-
-        document.body.appendChild(iframe);
-
-    } catch(err){
-        alert("❌ Error al iniciar cámara");
-        console.error(err);
+    function toggleSwitch(sw){
+      setSwitch(sw, !sw.value);
+      refreshUI();
     }
-}
 
-// Ejecutar al cargar
-init();
+    function wireSwitch(el, sw){
+      el.addEventListener("click", () => toggleSwitch(sw));
+      el.addEventListener("keydown", (e) => {
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          toggleSwitch(sw);
+        }
+      });
+    }
 
-</script>
+    wireSwitch(switches.mute.el, switches.mute);
+    wireSwitch(switches.auto.el, switches.auto);
+    wireSwitch(switches.autoPresenter.el, switches.autoPresenter);
 
+    function guestUrl(){
+      const room = encodeURIComponent($("room").value.trim() || "PROINKASWITCH");
+      const slot = encodeURIComponent($("slot").value.trim() || "INV1");
+      const name = encodeURIComponent($("name").value.trim() || "INV 1");
+      const bitrate = encodeURIComponent($("bitrate").value.trim() || "400");
+      const maxheight = encodeURIComponent($("maxheight").value.trim() || "360");
+      const framerate = encodeURIComponent($("framerate").value.trim() || "20");
+      const language = encodeURIComponent($("language").value.trim() || "es");
+      const mute = switches.mute.value ? "&mute" : "";
+      const auto = switches.auto.value ? "&autostart&autoplay" : "";
+
+      return `https://vdo.ninja/?room=${room}&push=${slot}&webcam&roombitrate=${bitrate}&maxheight=${maxheight}&framerate=${framerate}&language=${language}&header=SALA&btntxt=ENTRAR&clean&name=${name}${mute}${auto}`;
+    }
+
+    function presenterUrl(){
+      const room = encodeURIComponent($("room").value.trim() || "PROINKASWITCH");
+      const vlabel = encodeURIComponent($("vlabel").value.trim() || "vMix Video");
+      const alabel = encodeURIComponent($("alabel").value.trim() || "Line 1 (Virtual Audio Cable)");
+      const autoPresenter = switches.autoPresenter.value ? "&autoplay=1&autostart=1" : "";
+      return `https://vdo.ninja/?director=${room}&vlabel=${vlabel}&alabel=${alabel}&push&directorstfu=1&webcam=1&cleanoutput=1${autoPresenter}`;
+    }
+
+    function buildUrl(){
+      return $("mode").value === "presenter" ? presenterUrl() : guestUrl();
+    }
+
+    function refreshUI(){
+      const mode = $("mode").value;
+      $("guestPanel").classList.toggle("hidden", mode !== "guest");
+      $("presenterPanel").classList.toggle("hidden", mode !== "presenter");
+
+      const room = $("room").value.trim() || "PROINKASWITCH";
+      const slot = $("slot").value.trim() || "INV1";
+      const bitrate = $("bitrate").value.trim() || "400";
+
+      $("statMode").textContent = mode === "presenter" ? "DIRECTOR" : "INVITADO";
+      $("statModeSub").textContent = mode === "presenter" ? "Panel de presentador" : "Acceso de cámara y micrófono";
+      $("statRoom").textContent = room;
+      $("statSlot").textContent = slot;
+      $("statQ").textContent = mode === "presenter" ? "Programa" : `${bitrate} kbps`;
+
+      const live = mode === "presenter";
+      $("tallyText").textContent = live ? "EN VIVO" : "PREVIEW";
+      $("tallyLamp").classList.toggle("live", live);
+
+      $("connText").textContent = "Enlace listo para abrir";
+      $("topChip").textContent = mode === "presenter" ? "Modo director listo" : "Modo invitado listo";
+      $("previewUrl").textContent = buildUrl();
+    }
+
+    async function copyLink(){
+      const url = buildUrl();
+      try{
+        await navigator.clipboard.writeText(url);
+        $("connText").textContent = "Enlace copiado al portapapeles";
+        $("topChip").textContent = "Enlace copiado";
+      } catch(e){
+        $("connText").textContent = "No se pudo copiar automáticamente";
+        $("topChip").textContent = "Copiado no disponible";
+      }
+    }
+
+    function openLink(){
+      const url = buildUrl();
+      $("connText").textContent = "Abriendo acceso...";
+      $("topChip").textContent = "Abriendo";
+      window.location.replace(url);
+    }
+
+    $("mode").addEventListener("change", refreshUI);
+    ["room","slot","name","bitrate","maxheight","framerate","language","vlabel","alabel"].forEach(id => {
+      $(id).addEventListener("input", refreshUI);
+    });
+
+    $("openBtn").addEventListener("click", openLink);
+    $("copyBtn").addEventListener("click", copyLink);
+    $("resetBtn").addEventListener("click", () => {
+      $("mode").value = "guest";
+      $("room").value = "PROINKASWITCH";
+      $("slot").value = "INV1";
+      $("name").value = "INV 1";
+      $("bitrate").value = "400";
+      $("maxheight").value = "360";
+      $("framerate").value = "20";
+      $("language").value = "es";
+      $("vlabel").value = "vMix Video";
+      $("alabel").value = "Line 1 (Virtual Audio Cable)";
+      setSwitch(switches.mute, true);
+      setSwitch(switches.auto, true);
+      setSwitch(switches.autoPresenter, true);
+      refreshUI();
+    });
+
+    refreshUI();
+  </script>
 </body>
 </html>
