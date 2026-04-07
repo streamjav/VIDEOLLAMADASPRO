@@ -3,20 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>StreamJav | Invitado</title>
+  <title>StreamJav Studio</title>
   <style>
     :root{
       --bg:#07111f;
       --bg2:#0b1728;
-      --card:rgba(14,20,34,.88);
+      --card:rgba(14,20,34,.86);
       --line:rgba(255,255,255,.10);
       --text:#eef4ff;
       --muted:#a4b7d5;
       --blue:#4ea1ff;
       --green:#2ddc86;
-      --green2:#80ffbf;
+      --amber:#ffbf47;
       --shadow:0 18px 50px rgba(0,0,0,.35);
-      --radius:24px;
     }
     *{box-sizing:border-box}
     html,body{
@@ -29,11 +28,8 @@
         radial-gradient(700px 420px at 100% 12%, rgba(45,220,134,.12), transparent 50%),
         linear-gradient(180deg, var(--bg), var(--bg2));
     }
-    body.session-live .app{
-      display:none;
-    }
     .app{
-      width:min(1180px, calc(100% - 20px));
+      width:min(1240px, calc(100% - 20px));
       margin:0 auto;
       padding:14px 0 24px;
       padding-top:calc(14px + env(safe-area-inset-top));
@@ -51,59 +47,22 @@
       backdrop-filter:blur(14px);
       box-shadow:var(--shadow);
     }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-    }
+    .brand{display:flex;align-items:center;gap:12px;min-width:0}
     .logo{
-      width:48px;
-      height:48px;
-      border-radius:16px;
-      display:grid;
-      place-items:center;
+      width:48px;height:48px;border-radius:16px;
+      display:grid;place-items:center;
       background:linear-gradient(135deg, var(--blue), var(--green));
-      color:#03111d;
-      font-weight:900;
-      flex:0 0 auto;
+      color:#03111d;font-weight:900;flex:0 0 auto;
       box-shadow:0 10px 24px rgba(78,161,255,.15);
     }
-    .brand h1{
-      margin:0;
-      font-size:clamp(18px,2vw,26px);
-      line-height:1.1;
-      letter-spacing:.3px;
-    }
-    .brand p{
-      margin:4px 0 0;
-      color:var(--muted);
-      font-size:12px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
+    .brand h1{margin:0;font-size:clamp(18px,2vw,26px);line-height:1.1;letter-spacing:.3px}
+    .brand p{margin:4px 0 0;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .status{
-      padding:10px 14px;
-      border-radius:999px;
-      background:rgba(255,255,255,.05);
-      border:1px solid var(--line);
-      color:var(--muted);
-      font-size:12px;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      white-space:nowrap;
-      flex:0 0 auto;
+      padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.05);
+      border:1px solid var(--line);color:var(--muted);font-size:12px;
+      display:inline-flex;align-items:center;gap:8px;white-space:nowrap
     }
-    .dot{
-      width:9px;
-      height:9px;
-      border-radius:50%;
-      background:var(--green);
-      box-shadow:0 0 0 5px rgba(45,220,134,.12);
-      flex:0 0 auto;
-    }
+    .dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px rgba(45,220,134,.12)}
     .hero{
       margin-top:16px;
       padding:18px;
@@ -128,36 +87,14 @@
     .panel-head{
       padding:16px 18px;
       border-bottom:1px solid var(--line);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
       background:rgba(255,255,255,.02);
     }
-    .panel-head h2{
-      margin:0;
-      font-size:16px;
-      letter-spacing:.2px;
-    }
-    .panel-head span{
-      color:var(--muted);
-      font-size:12px;
-    }
-    .panel-body{
-      padding:18px;
-    }
-    .title{
-      margin:0 0 10px;
-      font-size:clamp(24px,3vw,38px);
-      line-height:1.02;
-      letter-spacing:.2px;
-    }
-    .subtitle{
-      margin:0;
-      color:var(--muted);
-      line-height:1.6;
-      font-size:14px;
-    }
+    .panel-head h2{margin:0;font-size:16px;letter-spacing:.2px}
+    .panel-head span{color:var(--muted);font-size:12px}
+    .panel-body{padding:18px}
+    .title{margin:0 0 10px;font-size:clamp(24px,3vw,38px);line-height:1.02;letter-spacing:.2px}
+    .subtitle{margin:0;color:var(--muted);line-height:1.6;font-size:14px}
     .stats{
       display:grid;
       grid-template-columns:repeat(2,1fr);
@@ -171,41 +108,13 @@
       background:rgba(255,255,255,.03);
       min-height:88px;
     }
-    .stat .k{
-      color:var(--muted);
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      margin-bottom:8px;
-    }
-    .stat .v{
-      font-size:14px;
-      font-weight:800;
-      line-height:1.4;
-      word-break:break-word;
-    }
-    .form{
-      display:grid;
-      gap:12px;
-      margin-top:16px;
-    }
-    .row{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    label{
-      color:var(--muted);
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-    }
-    input,select{
+    .stat .k{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+    .stat .v{font-size:14px;font-weight:800;line-height:1.4}
+    .form{display:grid;gap:12px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:8px}
+    label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+    input,select,textarea{
       width:100%;
       background:rgba(7,11,18,.86);
       color:var(--text);
@@ -215,68 +124,57 @@
       outline:none;
       font-size:14px;
     }
-    input:focus,select:focus{
+    input:focus,select:focus,textarea:focus{
       border-color:rgba(78,161,255,.75);
       box-shadow:0 0 0 4px rgba(78,161,255,.10);
     }
-    input[readonly]{
-      cursor:default;
-      color:#dfeaff;
-      background:rgba(9,14,24,.96);
-    }
-    .chip-row{
+    .toggle{
       display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .chip{
-      display:inline-flex;
       align-items:center;
-      gap:6px;
-      padding:10px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.04);
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 14px;
       border:1px solid var(--line);
-      color:var(--text);
-      font-size:12px;
-      font-weight:700;
-      white-space:nowrap;
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
     }
+    .toggle strong{display:block;margin-bottom:2px;font-size:14px}
+    .toggle small{color:var(--muted);font-size:12px}
+    .switch{
+      width:54px;height:32px;border-radius:999px;background:rgba(255,255,255,.10);
+      position:relative;border:1px solid var(--line);cursor:pointer;flex:0 0 auto;transition:.2s ease;
+    }
+    .switch::after{
+      content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;
+      background:white;transition:.2s ease;
+    }
+    .switch.on{background:rgba(45,220,134,.24);border-color:rgba(45,220,134,.35)}
+    .switch.on::after{left:26px;background:#eafff4}
     .buttons{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:14px;
+      display:flex;flex-wrap:wrap;gap:10px;margin-top:14px
     }
     .btn{
-      border:0;
-      border-radius:16px;
-      min-height:54px;
-      padding:13px 16px;
-      font-weight:900;
-      font-size:14px;
-      cursor:pointer;
-      flex:1 1 180px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      transition:transform .15s ease, opacity .15s ease, filter .15s ease;
+      border:0;border-radius:16px;min-height:52px;padding:13px 16px;
+      font-weight:800;font-size:14px;cursor:pointer;flex:1 1 180px;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      transition:transform .15s ease, opacity .15s ease;
     }
     .btn:active{transform:translateY(1px)}
-    .btn-green{
-      background:linear-gradient(135deg, var(--green), var(--green2));
-      color:#05130a;
-      box-shadow:0 12px 26px rgba(45,220,134,.18);
-    }
-    .btn-blue{
-      background:linear-gradient(135deg, var(--blue), #7287ff);
-      color:#05111d;
-    }
-    .btn-dark{
-      background:rgba(255,255,255,.06);
-      color:var(--text);
+    .btn-blue{background:linear-gradient(135deg,var(--blue),#7287ff);color:#05111d}
+    .btn-green{background:linear-gradient(135deg,var(--green),#80ffbf);color:#05130a}
+    .btn-dark{background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--line)}
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+    .mini{
       border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      border-radius:14px;
+      min-height:42px;
+      padding:10px 12px;
+      font-size:13px;
+      font-weight:800;
+      cursor:pointer;
+      flex:1 1 120px;
     }
     .summary{
       margin-top:12px;
@@ -285,14 +183,10 @@
       border:1px solid var(--line);
       background:rgba(255,255,255,.03);
     }
-    .summary .line{
-      font-size:13px;
-      color:var(--muted);
-      line-height:1.45;
-      margin-bottom:10px;
-    }
+    .summary .line{font-size:13px;color:var(--muted);line-height:1.45}
     .summary code{
       display:block;
+      margin-top:10px;
       padding:12px;
       border-radius:14px;
       background:#050a12;
@@ -303,217 +197,171 @@
       word-break:break-word;
       font-size:12px;
     }
-    .preview-wrap{
+    .list{display:grid;gap:12px;margin-top:14px}
+    .guest-card{
       border:1px solid var(--line);
-      border-radius:22px;
-      overflow:hidden;
-      background:#000;
-      box-shadow:var(--shadow);
-      min-height:560px;
-      display:flex;
-      flex-direction:column;
-    }
-    .preview-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      padding:12px 16px;
-      background:rgba(255,255,255,.03);
-      border-bottom:1px solid var(--line);
-      flex-wrap:wrap;
-    }
-    .preview-head strong{font-size:14px}
-    .preview-head span{color:var(--muted);font-size:12px}
-    .preview-body{
-      padding:16px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex:1 1 auto;
-      min-height:0;
-    }
-    video{
-      width:100%;
-      max-width:540px;
-      aspect-ratio:16/9;
       border-radius:20px;
-      background:#000;
-      border:1px solid rgba(255,255,255,.12);
-      object-fit:cover;
-      transform:scaleX(1);
+      background:rgba(255,255,255,.03);
+      padding:14px;
     }
-    .mirror{
-      transform:scaleX(-1);
-    }
-    .hint{
-      margin-top:12px;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.45;
-    }
-    .error{
-      margin-top:12px;
-      padding:12px 14px;
-      border-radius:16px;
-      border:1px solid rgba(255,95,120,.25);
-      background:rgba(255,95,120,.08);
-      color:#ffd8df;
-      font-size:13px;
-      display:none;
-    }
-    #iframeContainer{
-      display:none;
-      position:fixed;
-      inset:0;
-      z-index:200;
-      background:#000;
-    }
-    #iframeContainer iframe{
-      width:100%;
-      height:100%;
-      border:none;
-      display:block;
-      background:#000;
-    }
-    .live-bar{
-      position:fixed;
-      left:14px;
-      right:14px;
-      top:14px;
-      z-index:220;
-      display:none;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      padding:12px 14px;
-      border-radius:18px;
-      background:rgba(7,11,18,.72);
-      backdrop-filter:blur(14px);
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:var(--shadow);
-    }
-    body.session-live .live-bar{
+    .guest-top{
       display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:12px;
     }
-    .live-badge{
+    .badge{
       display:inline-flex;
       align-items:center;
-      gap:8px;
-      padding:8px 12px;
+      gap:6px;
+      padding:7px 10px;
       border-radius:999px;
-      background:rgba(45,220,134,.14);
-      border:1px solid rgba(45,220,134,.25);
-      color:#dffef0;
-      font-size:12px;
-      font-weight:800;
-      white-space:nowrap;
-    }
-    .tiny{
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
       color:var(--muted);
-      font-size:12px;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
       white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
     }
-    @media (max-width: 1080px){
-      .grid{grid-template-columns:1fr}
-      .preview-wrap{min-height:460px}
+    .guest-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .guest-link{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-top:10px;
+      font-size:12px;
+      color:var(--muted);
+      word-break:break-word;
     }
+    .guest-link code{
+      display:block;
+      padding:10px 12px;
+      border-radius:12px;
+      background:#050a12;
+      border:1px solid var(--line);
+      color:#d7e7ff;
+      width:100%;
+      overflow:auto;
+      white-space:nowrap;
+    }
+    .recent{margin-top:14px;display:flex;flex-wrap:wrap;gap:10px}
+    .chip{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:999px;
+      font-weight:700;
+      cursor:pointer;
+      font-size:12px;
+    }
+    .footer-note{margin-top:14px;color:var(--muted);font-size:12px;line-height:1.45}
+    @media (max-width: 1100px){ .grid{grid-template-columns:1fr} }
     @media (max-width: 760px){
       .topbar{flex-direction:column;align-items:flex-start}
       .status{width:100%;justify-content:center}
-      .row,.stats{grid-template-columns:1fr}
-      .btn{flex-basis:100%}
-      .preview-wrap{min-height:380px}
+      .row,.stats,.guest-grid{grid-template-columns:1fr}
+      .btn,.mini{flex-basis:100%}
     }
   </style>
 </head>
 <body>
-  <div class="live-bar" id="liveBar">
-    <div class="live-badge"><span class="dot"></span> Conectado a VDO.Ninja</div>
-    <div class="tiny" id="liveBarText">Sala lista</div>
-  </div>
-
-  <div class="app" id="app">
+  <div class="app">
     <div class="topbar">
       <div class="brand">
         <div class="logo">S</div>
         <div style="min-width:0">
-          <h1 id="mainTitle">Bienvenido Invitado 1</h1>
-          <p id="mainSubtitle">Acceso preparado para la sala del director</p>
+          <h1>STREAMJAV STUDIO</h1>
+          <p>Panel central para salas, invitados y director</p>
         </div>
       </div>
-      <div class="status">
-        <span class="dot" id="stateDot"></span>
-        <span id="stateText">Listo para configurar</span>
-      </div>
+      <div class="status"><span class="dot" id="stateDot"></span><span id="stateText">Listo para crear una sala</span></div>
     </div>
 
     <section class="hero">
       <div class="grid">
         <div class="panel">
           <div class="panel-head">
-            <h2>Acceso del invitado</h2>
-            <span>Interfaz limpia</span>
+            <h2>Configuración de sala</h2>
+            <span>Control principal</span>
           </div>
           <div class="panel-body">
-            <h2 class="title">Todo listo para entrar a la sala</h2>
+            <h2 class="title">Crea una producción con varios invitados</h2>
             <p class="subtitle">
-              La sala ya viene preparada por el director. Aquí solo eliges la fuente de video y comienzas.
-              No hay campos innecesarios ni botones extra.
+              Genera enlaces por invitado, abre el director y guarda tus últimas salas.
+              Esta interfaz se queda contigo; VDO.Ninja queda detrás.
             </p>
 
             <div class="stats">
-              <div class="stat">
-                <div class="k">Sala</div>
-                <div class="v" id="roomPreview">PROINKASWITHC</div>
-              </div>
-              <div class="stat">
-                <div class="k">Invitado</div>
-                <div class="v" id="guestPreview">Invitado 1</div>
-              </div>
-              <div class="stat">
-                <div class="k">Fuente de video</div>
-                <div class="v" id="cameraPreview">Frontal</div>
-              </div>
-              <div class="stat">
-                <div class="k">Estado</div>
-                <div class="v" id="statusPreview">Vista previa activa</div>
-              </div>
+              <div class="stat"><div class="k">Sala actual</div><div class="v" id="roomPreview">PROINKASWITCH</div></div>
+              <div class="stat"><div class="k">Invitados</div><div class="v" id="guestCountPreview">4</div></div>
+              <div class="stat"><div class="k">Director</div><div class="v" id="directorPreview">PRESENTADOR</div></div>
+              <div class="stat"><div class="k">Modo por defecto</div><div class="v" id="cameraPreview">Automática</div></div>
             </div>
 
-            <div class="form">
-              <div class="field">
-                <label for="room">Sala</label>
-                <input id="room" readonly />
+            <div class="form" style="margin-top:16px;">
+              <div class="row">
+                <div class="field">
+                  <label for="room">Sala</label>
+                  <input id="room" placeholder="PROINKASWITCH" />
+                </div>
+                <div class="field">
+                  <label for="directorName">Nombre del director</label>
+                  <input id="directorName" placeholder="Presentador" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="field">
+                  <label for="guestCount">Cantidad de invitados</label>
+                  <input id="guestCount" type="number" min="1" max="12" value="4" />
+                </div>
+                <div class="field">
+                  <label for="language">Idioma</label>
+                  <select id="language">
+                    <option value="es">Español</option>
+                    <option value="en">English</option>
+                    <option value="pt">Português</option>
+                  </select>
+                </div>
               </div>
 
               <div class="field">
-                <label for="videoSource">Fuente de video</label>
-                <select id="videoSource">
-                  <option value="user">Cámara frontal</option>
-                  <option value="environment">Cámara trasera</option>
+                <label for="cameraMode">Cámara por defecto</label>
+                <select id="cameraMode">
+                  <option value="auto">Automática</option>
+                  <option value="front">Frontal</option>
+                  <option value="back">Trasera</option>
                 </select>
               </div>
 
-              <div class="chip-row">
-                <div class="chip" id="guestChip">Bienvenido Invitado 1</div>
-                <div class="chip" id="roomChip">Sala protegida</div>
+              <div class="toggle">
+                <div>
+                  <strong>Silenciar retorno por defecto</strong>
+                  <small>Recomendado para celulares</small>
+                </div>
+                <div id="muteSwitch" class="switch on" role="switch" aria-checked="true" tabindex="0"></div>
               </div>
 
               <div class="buttons">
-                <button class="btn btn-green" id="startBtn" disabled>COMENZAR</button>
+                <button class="btn btn-blue" id="generateBtn">Generar enlaces</button>
+                <button class="btn btn-green" id="copyAllBtn">Copiar todo</button>
+                <button class="btn btn-dark" id="openDirectorBtn">Abrir director</button>
               </div>
 
-              <div class="error" id="errorBox"></div>
+              <div class="toolbar">
+                <button class="mini" id="saveRoomBtn">Guardar sala</button>
+                <button class="mini" id="resetBtn">Limpiar</button>
+              </div>
             </div>
 
             <div class="summary">
-              <div class="line">Enlace final de VDO.Ninja</div>
-              <code id="roomLinkBox">—</code>
-              <div class="hint">
-                La cámara se cambia aquí mismo con el selector. Al comenzar, la vista previa local se detiene y se abre la sesión sin duplicar video.
+              <div class="line">Enlace del director</div>
+              <code id="directorLinkBox">—</code>
+              <div class="footer-note">
+                Cada invitado recibe su propia entrada en <b>call.html</b>. Desde allí entra a la sala final.
               </div>
             </div>
           </div>
@@ -521,24 +369,22 @@
 
         <div class="panel">
           <div class="panel-head">
-            <h2>Vista previa</h2>
-            <span id="previewHeadState">Esperando cámara</span>
+            <h2>Invitados generados</h2>
+            <span id="guestListCount">0 enlaces</span>
           </div>
           <div class="panel-body">
-            <div class="preview-wrap">
-              <div class="preview-head">
-                <div>
-                  <strong>Cámara activa</strong><br />
-                  <span>Previsualización antes de entrar</span>
-                </div>
-                <div class="chip" id="facingChip">Frontal</div>
+            <div id="guestList" class="list"></div>
+
+            <div style="margin-top:16px;">
+              <div class="panel-head" style="padding:0 0 10px;border:0;background:transparent;">
+                <h2 style="font-size:15px;margin:0;">Salas recientes</h2>
+                <span>Acceso rápido</span>
               </div>
-              <div class="preview-body">
-                <video id="localPreview" autoplay muted playsinline></video>
-              </div>
+              <div id="recentRooms" class="recent"></div>
             </div>
-            <div class="hint">
-              Si el navegador no permite iniciar la cámara automáticamente, cambia la fuente de video o vuelve a pulsar el selector.
+
+            <div class="footer-note">
+              Puedes cambiar sala, cantidad de invitados y nombres cuando quieras. Al guardar, todo queda listo para la próxima sesión.
             </div>
           </div>
         </div>
@@ -546,229 +392,349 @@
     </section>
   </div>
 
-  <div id="iframeContainer">
-    <iframe
-      id="vdoFrame"
-      allow="camera *; microphone *; fullscreen; display-capture; autoplay; picture-in-picture"
-      allowfullscreen
-      referrerpolicy="no-referrer"
-    ></iframe>
-  </div>
-
   <script>
+    const STORAGE_KEY = "streamjav_hub_v2";
     const $ = (id) => document.getElementById(id);
+    const CALL_PAGE = new URL("call.html", window.location.href).href;
+    const DIRECTOR_PAGE = new URL("director.html", window.location.href).href;
 
-    const roomInput = $("room");
-    const videoSource = $("videoSource");
-    const localPreview = $("localPreview");
-    const startBtn = $("startBtn");
-    const iframeContainer = $("iframeContainer");
-    const vdoFrame = $("vdoFrame");
-    const errorBox = $("errorBox");
-    const stateText = $("stateText");
-    const stateDot = $("stateDot");
-    const statusPreview = $("statusPreview");
-    const roomLinkBox = $("roomLinkBox");
-    const previewHeadState = $("previewHeadState");
-    const cameraPreview = $("cameraPreview");
-    const facingChip = $("facingChip");
-    const liveBarText = $("liveBarText");
-    const mainTitle = $("mainTitle");
-    const mainSubtitle = $("mainSubtitle");
-    const guestPreview = $("guestPreview");
-    const guestChip = $("guestChip");
-    const roomChip = $("roomChip");
+    const defaultState = () => ({
+      room: "PROINKASWITCH",
+      directorName: "PRESENTADOR",
+      guestCount: 4,
+      language: "es",
+      cameraMode: "auto",
+      mute: true,
+      guests: Array.from({ length: 4 }, (_, i) => ({
+        slot: `INV${i + 1}`,
+        name: `Invitado ${i + 1}`
+      })),
+      recentRooms: []
+    });
 
-    const params = new URLSearchParams(window.location.search);
+    let state = loadState();
 
-    const roomName = (params.get("room") || "PROINKASWITHC").trim();
-    const slotName = (params.get("slot") || "INV1").trim();
-    const slotNumber = (slotName.match(/\d+/)?.[0]) || "1";
-    const guestName = `Invitado ${slotNumber}`;
-
-    roomInput.value = roomName;
-    roomInput.title = roomName;
-
-    mainTitle.textContent = `Bienvenido ${guestName}`;
-    mainSubtitle.textContent = `Acceso preparado para ${roomName}`;
-    guestPreview.textContent = guestName;
-    guestChip.textContent = `Bienvenido ${guestName}`;
-    roomChip.textContent = roomName;
-    roomLinkBox.textContent = buildRoomURL();
-    liveBarText.textContent = `Sala ${roomName} · ${guestName}`;
-
-    let currentStream = null;
-    let currentFacing = videoSource.value;
-    let previewReady = false;
-
-    function setStatus(message, tone = "neutral"){
-      stateText.textContent = message;
-      previewHeadState.textContent = message;
-      statusPreview.textContent = message;
-      stateDot.style.background =
-        tone === "good" ? "var(--green)" :
-        tone === "bad" ? "#ff5d6c" :
-        "var(--green)";
+    function clampCount(n){
+      const value = Number.parseInt(n, 10);
+      if (Number.isNaN(value)) return 1;
+      return Math.max(1, Math.min(12, value));
     }
 
-    function showError(message){
-      errorBox.textContent = message;
-      errorBox.style.display = "block";
-      setStatus(message, "bad");
-    }
-
-    function clearError(){
-      errorBox.textContent = "";
-      errorBox.style.display = "none";
-    }
-
-    function stopStream(stream){
-      if (!stream) return;
-      stream.getTracks().forEach(track => {
-        try { track.stop(); } catch {}
-      });
-    }
-
-    function getFacingLabel(mode){
-      return mode === "environment" ? "Trasera" : "Frontal";
-    }
-
-    function updateFacingUI(){
-      const label = getFacingLabel(currentFacing);
-      cameraPreview.textContent = label;
-      facingChip.textContent = label;
-      localPreview.classList.toggle("mirror", currentFacing === "user");
-      roomLinkBox.textContent = buildRoomURL();
-    }
-
-    function getVdoDeviceValue(mode){
-      if (mode === "environment") {
-        return /Android/i.test(navigator.userAgent) ? "rear" : "back";
+    function normalizeGuests(list, count){
+      const out = [];
+      for (let i = 0; i < count; i++){
+        const existing = list[i] || {};
+        out.push({
+          slot: String(existing.slot || `INV${i + 1}`).trim() || `INV${i + 1}`,
+          name: String(existing.name || `Invitado ${i + 1}`).trim() || `Invitado ${i + 1}`
+        });
       }
-      return "1";
+      return out;
     }
 
-    function buildRoomURL(){
-      const url = new URL("https://vdo.ninja/");
-      url.searchParams.set("room", roomName);
-      url.searchParams.set("push", slotName);
-      url.searchParams.set("name", guestName);
-      url.searchParams.set("autostart", "");
-      url.searchParams.set("webcam", "");
-      url.searchParams.set("cleanoutput", "");
-      url.searchParams.set("nopreview", "");
-      url.searchParams.set("nochat", "");
-      url.searchParams.set("nodashboard", "");
-      url.searchParams.set("header", "STREAMJAV");
-      url.searchParams.set("btntxt", "ENTRAR");
-      url.searchParams.set("language", "es");
-      url.searchParams.set("vdo", getVdoDeviceValue(currentFacing));
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultState();
+        const saved = JSON.parse(raw);
+        const base = defaultState();
+
+        const merged = {
+          ...base,
+          ...saved,
+          guests: Array.isArray(saved.guests) && saved.guests.length ? saved.guests : base.guests,
+          recentRooms: Array.isArray(saved.recentRooms) ? saved.recentRooms : []
+        };
+
+        merged.guestCount = clampCount(merged.guestCount || merged.guests.length || 1);
+        merged.guests = normalizeGuests(merged.guests, merged.guestCount);
+        return merged;
+      } catch {
+        return defaultState();
+      }
+    }
+
+    function saveState(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function buildGuestUrl(slot, name){
+      const url = new URL(CALL_PAGE);
+      url.searchParams.set("room", state.room || "PROINKASWITCH");
+      url.searchParams.set("slot", slot || "INV1");
+      url.searchParams.set("name", name || slot || "Invitado");
+      url.searchParams.set("language", state.language || "es");
+      if (state.cameraMode) url.searchParams.set("camera", state.cameraMode);
+      if (state.mute) url.searchParams.set("mute", "1");
       return url.toString();
     }
 
-    async function pickBestVideoConstraints(mode){
-      const wantBack = mode === "environment";
-      if (!navigator.mediaDevices?.enumerateDevices) {
-        return { video: { facingMode: { ideal: mode } }, audio: true };
-      }
+    function buildDirectorUrl(){
+      const url = new URL(DIRECTOR_PAGE);
+      url.searchParams.set("room", state.room || "PROINKASWITCH");
+      url.searchParams.set("director", state.directorName || "PRESENTADOR");
+      url.searchParams.set("language", state.language || "es");
+      return url.toString();
+    }
 
+    function updatePreview(){
+      $("roomPreview").textContent = state.room || "PROINKASWITCH";
+      $("guestCountPreview").textContent = String(state.guestCount);
+      $("directorPreview").textContent = state.directorName || "PRESENTADOR";
+      $("cameraPreview").textContent =
+        state.cameraMode === "front" ? "Frontal" :
+        state.cameraMode === "back" ? "Trasera" : "Automática";
+      $("guestListCount").textContent = `${state.guestCount} enlace${state.guestCount === 1 ? "" : "s"}`;
+      $("directorLinkBox").textContent = buildDirectorUrl();
+    }
+
+    function setSwitch(on){
+      state.mute = on;
+      $("muteSwitch").classList.toggle("on", on);
+      $("muteSwitch").setAttribute("aria-checked", on ? "true" : "false");
+      updatePreview();
+      saveState();
+    }
+
+    function syncInputs(){
+      $("room").value = state.room;
+      $("directorName").value = state.directorName;
+      $("guestCount").value = state.guestCount;
+      $("language").value = state.language;
+      $("cameraMode").value = state.cameraMode;
+      setSwitch(Boolean(state.mute));
+    }
+
+    function escapeHtml(value){
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function escapeAttr(value){
+      return String(value ?? "").replaceAll('"', "&quot;");
+    }
+
+    async function copyText(text){
       try{
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const cams = devices.filter(d => d.kind === "videoinput");
-        const keywords = wantBack
-          ? ["back", "rear", "environment", "trasera", "posterior"]
-          : ["front", "frontal", "user", "anterior"];
+        await navigator.clipboard.writeText(text);
+      } catch {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+      }
+    }
 
-        const matched = cams.find(d => {
-          const label = (d.label || "").toLowerCase();
-          return keywords.some(k => label.includes(k));
+    function toast(message){
+      $("stateText").textContent = message;
+      $("stateDot").style.background = "var(--green)";
+      setTimeout(() => {
+        $("stateText").textContent = "Listo para crear una sala";
+        $("stateDot").style.background = "var(--green)";
+      }, 1400);
+    }
+
+    function renderGuests(){
+      const container = $("guestList");
+      container.innerHTML = "";
+
+      state.guests.forEach((guest, idx) => {
+        const card = document.createElement("div");
+        card.className = "guest-card";
+        const guestUrl = buildGuestUrl(guest.slot, guest.name);
+
+        card.innerHTML = `
+          <div class="guest-top">
+            <div class="badge">Invitado ${idx + 1}</div>
+            <div class="badge">${escapeHtml(guest.slot)}</div>
+          </div>
+
+          <div class="guest-grid">
+            <div class="field">
+              <label>Slot</label>
+              <input data-index="${idx}" data-field="slot" value="${escapeAttr(guest.slot)}" />
+            </div>
+            <div class="field">
+              <label>Nombre</label>
+              <input data-index="${idx}" data-field="name" value="${escapeAttr(guest.name)}" />
+            </div>
+          </div>
+
+          <div class="guest-link">
+            <code>${escapeHtml(guestUrl)}</code>
+          </div>
+
+          <div class="toolbar">
+            <button class="mini" data-action="copy" data-index="${idx}">Copiar enlace</button>
+            <button class="mini" data-action="open" data-index="${idx}">Abrir acceso</button>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      container.querySelectorAll("input[data-field]").forEach(input => {
+        input.addEventListener("input", e => {
+          const index = Number(e.target.dataset.index);
+          const field = e.target.dataset.field;
+          state.guests[index][field] = e.target.value;
+          updatePreview();
+          saveState();
+          renderGuests();
         });
+      });
 
-        if (matched) {
-          return { video: { deviceId: { exact: matched.deviceId } }, audio: true };
-        }
-      } catch {}
+      container.querySelectorAll("button[data-action]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const index = Number(btn.dataset.index);
+          const guest = state.guests[index];
+          const url = buildGuestUrl(guest.slot, guest.name);
 
-      return { video: { facingMode: { ideal: mode } }, audio: true };
+          if (btn.dataset.action === "copy") {
+            await copyText(url);
+            toast("Enlace del invitado copiado");
+          } else {
+            window.open(url, "_blank", "noopener,noreferrer");
+          }
+        });
+      });
     }
 
-    async function startCamera(mode){
-      clearError();
-      setStatus("Solicitando cámara...", "neutral");
+    function renderRecentRooms(){
+      const recent = $("recentRooms");
+      recent.innerHTML = "";
 
-      stopStream(currentStream);
-      currentStream = null;
-      localPreview.srcObject = null;
-
-      try{
-        const constraints = await pickBestVideoConstraints(mode);
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        currentStream = stream;
-        localPreview.srcObject = stream;
-
-        const videoTrack = stream.getVideoTracks()[0];
-        const settings = videoTrack?.getSettings?.() || {};
-        const actualFacing = settings.facingMode || mode;
-        currentFacing = actualFacing === "environment" ? "environment" : mode;
-
-        updateFacingUI();
-        setStatus("Vista previa activa", "good");
-        previewReady = true;
-        startBtn.disabled = false;
-      } catch (err){
-        console.error(err);
-        previewReady = false;
-        startBtn.disabled = true;
-        showError("No se pudo acceder a la cámara. Revisa permisos o cambia la fuente de video.");
-      }
-    }
-
-    function enterLive(){
-      clearError();
-      if (!previewReady) {
-        showError("Primero activa la cámara antes de comenzar.");
+      const rooms = state.recentRooms.slice(0, 8);
+      if (!rooms.length){
+        recent.innerHTML = `<div class="footer-note">Aún no hay salas recientes guardadas.</div>`;
         return;
       }
 
-      const url = buildRoomURL();
-
-      stopStream(currentStream);
-      currentStream = null;
-      localPreview.srcObject = null;
-
-      document.body.classList.add("session-live");
-      iframeContainer.style.display = "block";
-      vdoFrame.src = url;
-
-      liveBarText.textContent = `Conectado a ${roomName} · ${guestName}`;
-      setStatus("Conectado a VDO.Ninja", "good");
+      rooms.forEach(room => {
+        const chip = document.createElement("button");
+        chip.className = "chip";
+        chip.textContent = room;
+        chip.onclick = () => {
+          state.room = room;
+          refreshFromState();
+          toast(`Sala cargada: ${room}`);
+        };
+        recent.appendChild(chip);
+      });
     }
 
-    videoSource.addEventListener("change", async () => {
-      currentFacing = videoSource.value;
-      updateFacingUI();
-      await startCamera(currentFacing);
-      roomLinkBox.textContent = buildRoomURL();
+    function refreshFromState(){
+      state.guestCount = clampCount(state.guestCount);
+      state.guests = normalizeGuests(state.guests, state.guestCount);
+      syncInputs();
+      updatePreview();
+      renderGuests();
+      renderRecentRooms();
+      saveState();
+    }
+
+    $("room").addEventListener("input", () => {
+      state.room = $("room").value.trim() || "PROINKASWITCH";
+      updatePreview();
+      renderGuests();
+      renderRecentRooms();
+      saveState();
     });
 
-    startBtn.addEventListener("click", enterLive);
-
-    localPreview.addEventListener("loadedmetadata", () => {
-      updateFacingUI();
+    $("directorName").addEventListener("input", () => {
+      state.directorName = $("directorName").value.trim() || "PRESENTADOR";
+      updatePreview();
+      saveState();
     });
 
-    window.addEventListener("beforeunload", () => stopStream(currentStream));
+    $("guestCount").addEventListener("input", () => {
+      state.guestCount = clampCount($("guestCount").value);
+      state.guests = normalizeGuests(state.guests, state.guestCount);
+      refreshFromState();
+    });
 
-    async function init(){
-      updateFacingUI();
-      startBtn.disabled = true;
+    $("language").addEventListener("change", () => {
+      state.language = $("language").value;
+      updatePreview();
+      renderGuests();
+      saveState();
+    });
 
-      if (!navigator.mediaDevices?.getUserMedia) {
-        showError("Este navegador no soporta cámara.");
-        return;
+    $("cameraMode").addEventListener("change", () => {
+      state.cameraMode = $("cameraMode").value;
+      updatePreview();
+      renderGuests();
+      saveState();
+    });
+
+    $("muteSwitch").addEventListener("click", () => setSwitch(!state.mute));
+    $("muteSwitch").addEventListener("keydown", e => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        setSwitch(!state.mute);
       }
+    });
 
-      await startCamera(currentFacing);
+    $("generateBtn").addEventListener("click", () => {
+      state.guests = normalizeGuests(state.guests, state.guestCount);
+      refreshFromState();
+      toast("Enlaces actualizados");
+    });
+
+    $("copyAllBtn").addEventListener("click", async () => {
+      const lines = [
+        `Sala: ${state.room}`,
+        `Director: ${state.directorName}`,
+        `Director link: ${buildDirectorUrl()}`,
+        "",
+        ...state.guests.map((guest, idx) => `Invitado ${idx + 1} (${guest.slot} - ${guest.name}): ${buildGuestUrl(guest.slot, guest.name)}`)
+      ].join("\n");
+      await copyText(lines);
+      toast("Todo copiado al portapapeles");
+    });
+
+    $("openDirectorBtn").addEventListener("click", () => {
+      window.open(buildDirectorUrl(), "_blank", "noopener,noreferrer");
+    });
+
+    $("saveRoomBtn").addEventListener("click", () => {
+      const room = (state.room || "").trim();
+      if (!room) return;
+      state.recentRooms = [room, ...state.recentRooms.filter(r => r !== room)].slice(0, 8);
+      saveState();
+      renderRecentRooms();
+      toast("Sala guardada");
+    });
+
+    $("resetBtn").addEventListener("click", () => {
+      if (!confirm("¿Limpiar la configuración actual?")) return;
+      state = defaultState();
+      saveState();
+      syncInputs();
+      refreshFromState();
+      toast("Configuración reiniciada");
+    });
+
+    function init(){
+      state.room = state.room || "PROINKASWITCH";
+      state.directorName = state.directorName || "PRESENTADOR";
+      state.guestCount = clampCount(state.guestCount || 4);
+      state.language = state.language || "es";
+      state.cameraMode = state.cameraMode || "auto";
+      state.mute = Boolean(state.mute);
+      state.guests = normalizeGuests(state.guests || [], state.guestCount);
+      state.recentRooms = Array.isArray(state.recentRooms) ? state.recentRooms : [];
+
+      syncInputs();
+      refreshFromState();
+      $("stateText").textContent = "Listo para crear una sala";
+      $("stateDot").style.background = "var(--green)";
     }
 
     init();
