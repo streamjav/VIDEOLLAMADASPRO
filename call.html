@@ -1,188 +1,952 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>StreamJav</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StreamJav | Invitado</title>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --bg2:#10182a;
+      --card:#121a2b;
+      --line:rgba(255,255,255,.08);
+      --text:#eef4ff;
+      --muted:#8ea3c7;
+      --accent:#37e28f;
+      --accent2:#70f2b1;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+      --radius:24px;
+    }
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      min-height:100%;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(900px 500px at 20% 0%, rgba(55,226,143,.10), transparent 55%),
+        radial-gradient(700px 420px at 100% 15%, rgba(78,161,255,.10), transparent 50%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+    }
 
-<style>
-:root{
-  --bg:#0b0f1a;
-  --card:#121826;
-  --text:#eaf2ff;
-  --muted:#7f96c2;
-  --accent:#2ddc86;
-}
+    body.session-live .app{
+      opacity:0;
+      pointer-events:none;
+      transform:translateY(10px);
+    }
 
-*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,system-ui;}
+    .app{
+      width:min(980px, calc(100% - 20px));
+      margin:0 auto;
+      padding:14px 0 24px;
+      padding-top:calc(14px + env(safe-area-inset-top));
+      padding-bottom:calc(24px + env(safe-area-inset-bottom));
+      transition:opacity .25s ease, transform .25s ease;
+    }
 
-body{
-  background:var(--bg);
-  color:var(--text);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:100vh;
-}
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:rgba(8,13,23,.78);
+      backdrop-filter:blur(14px);
+      box-shadow:var(--shadow);
+    }
 
-/* UI */
-.app{
-  width:100%;
-  max-width:420px;
-  padding:24px;
-  text-align:center;
-}
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      min-width:0;
+    }
 
-h1{
-  font-size:20px;
-  margin-bottom:6px;
-}
+    .logo{
+      width:46px;
+      height:46px;
+      border-radius:16px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#04140c;
+      font-weight:900;
+      flex:0 0 auto;
+      box-shadow:0 12px 22px rgba(55,226,143,.16);
+    }
 
-.sub{
-  font-size:13px;
-  color:var(--muted);
-  margin-bottom:24px;
-}
+    .brand h1{
+      margin:0;
+      font-size:clamp(18px,2vw,26px);
+      line-height:1.1;
+      letter-spacing:.2px;
+    }
 
-.card{
-  background:var(--card);
-  border-radius:18px;
-  padding:20px;
-  border:1px solid rgba(255,255,255,.06);
-}
+    .brand p{
+      margin:4px 0 0;
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
 
-/* Video preview */
-video{
-  width:100%;
-  border-radius:14px;
-  background:#000;
-  margin-bottom:16px;
-}
+    .status{
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size:12px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      white-space:nowrap;
+      flex:0 0 auto;
+    }
 
-/* Select */
-select{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:none;
-  background:#1a2235;
-  color:white;
-  margin-bottom:16px;
-}
+    .dot{
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      background:var(--accent);
+      box-shadow:0 0 0 5px rgba(55,226,143,.12);
+    }
 
-/* Button */
-button{
-  width:100%;
-  padding:14px;
-  border-radius:14px;
-  border:none;
-  font-weight:700;
-  cursor:pointer;
-}
+    .hero{
+      margin-top:16px;
+      padding:18px;
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg, rgba(17,24,39,.96), rgba(12,17,28,.92));
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(16px);
+    }
 
-.start{
-  background:linear-gradient(135deg,#2ddc86,#6affb4);
-  color:#052014;
-}
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:16px;
+    }
 
-/* Fullscreen iframe */
-#frame{
-  position:fixed;
-  inset:0;
-  width:100%;
-  height:100%;
-  border:none;
-  display:none;
-  background:black;
-}
-</style>
+    .panel{
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:rgba(255,255,255,.03);
+      overflow:hidden;
+    }
+
+    .panel-head{
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      background:rgba(255,255,255,.02);
+    }
+
+    .panel-head h2{
+      margin:0;
+      font-size:16px;
+      letter-spacing:.2px;
+    }
+
+    .panel-head span{
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    .panel-body{padding:18px}
+
+    .title{
+      margin:0 0 8px;
+      font-size:clamp(24px,3vw,38px);
+      line-height:1.02;
+      letter-spacing:.2px;
+    }
+
+    .subtitle{
+      margin:0;
+      color:var(--muted);
+      line-height:1.55;
+      font-size:14px;
+      max-width:60ch;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .stat{
+      padding:14px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      min-height:84px;
+    }
+
+    .stat .k{
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:8px;
+    }
+
+    .stat .v{
+      font-size:14px;
+      font-weight:800;
+      line-height:1.35;
+      word-break:break-word;
+    }
+
+    .form{
+      display:grid;
+      gap:12px;
+      margin-top:16px;
+    }
+
+    .row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+
+    .field{
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+    }
+
+    label{
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+    }
+
+    input,select{
+      width:100%;
+      background:rgba(7,11,18,.86);
+      color:var(--text);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:13px 14px;
+      outline:none;
+      font-size:14px;
+    }
+
+    input[readonly]{
+      background:rgba(9,14,24,.98);
+      cursor:default;
+      color:#dfeaff;
+    }
+
+    input:focus,select:focus{
+      border-color:rgba(78,161,255,.75);
+      box-shadow:0 0 0 4px rgba(78,161,255,.10);
+    }
+
+    .buttons{
+      display:flex;
+      gap:10px;
+      margin-top:14px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      border:0;
+      border-radius:16px;
+      min-height:56px;
+      padding:13px 18px;
+      font-weight:900;
+      font-size:14px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      transition:transform .15s ease, opacity .15s ease, filter .15s ease;
+      flex:1 1 220px;
+    }
+
+    .btn:active{transform:translateY(1px)}
+
+    .btn-green{
+      background:linear-gradient(135deg, var(--accent), var(--accent2));
+      color:#06140d;
+      box-shadow:0 14px 28px rgba(55,226,143,.18);
+    }
+
+    .btn-dark{
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      border:1px solid var(--line);
+    }
+
+    .chips{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-top:2px;
+    }
+
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:10px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      color:var(--text);
+      font-size:12px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    .summary{
+      margin-top:12px;
+      padding:14px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+    }
+
+    .summary .line{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.45;
+      margin-bottom:10px;
+    }
+
+    .summary code{
+      display:block;
+      padding:12px;
+      border-radius:14px;
+      background:#050a12;
+      border:1px solid var(--line);
+      color:#d7e7ff;
+      overflow:auto;
+      white-space:pre-wrap;
+      word-break:break-word;
+      font-size:12px;
+    }
+
+    .preview-wrap{
+      border:1px solid var(--line);
+      border-radius:22px;
+      overflow:hidden;
+      background:#000;
+      box-shadow:var(--shadow);
+      min-height:420px;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .preview-head{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      padding:12px 16px;
+      background:rgba(255,255,255,.03);
+      border-bottom:1px solid var(--line);
+      flex-wrap:wrap;
+    }
+
+    .preview-head strong{font-size:14px}
+    .preview-head span{color:var(--muted);font-size:12px}
+
+    .preview-body{
+      padding:16px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex:1 1 auto;
+      min-height:0;
+    }
+
+    video{
+      width:100%;
+      max-width:520px;
+      aspect-ratio:16/9;
+      border-radius:20px;
+      background:#000;
+      border:1px solid rgba(255,255,255,.12);
+      object-fit:cover;
+      transform:scaleX(1);
+    }
+
+    .mirror{transform:scaleX(-1)}
+
+    .hint{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .error{
+      margin-top:12px;
+      padding:12px 14px;
+      border-radius:16px;
+      border:1px solid rgba(255,95,120,.25);
+      background:rgba(255,95,120,.08);
+      color:#ffd8df;
+      font-size:13px;
+      display:none;
+    }
+
+    #iframeContainer{
+      display:none;
+      position:fixed;
+      inset:0;
+      z-index:200;
+      background:#000;
+    }
+
+    #vdoFrame{
+      width:100%;
+      height:100%;
+      border:none;
+      display:block;
+      background:#000;
+    }
+
+    .loading-mask{
+      position:fixed;
+      inset:0;
+      z-index:210;
+      display:none;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(180deg, rgba(5,8,16,.90), rgba(5,8,16,.94));
+      backdrop-filter:blur(10px);
+      color:var(--text);
+      text-align:center;
+      padding:24px;
+    }
+
+    .loading-mask.on{display:flex}
+
+    .loading-card{
+      width:min(360px, 100%);
+      border:1px solid var(--line);
+      border-radius:24px;
+      background:rgba(255,255,255,.04);
+      box-shadow:var(--shadow);
+      padding:22px 18px;
+    }
+
+    .spinner{
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      border:3px solid rgba(255,255,255,.12);
+      border-top-color:var(--accent);
+      margin:0 auto 14px;
+      animation:spin 1s linear infinite;
+    }
+
+    @keyframes spin{
+      to{transform:rotate(360deg)}
+    }
+
+    .loading-card h3{
+      margin:0 0 6px;
+      font-size:18px;
+    }
+
+    .loading-card p{
+      margin:0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.5;
+    }
+
+    .small{
+      display:block;
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+    }
+
+    @media (max-width: 900px){
+      .stats{grid-template-columns:1fr}
+      .row{grid-template-columns:1fr}
+      .btn{flex-basis:100%}
+    }
+
+    @media (max-width: 760px){
+      .topbar{flex-direction:column;align-items:flex-start}
+      .status{width:100%;justify-content:center}
+      .preview-wrap{min-height:340px}
+    }
+  </style>
 </head>
-
 <body>
-
-<div class="app" id="app">
-  <h1 id="title">Bienvenido Invitado</h1>
-  <div class="sub" id="roomLabel">Sala</div>
-
-  <div class="card">
-    <video id="preview" autoplay muted playsinline></video>
-
-    <select id="camera">
-      <option value="user">Cámara frontal</option>
-      <option value="environment">Cámara trasera</option>
-    </select>
-
-    <button class="start" id="start">COMENZAR</button>
+  <div class="loading-mask" id="loadingMask" aria-hidden="true">
+    <div class="loading-card">
+      <div class="spinner"></div>
+      <h3>Conectando a la sala</h3>
+      <p>Preparando cámara y aplicando interfaz limpia.</p>
+      <span class="small" id="loadingSmall">Espera un momento…</span>
+    </div>
   </div>
-</div>
 
-<iframe id="frame"
-allow="camera *; microphone *; autoplay; fullscreen"></iframe>
+  <div class="app" id="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">S</div>
+        <div style="min-width:0">
+          <h1 id="mainTitle">Bienvenido Invitado 1</h1>
+          <p id="mainSubtitle">Acceso limpio para la sala del director</p>
+        </div>
+      </div>
+      <div class="status">
+        <span class="dot" id="stateDot"></span>
+        <span id="stateText">Listo para configurar</span>
+      </div>
+    </div>
 
-<script>
-const params = new URLSearchParams(location.search);
+    <section class="hero">
+      <div class="grid">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Acceso del invitado</h2>
+            <span>Interfaz minimalista</span>
+          </div>
+          <div class="panel-body">
+            <h2 class="title">Bienvenido Invitado 1</h2>
+            <p class="subtitle">
+              Selecciona la cámara frontal o trasera y presiona comenzar.
+              La página final se abre limpia, sin mostrar menús extra ni pantallas de configuración visibles.
+            </p>
 
-const room = params.get("room") || "PROINKASWITHC";
-const slot = params.get("slot") || "INV1";
+            <div class="stats">
+              <div class="stat">
+                <div class="k">Sala</div>
+                <div class="v" id="roomPreview">PROINKASWITCH</div>
+              </div>
+              <div class="stat">
+                <div class="k">Invitado</div>
+                <div class="v" id="guestPreview">Invitado 1</div>
+              </div>
+              <div class="stat">
+                <div class="k">Fuente de video</div>
+                <div class="v" id="cameraPreview">Frontal</div>
+              </div>
+            </div>
 
-const num = slot.match(/\d+/)?.[0] || "1";
+            <div class="form">
+              <div class="field">
+                <label for="room">Sala</label>
+                <input id="room" readonly value="PROINKASWITCH" />
+              </div>
 
-document.getElementById("title").textContent = "Bienvenido Invitado " + num;
-document.getElementById("roomLabel").textContent = room;
+              <div class="field">
+                <label for="videoSource">Fuente de video</label>
+                <select id="videoSource">
+                  <option value="front">Cámara frontal</option>
+                  <option value="rear">Cámara trasera</option>
+                </select>
+              </div>
 
-const video = document.getElementById("preview");
-const cameraSelect = document.getElementById("camera");
-const startBtn = document.getElementById("start");
-const frame = document.getElementById("frame");
+              <div class="chips">
+                <div class="chip" id="guestChip">Bienvenido Invitado 1</div>
+                <div class="chip" id="roomChip">Sala protegida</div>
+              </div>
 
-let stream;
+              <div class="buttons">
+                <button class="btn btn-green" id="startBtn" disabled>COMENZAR</button>
+              </div>
 
-/* CAMARA */
-async function startCamera(mode){
-  if(stream){
-    stream.getTracks().forEach(t=>t.stop());
-  }
+              <div class="error" id="errorBox"></div>
+            </div>
 
-  try{
-    stream = await navigator.mediaDevices.getUserMedia({
-      video:{ facingMode: mode },
-      audio:true
+            <div class="summary">
+              <div class="line">Enlace final preparado</div>
+              <code id="roomLinkBox">—</code>
+              <div class="hint">
+                Al entrar, la vista previa local se apaga para evitar doble cámara y la página interna se carga con una versión limpia y disfrazada.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Vista previa</h2>
+            <span id="previewHeadState">Esperando cámara</span>
+          </div>
+          <div class="panel-body">
+            <div class="preview-wrap">
+              <div class="preview-head">
+                <div>
+                  <strong>Cámara activa</strong><br />
+                  <span>Previsualización antes de entrar</span>
+                </div>
+                <div class="chip" id="facingChip">Frontal</div>
+              </div>
+              <div class="preview-body">
+                <video id="localPreview" autoplay muted playsinline></video>
+              </div>
+            </div>
+            <div class="hint">
+              Si cambias la cámara, la vista previa se reinicia para que el navegador aplique el cambio correctamente.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="iframeContainer">
+    <iframe
+      id="vdoFrame"
+      allow="camera *; microphone *; fullscreen; display-capture; autoplay; picture-in-picture"
+      allowfullscreen
+      referrerpolicy="no-referrer"
+    ></iframe>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+
+    const roomInput = $("room");
+    const videoSource = $("videoSource");
+    const localPreview = $("localPreview");
+    const startBtn = $("startBtn");
+    const iframeContainer = $("iframeContainer");
+    const vdoFrame = $("vdoFrame");
+    const errorBox = $("errorBox");
+    const stateText = $("stateText");
+    const stateDot = $("stateDot");
+    const roomLinkBox = $("roomLinkBox");
+    const previewHeadState = $("previewHeadState");
+    const cameraPreview = $("cameraPreview");
+    const facingChip = $("facingChip");
+    const loadingMask = $("loadingMask");
+    const loadingSmall = $("loadingSmall");
+    const mainTitle = $("mainTitle");
+    const mainSubtitle = $("mainSubtitle");
+    const guestPreview = $("guestPreview");
+    const guestChip = $("guestChip");
+    const roomChip = $("roomChip");
+
+    const params = new URLSearchParams(location.search);
+    const roomName = (params.get("room") || "PROINKASWITCH").trim();
+    const slotName = (params.get("slot") || "INV1").trim();
+    const slotNumber = (slotName.match(/\d+/)?.[0]) || "1";
+    const guestName = `Invitado ${slotNumber}`;
+
+    let currentStream = null;
+    let currentFacing = "front";
+    let previewReady = false;
+
+    roomInput.value = roomName;
+    mainTitle.textContent = `Bienvenido ${guestName}`;
+    mainSubtitle.textContent = `Acceso preparado para ${roomName}`;
+    guestPreview.textContent = guestName;
+    guestChip.textContent = `Bienvenido ${guestName}`;
+    roomChip.textContent = roomName;
+    roomLinkBox.textContent = buildRoomURL();
+    updateFacingUI();
+
+    function setStatus(message, tone = "neutral"){
+      stateText.textContent = message;
+      previewHeadState.textContent = message;
+      stateDot.style.background =
+        tone === "good" ? "var(--accent)" :
+        tone === "bad" ? "#ff5d6c" :
+        "var(--accent)";
+    }
+
+    function showError(message){
+      errorBox.textContent = message;
+      errorBox.style.display = "block";
+      setStatus(message, "bad");
+    }
+
+    function clearError(){
+      errorBox.textContent = "";
+      errorBox.style.display = "none";
+    }
+
+    function stopStream(stream){
+      if (!stream) return;
+      stream.getTracks().forEach(track => {
+        try { track.stop(); } catch {}
+      });
+    }
+
+    function facingLabel(mode){
+      return mode === "rear" ? "Trasera" : "Frontal";
+    }
+
+    function vdoFacing(mode){
+      return mode === "rear" ? "rear" : "front";
+    }
+
+    function updateFacingUI(){
+      const label = facingLabel(currentFacing);
+      cameraPreview.textContent = label;
+      facingChip.textContent = label;
+      localPreview.classList.toggle("mirror", currentFacing === "front");
+      roomLinkBox.textContent = buildRoomURL();
+    }
+
+    function b64(str){
+      return btoa(unescape(encodeURIComponent(str)));
+    }
+
+    function buildDisguiseJS(){
+      const welcome = `Bienvenido ${guestName}`;
+      return `
+(function(){
+  const WELCOME = ${JSON.stringify(welcome)};
+  const ROOM = ${JSON.stringify(roomName)};
+  const mutedText = "Preparando acceso";
+
+  const style = document.createElement('style');
+  style.textContent = \`
+    html, body { background:#050812 !important; color:#eef4ff !important; }
+    body { overflow:hidden !important; }
+    a, header, nav { text-decoration:none !important; }
+    #app, .app, main { background:#050812 !important; }
+    button, select, input { border-radius:14px !important; }
+    * { scrollbar-width: thin; }
+  \`;
+  document.head.appendChild(style);
+
+  const replaceText = () => {
+    const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    const targets = [];
+    while (walker.nextNode()) targets.push(walker.currentNode);
+    for (const node of targets) {
+      const txt = node.nodeValue || "";
+      if (/Join Room with Camera/i.test(txt)) node.nodeValue = WELCOME;
+      if (/Screenshare with Room/i.test(txt)) node.nodeValue = "";
+      if (/Source of video/i.test(txt)) node.nodeValue = "Fuente de video";
+      if (/Select audio source/i.test(txt)) node.nodeValue = "";
+      if (/Destination of output/i.test(txt)) node.nodeValue = "";
+      if (/Enter room/i.test(txt)) node.nodeValue = "COMENZAR";
+    }
+
+    const all = [...document.querySelectorAll('*')];
+
+    all.forEach(el => {
+      const text = (el.textContent || '').trim();
+      const aria = (el.getAttribute('aria-label') || '').trim();
+      const title = (el.getAttribute('title') || '').trim();
+      const combined = (text + ' ' + aria + ' ' + title).toLowerCase();
+
+      if (!combined) return;
+
+      if (combined.includes('screenshare with room')) {
+        el.style.display = 'none';
+      }
+
+      if (combined.includes('select audio source') || combined.includes('audio source') || combined.includes('destination of output') || combined.includes('output destination')) {
+        const card = el.closest('section, article, .card, .panel, .box, .row, label, fieldset, div');
+        (card || el).style.display = 'none';
+      }
+
+      if (combined.includes('join room with camera')) {
+        el.textContent = WELCOME;
+      }
+
+      if (combined.includes('vdo.ninja')) {
+        el.style.display = 'none';
+      }
     });
-    video.srcObject = stream;
-  }catch(e){
-    alert("No se pudo acceder a la cámara");
-  }
-}
 
-/* CAMBIO CAMARA */
-cameraSelect.addEventListener("change", ()=>{
-  startCamera(cameraSelect.value);
-});
+    const buttons = [...document.querySelectorAll('button')];
+    buttons.forEach(btn => {
+      const t = (btn.textContent || '').trim().toLowerCase();
+      if (t === 'join' || t === 'enter' || t.includes('join room')) {
+        btn.textContent = 'COMENZAR';
+      }
+      if (t.includes('screenshare')) {
+        btn.style.display = 'none';
+      }
+    });
 
-/* ENTRAR */
-startBtn.onclick = ()=>{
-  if(stream){
-    stream.getTracks().forEach(t=>t.stop());
-  }
+    const labels = [...document.querySelectorAll('label, h1, h2, h3, p, span, small, strong')];
+    labels.forEach(el => {
+      const t = (el.textContent || '').trim().toLowerCase();
+      if (t === 'join room with camera') el.textContent = WELCOME;
+      if (t === 'screenshare with room') el.style.display = 'none';
+      if (t.includes('select audio source')) el.style.display = 'none';
+      if (t.includes('destination of output')) el.style.display = 'none';
+    });
+  };
 
-  const url = new URL("https://vdo.ninja/");
-  url.searchParams.set("room", room);
-  url.searchParams.set("push", slot);
-  url.searchParams.set("autostart", "");
-  url.searchParams.set("cleanoutput", "");
-  url.searchParams.set("nopreview", "");
-  url.searchParams.set("nochat", "");
-  url.searchParams.set("nodashboard", "");
+  const observer = new MutationObserver(replaceText);
+  observer.observe(document.documentElement, { childList:true, subtree:true, characterData:true });
 
-  frame.src = url.toString();
+  const interval = setInterval(() => {
+    replaceText();
+    if (document.readyState === 'complete') {
+      clearInterval(interval);
+      setTimeout(replaceText, 200);
+      setTimeout(replaceText, 800);
+    }
+  }, 120);
 
-  document.getElementById("app").style.display = "none";
-  frame.style.display = "block";
-};
+  replaceText();
+})();
+      `.trim();
+    }
 
-/* INIT */
-startCamera("user");
-</script>
+    function buildDisguiseCSS(){
+      return `
+html,body{background:#050812 !important;color:#eef4ff !important;}
+body{overflow:hidden !important;}
+a[href*="vdo.ninja"], header, nav{display:none !important;}
+      `.trim();
+    }
 
+    function buildRoomURL(){
+      const url = new URL("https://vdo.ninja/");
+      url.searchParams.set("room", roomName);
+      url.searchParams.set("push", slotName);
+      url.searchParams.set("name", guestName);
+      url.searchParams.set("language", "es");
+      url.searchParams.set("header", "SALA");
+      url.searchParams.set("btntxt", "ENTRAR");
+      url.searchParams.set("cleanoutput", "");
+      url.searchParams.set("hidehome", "");
+      url.searchParams.set("webcam", "");
+      url.searchParams.set("nopreview", "");
+      url.searchParams.set("noaudio", "");
+      url.searchParams.set("nochat", "");
+      url.searchParams.set("nodashboard", "");
+      url.searchParams.set("autostart", "");
+      url.searchParams.set("facing", vdoFacing(currentFacing));
+      url.searchParams.set("base64js", b64(buildDisguiseJS()));
+      url.searchParams.set("base64css", b64(buildDisguiseCSS()));
+      return url.toString();
+    }
+
+    async function pickBestVideoConstraints(mode){
+      const facingMode = mode === "rear" ? "environment" : "user";
+
+      if (!navigator.mediaDevices?.enumerateDevices) {
+        return { video: { facingMode: { ideal: facingMode } }, audio: true };
+      }
+
+      try{
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        const cams = devices.filter(d => d.kind === "videoinput");
+
+        const keywords = mode === "rear"
+          ? ["back", "rear", "environment", "trasera", "posterior"]
+          : ["front", "frontal", "user", "anterior"];
+
+        const matched = cams.find(d => {
+          const label = (d.label || "").toLowerCase();
+          return keywords.some(k => label.includes(k));
+        });
+
+        if (matched) {
+          return { video: { deviceId: { exact: matched.deviceId } }, audio: true };
+        }
+      } catch {}
+
+      return { video: { facingMode: { ideal: facingMode } }, audio: true };
+    }
+
+    async function startCamera(mode){
+      clearError();
+      setStatus("Solicitando cámara...", "neutral");
+
+      stopStream(currentStream);
+      currentStream = null;
+      localPreview.srcObject = null;
+
+      try{
+        const constraints = await pickBestVideoConstraints(mode);
+        const stream = await navigator.mediaDevices.getUserMedia(constraints);
+        currentStream = stream;
+        localPreview.srcObject = stream;
+
+        const videoTrack = stream.getVideoTracks()[0];
+        const settings = videoTrack?.getSettings?.() || {};
+        currentFacing = settings.facingMode === "environment" ? "rear" : mode;
+
+        updateFacingUI();
+        setStatus("Vista previa activa", "good");
+        previewReady = true;
+        startBtn.disabled = false;
+      } catch (err){
+        console.error(err);
+        previewReady = false;
+        startBtn.disabled = true;
+        showError("No se pudo acceder a la cámara. Revisa permisos o cambia la fuente de video.");
+      }
+    }
+
+    function enterLive(){
+      clearError();
+
+      if (!previewReady) {
+        showError("Primero activa la cámara antes de comenzar.");
+        return;
+      }
+
+      const url = buildRoomURL();
+
+      stopStream(currentStream);
+      currentStream = null;
+      localPreview.srcObject = null;
+
+      document.body.classList.add("session-live");
+      iframeContainer.style.display = "block";
+      loadingMask.classList.add("on");
+      loadingSmall.textContent = `Sala ${roomName} · ${guestName}`;
+
+      vdoFrame.onload = () => {
+        setTimeout(() => {
+          loadingMask.classList.remove("on");
+        }, 900);
+      };
+
+      vdoFrame.src = url;
+      setStatus("Conectando a la sala...", "good");
+    }
+
+    videoSource.addEventListener("change", async () => {
+      currentFacing = videoSource.value;
+      updateFacingUI();
+      await startCamera(currentFacing);
+      roomLinkBox.textContent = buildRoomURL();
+    });
+
+    startBtn.addEventListener("click", enterLive);
+
+    window.addEventListener("beforeunload", () => stopStream(currentStream));
+
+    async function init(){
+      updateFacingUI();
+      startBtn.disabled = true;
+
+      if (!navigator.mediaDevices?.getUserMedia) {
+        showError("Este navegador no soporta cámara.");
+        return;
+      }
+
+      await startCamera(currentFacing);
+    }
+
+    init();
+  </script>
 </body>
 </html>
