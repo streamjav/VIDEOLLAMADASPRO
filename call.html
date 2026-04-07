@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover" />
-  <title>Acceso a videollamada</title>
+  <title>StreamJav | Acceso de invitado</title>
   <style>
     :root{
       --bg:#07111f;
       --bg2:#0b1728;
-      --card:rgba(14,20,34,.84);
+      --card:rgba(14,20,34,.86);
       --card2:rgba(255,255,255,.04);
       --line:rgba(255,255,255,.10);
       --text:#eef4ff;
@@ -21,25 +21,25 @@
       --radius:24px;
     }
 
-    * { box-sizing: border-box; }
-    html, body {
-      margin: 0;
-      min-height: 100%;
-      color: var(--text);
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      min-height:100%;
+      color:var(--text);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
       background:
         radial-gradient(900px 520px at 15% 0%, rgba(78,161,255,.18), transparent 58%),
         radial-gradient(700px 420px at 100% 10%, rgba(45,220,134,.12), transparent 50%),
         linear-gradient(180deg, var(--bg), var(--bg2));
-      overflow-x: hidden;
+      overflow-x:hidden;
     }
 
     .app{
-      width: min(980px, calc(100% - 20px));
-      margin: 0 auto;
-      padding: 14px 0 18px;
-      padding-top: calc(14px + env(safe-area-inset-top));
-      padding-bottom: calc(18px + env(safe-area-inset-bottom));
+      width:min(1180px, calc(100% - 20px));
+      margin:0 auto;
+      padding:14px 0 18px;
+      padding-top:calc(14px + env(safe-area-inset-top));
+      padding-bottom:calc(18px + env(safe-area-inset-bottom));
     }
 
     .topbar{
@@ -47,220 +47,193 @@
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      padding: 14px 16px;
-      border: 1px solid var(--line);
-      border-radius: 20px;
-      background: rgba(8,13,23,.72);
-      backdrop-filter: blur(14px);
-      box-shadow: var(--shadow);
+      padding:14px 16px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:rgba(8,13,23,.72);
+      backdrop-filter:blur(14px);
+      box-shadow:var(--shadow);
     }
 
     .brand{
       display:flex;
       align-items:center;
       gap:12px;
-      min-width: 0;
+      min-width:0;
     }
 
     .logo{
-      width:46px;
-      height:46px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, var(--blue), var(--green));
-      color:#03111d;
-      display:grid;
-      place-items:center;
-      font-weight:900;
-      flex: 0 0 auto;
-      box-shadow: 0 10px 20px rgba(78,161,255,.15);
+      width:46px;height:46px;border-radius:14px;
+      background:linear-gradient(135deg, var(--blue), var(--green));
+      color:#03111d;display:grid;place-items:center;font-weight:900;flex:0 0 auto;
+      box-shadow:0 10px 20px rgba(78,161,255,.15);
     }
 
     .brand h1{
       margin:0;
-      font-size: clamp(18px, 2vw, 24px);
+      font-size:clamp(18px,2vw,24px);
       line-height:1.1;
       letter-spacing:.3px;
     }
 
     .brand p{
       margin:4px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
     }
 
     .status{
-      padding: 10px 14px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.05);
-      border: 1px solid var(--line);
-      color: var(--muted);
-      font-size: 12px;
-      white-space: nowrap;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size:12px;
+      white-space:nowrap;
       display:inline-flex;
       align-items:center;
       gap:8px;
     }
 
     .dot{
-      width:9px;
-      height:9px;
-      border-radius:50%;
-      background: var(--amber);
-      box-shadow: 0 0 0 5px rgba(255,191,71,.12);
+      width:9px;height:9px;border-radius:50%;
+      background:var(--amber);
+      box-shadow:0 0 0 5px rgba(255,191,71,.12);
     }
 
     .hero{
-      margin-top: 16px;
-      padding: 18px;
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      background: linear-gradient(180deg, rgba(16,23,37,.95), rgba(11,18,30,.88));
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(16px);
+      margin-top:16px;
+      padding:18px;
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg, rgba(16,23,37,.96), rgba(11,18,30,.90));
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(16px);
     }
 
-    .hero-grid{
+    .grid{
       display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 16px;
-      align-items: stretch;
+      grid-template-columns: 1fr 1fr;
+      gap:16px;
+      align-items:stretch;
     }
 
     .panel{
       border:1px solid var(--line);
-      border-radius: 22px;
-      background: rgba(255,255,255,.03);
+      border-radius:22px;
+      background:rgba(255,255,255,.03);
       overflow:hidden;
     }
 
     .panel-head{
-      padding: 16px 18px;
+      padding:16px 18px;
       border-bottom:1px solid var(--line);
       display:flex;
       justify-content:space-between;
       align-items:center;
       gap:12px;
+      background:rgba(255,255,255,.02);
     }
 
     .panel-head h2{
       margin:0;
-      font-size: 16px;
+      font-size:16px;
       letter-spacing:.2px;
     }
 
     .panel-head span{
-      color: var(--muted);
-      font-size: 12px;
+      color:var(--muted);
+      font-size:12px;
     }
 
-    .panel-body{
-      padding: 18px;
-    }
+    .panel-body{padding:18px}
 
     .title{
       margin:0 0 10px;
-      font-size: clamp(26px, 3.2vw, 42px);
+      font-size:clamp(24px,3vw,40px);
       line-height:1.02;
-      letter-spacing: .2px;
+      letter-spacing:.2px;
     }
 
     .subtitle{
       margin:0;
-      color: var(--muted);
+      color:var(--muted);
       line-height:1.6;
-      font-size: 14px;
-      max-width: 60ch;
+      font-size:14px;
+      max-width:62ch;
     }
 
-    .info-grid{
+    .stats{
       display:grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 16px;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-top:16px;
     }
 
-    .info{
-      padding: 14px;
-      border-radius: 18px;
+    .stat{
+      padding:14px;
+      border-radius:18px;
       border:1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      min-height: 92px;
+      background:rgba(255,255,255,.03);
+      min-height:88px;
     }
-
-    .info .k{
-      color: var(--muted);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      margin-bottom: 8px;
+    .stat .k{
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      margin-bottom:8px;
     }
-
-    .info .v{
-      font-size: 14px;
-      font-weight: 700;
+    .stat .v{
+      font-size:14px;
+      font-weight:800;
       line-height:1.4;
     }
 
-    .form{
-      margin-top: 4px;
-      display:grid;
-      gap: 12px;
-    }
-
-    .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-
+    .form{display:grid;gap:12px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:8px}
     label{
-      color: var(--muted);
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .08em;
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
     }
 
-    input, select{
+    input,select,textarea{
       width:100%;
-      background: rgba(7,11,18,.86);
-      color: var(--text);
+      background:rgba(7,11,18,.86);
+      color:var(--text);
       border:1px solid var(--line);
-      border-radius: 16px;
-      padding: 13px 14px;
+      border-radius:16px;
+      padding:13px 14px;
       outline:none;
-      font-size: 14px;
+      font-size:14px;
     }
-
-    input:focus, select:focus{
-      border-color: rgba(78,161,255,.75);
-      box-shadow: 0 0 0 4px rgba(78,161,255,.10);
+    input:focus,select:focus,textarea:focus{
+      border-color:rgba(78,161,255,.75);
+      box-shadow:0 0 0 4px rgba(78,161,255,.10);
     }
 
     .segmented{
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
     }
 
     .seg-btn{
       border:1px solid var(--line);
-      background: rgba(255,255,255,.03);
-      color: var(--text);
-      border-radius: 16px;
-      min-height: 54px;
-      font-weight: 800;
-      font-size: 13px;
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      border-radius:16px;
+      min-height:54px;
+      font-weight:800;
+      font-size:13px;
       cursor:pointer;
-      transition: .16s ease;
+      transition:.16s ease;
       display:flex;
       align-items:center;
       justify-content:center;
@@ -269,62 +242,49 @@
     }
 
     .seg-btn.active{
-      background: linear-gradient(135deg, rgba(78,161,255,.28), rgba(45,220,134,.22));
-      border-color: rgba(78,161,255,.32);
-      box-shadow: 0 10px 24px rgba(78,161,255,.10);
+      background:linear-gradient(135deg, rgba(78,161,255,.28), rgba(45,220,134,.22));
+      border-color:rgba(78,161,255,.32);
+      box-shadow:0 10px 24px rgba(78,161,255,.10);
     }
 
-    .seg-btn:active{ transform: translateY(1px); }
+    .seg-btn:active{transform:translateY(1px)}
 
     .toggle{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap: 12px;
-      padding: 12px 14px;
+      gap:12px;
+      padding:12px 14px;
       border:1px solid var(--line);
-      border-radius: 16px;
-      background: rgba(255,255,255,.03);
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
     }
 
-    .toggle strong{
-      display:block;
-      margin-bottom: 2px;
-      font-size: 14px;
-    }
-
-    .toggle small{
-      color: var(--muted);
-      font-size: 12px;
-    }
+    .toggle strong{display:block;margin-bottom:2px;font-size:14px}
+    .toggle small{color:var(--muted);font-size:12px}
 
     .switch{
-      width: 54px;
-      height: 32px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.10);
-      position: relative;
+      width:54px;height:32px;border-radius:999px;
+      background:rgba(255,255,255,.10);
+      position:relative;
       border:1px solid var(--line);
       cursor:pointer;
-      flex: 0 0 auto;
-      transition: .2s ease;
+      flex:0 0 auto;
+      transition:.2s ease;
     }
 
     .switch::after{
       content:"";
       position:absolute;
-      top:3px;
-      left:3px;
-      width:24px;
-      height:24px;
-      border-radius:50%;
+      top:3px;left:3px;
+      width:24px;height:24px;border-radius:50%;
       background:white;
-      transition: .2s ease;
+      transition:.2s ease;
     }
 
     .switch.on{
-      background: rgba(45,220,134,.24);
-      border-color: rgba(45,220,134,.35);
+      background:rgba(45,220,134,.24);
+      border-color:rgba(45,220,134,.35);
     }
 
     .switch.on::after{
@@ -333,26 +293,26 @@
     }
 
     .preview{
-      margin-top: 12px;
-      padding: 12px;
+      margin-top:12px;
+      padding:12px;
       border:1px solid var(--line);
-      border-radius: 18px;
-      background: rgba(6,10,18,.72);
+      border-radius:18px;
+      background:rgba(6,10,18,.72);
     }
 
     .preview video{
-      width: 100%;
-      aspect-ratio: 16/9;
-      border-radius: 14px;
-      background: #000;
-      object-fit: cover;
+      width:100%;
+      aspect-ratio:16/9;
+      border-radius:14px;
+      background:#000;
+      object-fit:cover;
       display:block;
     }
 
-    .preview .caption{
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 12px;
+    .caption{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
       line-height:1.45;
     }
 
@@ -360,69 +320,152 @@
       display:flex;
       flex-wrap:wrap;
       gap:10px;
-      margin-top: 14px;
+      margin-top:14px;
     }
 
     .btn{
       border:0;
-      border-radius: 16px;
-      min-height: 52px;
-      padding: 13px 16px;
-      font-weight: 800;
-      font-size: 14px;
+      border-radius:16px;
+      min-height:52px;
+      padding:13px 16px;
+      font-weight:800;
+      font-size:14px;
       cursor:pointer;
-      flex: 1 1 180px;
+      flex:1 1 180px;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap: 8px;
-      transition: transform .15s ease, opacity .15s ease;
+      gap:8px;
+      transition:transform .15s ease, opacity .15s ease;
     }
 
-    .btn:active{ transform: translateY(1px); }
-    .btn-green{
-      background: linear-gradient(135deg, var(--green), #80ffbf);
-      color:#05130a;
+    .btn:active{transform:translateY(1px)}
+    .btn-green{background:linear-gradient(135deg,var(--green),#80ffbf);color:#05130a}
+    .btn-blue{background:linear-gradient(135deg,var(--blue),#7287ff);color:#05111d}
+    .btn-dark{background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--line)}
+    .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+
+    .mini-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:12px;
     }
-    .btn-blue{
-      background: linear-gradient(135deg, var(--blue), #7287ff);
-      color:#05111d;
-    }
-    .btn-dark{
-      background: rgba(255,255,255,.06);
-      color: var(--text);
+
+    .mini{
       border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      border-radius:14px;
+      min-height:42px;
+      padding:10px 12px;
+      font-size:13px;
+      font-weight:800;
+      cursor:pointer;
+      flex:1 1 120px;
+    }
+
+    .summary{
+      margin-top:12px;
+      padding:14px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+    }
+
+    .summary .line{
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.45;
+      margin-bottom:10px;
+    }
+
+    .summary code{
+      display:block;
+      padding:12px;
+      border-radius:14px;
+      background:#050a12;
+      border:1px solid var(--line);
+      color:#d7e7ff;
+      overflow:auto;
+      white-space:pre-wrap;
+      word-break:break-word;
+      font-size:12px;
+    }
+
+    .guest-card{
+      margin-top:12px;
+      padding:14px;
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:rgba(255,255,255,.03);
+    }
+
+    .guest-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      margin-bottom:12px;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      white-space:nowrap;
+    }
+
+    .guest-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .guest-link{
+      margin-top:10px;
+      font-size:12px;
+      color:var(--muted);
+      word-break:break-word;
+    }
+
+    .guest-link code{
+      display:block;
+      padding:10px 12px;
+      border-radius:12px;
+      background:#050a12;
+      border:1px solid var(--line);
+      color:#d7e7ff;
+      width:100%;
+      overflow:auto;
+      white-space:nowrap;
     }
 
     .footer-note{
-      margin-top: 12px;
-      color: var(--muted);
-      font-size: 12px;
+      margin-top:14px;
+      color:var(--muted);
+      font-size:12px;
       line-height:1.45;
     }
 
-    .hidden{ display:none !important; }
+    .hidden{display:none !important}
 
-    @media (max-width: 920px){
-      .hero-grid,
-      .row,
-      .info-grid{
-        grid-template-columns: 1fr;
-      }
-      .topbar{
-        flex-direction:column;
-        align-items:flex-start;
-      }
-      .status{
-        width:100%;
-        justify-content:center;
-      }
-      .segmented{
-        grid-template-columns: 1fr;
-      }
-      .btn{
-        flex-basis: 100%;
-      }
+    @media (max-width: 1000px){
+      .grid{grid-template-columns:1fr}
+    }
+    @media (max-width: 760px){
+      .topbar{flex-direction:column;align-items:flex-start}
+      .status{width:100%;justify-content:center}
+      .row,.stats,.guest-grid,.segmented{grid-template-columns:1fr}
+      .btn,.mini{flex-basis:100%}
     }
   </style>
 </head>
@@ -430,17 +473,17 @@
   <div class="app">
     <div class="topbar">
       <div class="brand">
-        <div class="logo">V</div>
+        <div class="logo">G</div>
         <div style="min-width:0">
-          <h1>VIDEOLLAMADAS PRO</h1>
-          <p>Ingreso de invitado con diseño limpio y profesional</p>
+          <h1>STREAMJAV ACCESS</h1>
+          <p>Ingreso de invitado con vista previa y control de cámara</p>
         </div>
       </div>
       <div class="status"><span class="dot" id="stateDot"></span><span id="stateText">Listo para configurar</span></div>
     </div>
 
     <section class="hero">
-      <div class="hero-grid">
+      <div class="grid">
         <div class="panel">
           <div class="panel-head">
             <h2>Antes de entrar</h2>
@@ -449,31 +492,36 @@
           <div class="panel-body">
             <h2 class="title">Elige tu cámara y entra</h2>
             <p class="subtitle">
-              Esta pantalla está pensada para verse como una aplicación: limpia, elegante y en español.
-              Primero activas permisos, luego eliges cámara frontal o trasera y finalmente entras a la sala.
+              Esta pantalla sirve como antesala profesional para tus invitados. Permite elegir cámara,
+              probar audio, copiar el enlace y entrar a la sala sin mostrar el motor interno.
             </p>
 
-            <div class="info-grid">
-              <div class="info">
+            <div class="stats">
+              <div class="stat">
                 <div class="k">Sala</div>
                 <div class="v" id="roomPreview">PROINKASWITCH</div>
               </div>
-              <div class="info">
+              <div class="stat">
                 <div class="k">Slot</div>
                 <div class="v" id="slotPreview">INV1</div>
               </div>
-              <div class="info">
+              <div class="stat">
                 <div class="k">Modo</div>
-                <div class="v">Invitado</div>
+                <div class="v" id="modePreview">Invitado</div>
               </div>
-              <div class="info">
+              <div class="stat">
                 <div class="k">Retorno</div>
                 <div class="v" id="mutePreview">Silenciado</div>
               </div>
             </div>
 
             <div class="footer-note">
-              Si no aparece la lista de cámaras, primero concede permiso. Después podrás elegir entre frontal o trasera.
+              Si no ves cámaras, concede permisos primero. Después podrás elegir frontal, trasera o una cámara específica.
+            </div>
+
+            <div class="summary">
+              <div class="line">Enlace final que abrirá esta pantalla:</div>
+              <code id="guestLinkBox">—</code>
             </div>
           </div>
         </div>
@@ -494,6 +542,11 @@
                   <label for="slot">Slot</label>
                   <input id="slot" value="INV1" />
                 </div>
+              </div>
+
+              <div class="field">
+                <label for="displayName">Nombre visible</label>
+                <input id="displayName" value="Invitado 1" />
               </div>
 
               <div class="field">
@@ -540,6 +593,11 @@
                 <button class="btn btn-green" id="enterBtn">Entrar a la sala</button>
                 <button class="btn btn-dark" id="copyBtn">Copiar enlace</button>
               </div>
+
+              <div class="mini-row">
+                <button class="mini" id="refreshPreviewBtn">Reiniciar cámara</button>
+                <button class="mini" id="saveBtn">Guardar ajustes</button>
+              </div>
             </div>
           </div>
         </div>
@@ -549,92 +607,139 @@
 
   <script>
     const $ = (id) => document.getElementById(id);
-
     const params = new URLSearchParams(window.location.search);
-    const room = params.get("room") || "PROINKASWITCH";
-    const slot = params.get("slot") || "INV1";
-    const name = params.get("name") || "INV 1";
-    const language = params.get("language") || "es";
 
-    $("room").value = room;
-    $("slot").value = slot;
-    $("roomPreview").textContent = room;
-    $("slotPreview").textContent = slot;
+    const STORAGE_KEY = "streamjav_call_v2";
 
-    const switches = {
-      mute: { el: $("muteSwitch"), value: true },
-      preview: { el: $("previewSwitch"), value: true }
+    const roomParam = params.get("room") || "PROINKASWITCH";
+    const slotParam = params.get("slot") || "INV1";
+    const nameParam = params.get("name") || "INVITADO";
+    const languageParam = params.get("language") || "es";
+    const cameraParam = params.get("camera") || "auto";
+    const muteParam = params.get("mute") !== null ? true : true;
+
+    $("room").value = roomParam;
+    $("slot").value = slotParam;
+    $("displayName").value = nameParam;
+    $("roomPreview").textContent = roomParam;
+    $("slotPreview").textContent = slotParam;
+    $("modePreview").textContent = "Invitado";
+
+    let facingMode = cameraParam === "front" ? "user" : cameraParam === "back" ? "environment" : "auto";
+    let currentStream = null;
+    let currentDeviceId = "";
+    let previewEnabled = true;
+
+    const state = {
+      mute: true,
+      preview: true
     };
 
-    function setSwitch(sw, on){
-      sw.value = on;
-      sw.el.classList.toggle("on", on);
-      sw.el.setAttribute("aria-checked", on ? "true" : "false");
-      refreshUI();
+    function setSwitch(el, on){
+      el.classList.toggle("on", on);
+      el.setAttribute("aria-checked", on ? "true" : "false");
     }
 
-    function toggleSwitch(sw){
-      setSwitch(sw, !sw.value);
+    function updateMutePreviewLabel(){
+      $("mutePreview").textContent = state.mute ? "Silenciado" : "Con audio";
     }
-
-    function wireSwitch(el, sw){
-      el.addEventListener("click", () => toggleSwitch(sw));
-      el.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          toggleSwitch(sw);
-        }
-      });
-    }
-
-    wireSwitch(switches.mute.el, switches.mute);
-    wireSwitch(switches.preview.el, switches.preview);
-
-    let facingMode = "user"; // user = frontal, environment = trasera, auto = sin preferencia
-    let currentStream = null;
 
     function setActiveCameraButton(mode){
       const front = $("camFrontBtn");
       const back = $("camBackBtn");
       const auto = $("camAutoBtn");
       [front, back, auto].forEach(b => b.classList.remove("active"));
-
       if (mode === "user") front.classList.add("active");
       else if (mode === "environment") back.classList.add("active");
       else auto.classList.add("active");
     }
 
-    $("camFrontBtn").addEventListener("click", () => {
-      facingMode = "user";
-      setActiveCameraButton("user");
-      $("stateText").textContent = "Cámara frontal seleccionada";
-    });
+    function buildVdoLink(){
+      const room = encodeURIComponent(($("room").value.trim() || "PROINKASWITCH"));
+      const slot = encodeURIComponent(($("slot").value.trim() || "INV1"));
+      const name = encodeURIComponent(($("displayName").value.trim() || "Invitado"));
+      const language = encodeURIComponent(languageParam || "es");
 
-    $("camBackBtn").addEventListener("click", () => {
-      facingMode = "environment";
-      setActiveCameraButton("environment");
-      $("stateText").textContent = "Cámara trasera seleccionada";
-    });
+      const camChoice = facingMode === "user"
+        ? "&facing=front"
+        : facingMode === "environment"
+          ? "&facing=back"
+          : "";
 
-    $("camAutoBtn").addEventListener("click", () => {
-      facingMode = "auto";
-      setActiveCameraButton("auto");
-      $("stateText").textContent = "Cámara automática seleccionada";
-    });
+      const mute = state.mute ? "&mute" : "";
+      const auto = "&autostart&webcam&clean&cleanoutput&nochat&nodashboard";
 
-    async function stopStream(){
-      if (currentStream) {
-        currentStream.getTracks().forEach(t => t.stop());
-        currentStream = null;
-      }
-      $("localPreview").srcObject = null;
+      return `https://vdo.ninja/?room=${room}&push=${slot}${auto}${mute}${camChoice}&language=${language}&header=STREAMJAV&btntxt=ENTRAR&name=${name}`;
+    }
+
+    function buildShareLink(){
+      const url = new URL(window.location.href);
+      url.searchParams.set("room", $("room").value.trim() || "PROINKASWITCH");
+      url.searchParams.set("slot", $("slot").value.trim() || "INV1");
+      url.searchParams.set("name", $("displayName").value.trim() || "Invitado");
+      url.searchParams.set("language", languageParam || "es");
+      if (facingMode === "user") url.searchParams.set("camera", "front");
+      else if (facingMode === "environment") url.searchParams.set("camera", "back");
+      else url.searchParams.set("camera", "auto");
+      if (state.mute) url.searchParams.set("mute", "1");
+      return url.toString();
+    }
+
+    function refreshLinkBoxes(){
+      $("guestLinkBox").textContent = buildShareLink();
+    }
+
+    function saveLocalSettings(){
+      const data = {
+        room: $("room").value.trim(),
+        slot: $("slot").value.trim(),
+        name: $("displayName").value.trim(),
+        camera: facingMode,
+        mute: state.mute,
+        preview: state.preview
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function loadLocalSettings(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const data = JSON.parse(raw);
+        if (data.room) $("room").value = data.room;
+        if (data.slot) $("slot").value = data.slot;
+        if (data.name) $("displayName").value = data.name;
+        if (data.camera) facingMode = data.camera;
+        if (typeof data.mute === "boolean") state.mute = data.mute;
+        if (typeof data.preview === "boolean") state.preview = data.preview;
+      } catch (e) {}
+    }
+
+    function copyText(text){
+      return navigator.clipboard.writeText(text).catch(() => {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+      });
+    }
+
+    function toast(message, color = "var(--green)"){
+      $("stateText").textContent = message;
+      $("stateDot").style.background = color;
+      setTimeout(() => {
+        $("stateText").textContent = "Listo para configurar";
+        $("stateDot").style.background = "var(--green)";
+      }, 1500);
     }
 
     function populateCameraSelect(devices){
       const select = $("cameraSelect");
       select.innerHTML = "";
 
-      if (!devices.length) {
+      if (!devices.length){
         const opt = document.createElement("option");
         opt.value = "";
         opt.textContent = "No se detectaron cámaras";
@@ -650,16 +755,36 @@
       });
     }
 
-    async function requestPermissionAndPreview(){
+    async function stopStream(){
+      if (currentStream){
+        currentStream.getTracks().forEach(t => t.stop());
+        currentStream = null;
+      }
+      $("localPreview").srcObject = null;
+    }
+
+    async function startPreview(deviceId = ""){
+      if (!state.preview){
+        await stopStream();
+        $("previewCaption").textContent = "La previsualización está desactivada.";
+        return;
+      }
+
       $("stateText").textContent = "Solicitando permisos...";
       $("stateDot").style.background = "var(--amber)";
 
-      try {
+      try{
         await stopStream();
 
+        const videoConstraints = deviceId
+          ? { deviceId: { exact: deviceId } }
+          : (facingMode === "auto"
+            ? true
+            : { facingMode: { ideal: facingMode } });
+
         const constraints = {
-          video: facingMode === "auto" ? true : { facingMode: { ideal: facingMode } },
-          audio: true
+          video: videoConstraints,
+          audio: !state.mute
         };
 
         currentStream = await navigator.mediaDevices.getUserMedia(constraints);
@@ -669,19 +794,24 @@
         const cameras = devices.filter(d => d.kind === "videoinput");
         populateCameraSelect(cameras);
 
-        const selected = cameras.find(c => c.label && (
-          c.label.toLowerCase().includes("back") ||
-          c.label.toLowerCase().includes("rear") ||
-          c.label.toLowerCase().includes("trasera")
-        ));
-
-        if (selected) $("cameraSelect").value = selected.deviceId;
+        if (deviceId) {
+          $("cameraSelect").value = deviceId;
+        } else {
+          const selected = cameras.find(c => c.label && (
+            c.label.toLowerCase().includes("back") ||
+            c.label.toLowerCase().includes("rear") ||
+            c.label.toLowerCase().includes("trasera")
+          ));
+          if (selected) $("cameraSelect").value = selected.deviceId;
+        }
 
         $("previewCaption").textContent = "Permiso concedido. Ya puedes elegir la cámara y entrar a la sala.";
         $("stateText").textContent = "Permiso concedido";
         $("stateDot").style.background = "var(--green)";
-        $("mutePreview").textContent = switches.mute.value ? "Silenciado" : "Con audio";
-      } catch (err) {
+        updateMutePreviewLabel();
+        refreshLinkBoxes();
+        saveLocalSettings();
+      } catch (err){
         console.error(err);
         $("stateText").textContent = "No se pudo activar la cámara";
         $("stateDot").style.background = "var(--red)";
@@ -690,84 +820,130 @@
       }
     }
 
-    function buildGuestUrl(){
-      const roomVal = encodeURIComponent($("room").value.trim() || "PROINKASWITCH");
-      const slotVal = encodeURIComponent($("slot").value.trim() || "INV1");
-      const nameVal = encodeURIComponent(name);
-
-      const camChoice = facingMode === "user"
-        ? "&facing=front"
-        : facingMode === "environment"
-          ? "&facing=back"
-          : "";
-
-      const mute = switches.mute.value ? "&mute" : "";
-      const auto = "&autostart&webcam&clean&cleanoutput";
-
-      return `https://vdo.ninja/?room=${roomVal}&push=${slotVal}${auto}${mute}${camChoice}&language=${encodeURIComponent(language)}&header=SALA&btntxt=ENTRAR&name=${nameVal}`;
-    }
-
     async function copyLink(){
-      const url = buildGuestUrl();
-      try{
-        await navigator.clipboard.writeText(url);
-        $("stateText").textContent = "Enlace copiado";
-        $("stateDot").style.background = "var(--green)";
-      } catch (e) {
-        $("stateText").textContent = "No se pudo copiar automáticamente";
-        $("stateDot").style.background = "var(--amber)";
-      }
+      const url = buildShareLink();
+      await copyText(url);
+      toast("Enlace copiado");
     }
 
     function enterRoom(){
-      const url = buildGuestUrl();
+      const url = buildVdoLink();
       $("stateText").textContent = "Abriendo la sala...";
       $("stateDot").style.background = "var(--blue)";
       window.location.replace(url);
     }
 
-    $("permissionBtn").addEventListener("click", requestPermissionAndPreview);
-    $("enterBtn").addEventListener("click", enterRoom);
-    $("copyBtn").addEventListener("click", copyLink);
-
-    $("room").addEventListener("input", () => {
+    function refreshUI(){
       $("roomPreview").textContent = $("room").value.trim() || "PROINKASWITCH";
-    });
-
-    $("slot").addEventListener("input", () => {
       $("slotPreview").textContent = $("slot").value.trim() || "INV1";
+      refreshLinkBoxes();
+      saveLocalSettings();
+      updateMutePreviewLabel();
+    }
+
+    $("camFrontBtn").addEventListener("click", () => {
+      facingMode = "user";
+      setActiveCameraButton("user");
+      $("stateText").textContent = "Cámara frontal seleccionada";
+      refreshUI();
+      if (currentStream) startPreview($("cameraSelect").value || "");
     });
 
-    $("cameraSelect").addEventListener("change", async () => {
-      const select = $("cameraSelect");
-      const deviceId = select.value;
+    $("camBackBtn").addEventListener("click", () => {
+      facingMode = "environment";
+      setActiveCameraButton("environment");
+      $("stateText").textContent = "Cámara trasera seleccionada";
+      refreshUI();
+      if (currentStream) startPreview($("cameraSelect").value || "");
+    });
 
-      if (!deviceId) return;
+    $("camAutoBtn").addEventListener("click", () => {
+      facingMode = "auto";
+      setActiveCameraButton("auto");
+      $("stateText").textContent = "Cámara automática seleccionada";
+      refreshUI();
+      if (currentStream) startPreview($("cameraSelect").value || "");
+    });
 
-      try{
-        await stopStream();
-        currentStream = await navigator.mediaDevices.getUserMedia({
-          video: { deviceId: { exact: deviceId } },
-          audio: true
-        });
-        $("localPreview").srcObject = currentStream;
-        $("previewCaption").textContent = "Cámara seleccionada correctamente. Ya puedes entrar.";
-        $("stateText").textContent = "Cámara seleccionada";
-        $("stateDot").style.background = "var(--green)";
-      } catch(err){
-        console.error(err);
-        $("stateText").textContent = "No se pudo cambiar la cámara";
-        $("stateDot").style.background = "var(--red)";
+    $("muteSwitch").addEventListener("click", () => {
+      state.mute = !state.mute;
+      setSwitch($("muteSwitch"), state.mute);
+      updateMutePreviewLabel();
+      refreshUI();
+      if (currentStream) startPreview($("cameraSelect").value || "");
+    });
+
+    $("muteSwitch").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        $("muteSwitch").click();
       }
     });
 
-    // Estado inicial
-    setActiveCameraButton("user");
-    $("stateText").textContent = "Listo para configurar";
-    $("mutePreview").textContent = "Silenciado";
+    $("previewSwitch").addEventListener("click", () => {
+      state.preview = !state.preview;
+      setSwitch($("previewSwitch"), state.preview);
+      if (!state.preview) {
+        stopStream();
+        $("previewCaption").textContent = "La previsualización está desactivada.";
+      } else {
+        startPreview($("cameraSelect").value || "");
+      }
+      refreshUI();
+    });
 
-    // En algunos móviles es mejor no pedir permisos automáticamente,
-    // así el usuario toca primero el botón.
+    $("previewSwitch").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        $("previewSwitch").click();
+      }
+    });
+
+    $("permissionBtn").addEventListener("click", () => startPreview($("cameraSelect").value || ""));
+    $("refreshPreviewBtn").addEventListener("click", () => startPreview($("cameraSelect").value || ""));
+    $("enterBtn").addEventListener("click", enterRoom);
+    $("copyBtn").addEventListener("click", copyLink);
+    $("saveBtn").addEventListener("click", () => {
+      saveLocalSettings();
+      toast("Ajustes guardados");
+    });
+
+    $("room").addEventListener("input", refreshUI);
+    $("slot").addEventListener("input", refreshUI);
+    $("displayName").addEventListener("input", refreshUI);
+
+    $("cameraSelect").addEventListener("change", async () => {
+      const deviceId = $("cameraSelect").value;
+      if (!deviceId) return;
+      currentDeviceId = deviceId;
+      await startPreview(deviceId);
+      $("previewCaption").textContent = "Cámara seleccionada correctamente. Ya puedes entrar.";
+      $("stateText").textContent = "Cámara seleccionada";
+      $("stateDot").style.background = "var(--green)";
+    });
+
+    function init(){
+      loadLocalSettings();
+
+      $("room").value = $("room").value.trim() || roomParam;
+      $("slot").value = $("slot").value.trim() || slotParam;
+      $("displayName").value = $("displayName").value.trim() || nameParam;
+
+      state.mute = typeof state.mute === "boolean" ? state.mute : true;
+      state.preview = typeof state.preview === "boolean" ? state.preview : true;
+
+      setActiveCameraButton(facingMode);
+      setSwitch($("muteSwitch"), state.mute);
+      setSwitch($("previewSwitch"), state.preview);
+      updateMutePreviewLabel();
+      refreshUI();
+      refreshLinkBoxes();
+
+      $("stateText").textContent = "Listo para configurar";
+      $("stateDot").style.background = "var(--green)";
+    }
+
+    init();
   </script>
 </body>
 </html>
