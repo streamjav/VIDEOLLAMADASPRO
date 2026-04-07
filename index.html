@@ -1,32 +1,825 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>HUB de Videollamadas</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>StreamJav Studio</title>
   <style>
-    body { margin:0; background:#222; color:#fff; font-family:sans-serif; text-align:center; }
-    .container { display:flex; flex-direction:column; align-items:center; justify-content:center; height:100vh; }
-    h1 { margin-bottom:20px; font-size:2rem; }
-    .btn {
-      display:block; margin:10px 0; padding:15px 25px;
-      font-size:1.2rem; color:#fff; background:#2196F3; text-decoration:none;
-      border-radius:5px; transition:background 0.3s;
+    :root{
+      --bg:#07111f;
+      --bg2:#0b1728;
+      --card:rgba(14,20,34,.86);
+      --card2:rgba(255,255,255,.04);
+      --line:rgba(255,255,255,.10);
+      --text:#eef4ff;
+      --muted:#a4b7d5;
+      --blue:#4ea1ff;
+      --green:#2ddc86;
+      --amber:#ffbf47;
+      --red:#ff5d6c;
+      --shadow:0 18px 50px rgba(0,0,0,.35);
+      --radius:24px;
     }
-    .btn:hover { background:#1976D2; }
+
+    *{box-sizing:border-box}
+    html,body{
+      margin:0;
+      min-height:100%;
+      color:var(--text);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:
+        radial-gradient(1000px 520px at 10% 0%, rgba(78,161,255,.18), transparent 55%),
+        radial-gradient(700px 420px at 100% 12%, rgba(45,220,134,.12), transparent 50%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
+      overflow-x:hidden;
+    }
+
+    .app{
+      width:min(1240px, calc(100% - 20px));
+      margin:0 auto;
+      padding:14px 0 24px;
+      padding-top:calc(14px + env(safe-area-inset-top));
+      padding-bottom:calc(24px + env(safe-area-inset-bottom));
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:16px 18px;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:rgba(8,13,23,.75);
+      backdrop-filter:blur(14px);
+      box-shadow:var(--shadow);
+    }
+
+    .brand{display:flex;align-items:center;gap:12px;min-width:0}
+    .logo{
+      width:48px;height:48px;border-radius:16px;
+      display:grid;place-items:center;
+      background:linear-gradient(135deg, var(--blue), var(--green));
+      color:#03111d;font-weight:900;flex:0 0 auto;
+      box-shadow:0 10px 24px rgba(78,161,255,.15);
+    }
+    .brand h1{margin:0;font-size:clamp(18px,2vw,26px);line-height:1.1;letter-spacing:.3px}
+    .brand p{margin:4px 0 0;color:var(--muted);font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .status{
+      padding:10px 14px;border-radius:999px;background:rgba(255,255,255,.05);
+      border:1px solid var(--line);color:var(--muted);font-size:12px;
+      display:inline-flex;align-items:center;gap:8px;white-space:nowrap
+    }
+    .dot{width:9px;height:9px;border-radius:50%;background:var(--green);box-shadow:0 0 0 5px rgba(45,220,134,.12)}
+
+    .hero{
+      margin-top:16px;
+      padding:18px;
+      border:1px solid var(--line);
+      border-radius:28px;
+      background:linear-gradient(180deg, rgba(16,23,37,.96), rgba(11,18,30,.90));
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(16px);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 360px 1fr;
+      gap:16px;
+      align-items:start;
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:rgba(255,255,255,.03);
+      overflow:hidden;
+    }
+
+    .panel-head{
+      padding:16px 18px;
+      border-bottom:1px solid var(--line);
+      display:flex;justify-content:space-between;align-items:center;gap:12px;
+      background:rgba(255,255,255,.02);
+    }
+    .panel-head h2{margin:0;font-size:16px;letter-spacing:.2px}
+    .panel-head span{color:var(--muted);font-size:12px}
+
+    .panel-body{padding:18px}
+    .title{margin:0 0 10px;font-size:clamp(24px,3vw,38px);line-height:1.02;letter-spacing:.2px}
+    .subtitle{margin:0;color:var(--muted);line-height:1.6;font-size:14px}
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-top:16px;
+    }
+    .stat{
+      padding:14px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      min-height:88px;
+    }
+    .stat .k{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
+    .stat .v{font-size:14px;font-weight:800;line-height:1.4}
+
+    .form{display:grid;gap:12px}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .field{display:flex;flex-direction:column;gap:8px}
+    label{color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.08em}
+
+    input,select,textarea{
+      width:100%;
+      background:rgba(7,11,18,.86);
+      color:var(--text);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:13px 14px;
+      outline:none;
+      font-size:14px;
+    }
+    input:focus,select:focus,textarea:focus{
+      border-color:rgba(78,161,255,.75);
+      box-shadow:0 0 0 4px rgba(78,161,255,.10);
+    }
+
+    .toggle{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:12px 14px;
+      border:1px solid var(--line);
+      border-radius:16px;
+      background:rgba(255,255,255,.03);
+    }
+    .toggle strong{display:block;margin-bottom:2px;font-size:14px}
+    .toggle small{color:var(--muted);font-size:12px}
+    .switch{
+      width:54px;height:32px;border-radius:999px;background:rgba(255,255,255,.10);
+      position:relative;border:1px solid var(--line);cursor:pointer;flex:0 0 auto;transition:.2s ease;
+    }
+    .switch::after{
+      content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;
+      background:white;transition:.2s ease;
+    }
+    .switch.on{background:rgba(45,220,134,.24);border-color:rgba(45,220,134,.35)}
+    .switch.on::after{left:26px;background:#eafff4}
+
+    .buttons{
+      display:flex;flex-wrap:wrap;gap:10px;margin-top:14px
+    }
+    .btn{
+      border:0;border-radius:16px;min-height:52px;padding:13px 16px;
+      font-weight:800;font-size:14px;cursor:pointer;flex:1 1 180px;
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      transition:transform .15s ease, opacity .15s ease;
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn-blue{background:linear-gradient(135deg,var(--blue),#7287ff);color:#05111d}
+    .btn-green{background:linear-gradient(135deg,var(--green),#80ffbf);color:#05130a}
+    .btn-dark{background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--line)}
+    .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--line)}
+    .btn:hover{opacity:.96}
+
+    .toolbar{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:12px;
+    }
+
+    .summary{
+      margin-top:12px;
+      padding:14px;
+      border-radius:18px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+    }
+    .summary .line{font-size:13px;color:var(--muted);line-height:1.45}
+    .summary code{
+      display:block;
+      margin-top:10px;
+      padding:12px;
+      border-radius:14px;
+      background:#050a12;
+      border:1px solid var(--line);
+      color:#d7e7ff;
+      overflow:auto;
+      white-space:pre-wrap;
+      word-break:break-word;
+      font-size:12px;
+    }
+
+    .list{
+      display:grid;
+      gap:12px;
+      margin-top:14px;
+    }
+
+    .guest-card{
+      border:1px solid var(--line);
+      border-radius:20px;
+      background:rgba(255,255,255,.03);
+      padding:14px;
+    }
+    .guest-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:12px;
+    }
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      padding:7px 10px;
+      border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid var(--line);
+      color:var(--muted);
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      white-space:nowrap;
+    }
+
+    .mini-actions{
+      display:flex;
+      gap:10px;
+      margin-top:12px;
+      flex-wrap:wrap;
+    }
+    .mini{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      border-radius:14px;
+      min-height:42px;
+      padding:10px 12px;
+      font-size:13px;
+      font-weight:800;
+      cursor:pointer;
+      flex:1 1 120px;
+    }
+
+    .guest-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .guest-link{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-top:10px;
+      font-size:12px;
+      color:var(--muted);
+      word-break:break-word;
+    }
+    .guest-link code{
+      display:block;
+      padding:10px 12px;
+      border-radius:12px;
+      background:#050a12;
+      border:1px solid var(--line);
+      color:#d7e7ff;
+      width:100%;
+      overflow:auto;
+      white-space:nowrap;
+    }
+
+    .recent{
+      margin-top:14px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+
+    .chip{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:999px;
+      font-weight:700;
+      cursor:pointer;
+      font-size:12px;
+    }
+
+    .footer-note{
+      margin-top:14px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .hidden{display:none !important}
+
+    @media (max-width: 1100px){
+      .grid{grid-template-columns:1fr}
+    }
+    @media (max-width: 760px){
+      .topbar{flex-direction:column;align-items:flex-start}
+      .status{width:100%;justify-content:center}
+      .row,.stats,.guest-grid{grid-template-columns:1fr}
+      .btn,.mini{flex-basis:100%}
+    }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Bienvenido al HUB de Videollamadas</h1>
-    <!-- Enlace para invitado -->
-    <a class="btn" href="call.html?mode=guest&room=PROINKASWITCH&slot=INV1">
-      Entrar como Invitado
-    </a>
-    <!-- Enlace para director/presentador -->
-    <a class="btn" href="director.html?mode=presenter&room=PROINKASWITCH">
-      Entrar como Presentador
-    </a>
+  <div class="app">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">S</div>
+        <div style="min-width:0">
+          <h1>STREAMJAV STUDIO</h1>
+          <p>Panel central para salas, invitados y director</p>
+        </div>
+      </div>
+      <div class="status"><span class="dot" id="stateDot"></span><span id="stateText">Listo para crear una sala</span></div>
+    </div>
+
+    <section class="hero">
+      <div class="grid">
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Configuración de sala</h2>
+            <span>Control principal</span>
+          </div>
+          <div class="panel-body">
+            <h2 class="title">Crea una producción con varios invitados</h2>
+            <p class="subtitle">
+              Genera enlaces por invitado, abre el director y guarda tus últimas salas.
+              Esta interfaz se queda contigo; VDO.Ninja queda detrás.
+            </p>
+
+            <div class="stats">
+              <div class="stat">
+                <div class="k">Sala actual</div>
+                <div class="v" id="roomPreview">PROINKASWITCH</div>
+              </div>
+              <div class="stat">
+                <div class="k">Invitados</div>
+                <div class="v" id="guestCountPreview">4</div>
+              </div>
+              <div class="stat">
+                <div class="k">Director</div>
+                <div class="v" id="directorPreview">PRESENTADOR</div>
+              </div>
+              <div class="stat">
+                <div class="k">Modo por defecto</div>
+                <div class="v" id="cameraPreview">Automática</div>
+              </div>
+            </div>
+
+            <div class="form" style="margin-top:16px;">
+              <div class="row">
+                <div class="field">
+                  <label for="room">Sala</label>
+                  <input id="room" placeholder="PROINKASWITCH" />
+                </div>
+                <div class="field">
+                  <label for="directorName">Nombre del director</label>
+                  <input id="directorName" placeholder="Presentador" />
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="field">
+                  <label for="guestCount">Cantidad de invitados</label>
+                  <input id="guestCount" type="number" min="1" max="12" value="4" />
+                </div>
+                <div class="field">
+                  <label for="language">Idioma</label>
+                  <select id="language">
+                    <option value="es">Español</option>
+                    <option value="en">English</option>
+                    <option value="pt">Português</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field">
+                <label for="cameraMode">Cámara por defecto</label>
+                <select id="cameraMode">
+                  <option value="auto">Automática</option>
+                  <option value="front">Frontal</option>
+                  <option value="back">Trasera</option>
+                </select>
+              </div>
+
+              <div class="toggle">
+                <div>
+                  <strong>Silenciar retorno por defecto</strong>
+                  <small>Recomendado para celulares</small>
+                </div>
+                <div id="muteSwitch" class="switch on" role="switch" aria-checked="true" tabindex="0"></div>
+              </div>
+
+              <div class="buttons">
+                <button class="btn btn-blue" id="generateBtn">Generar enlaces</button>
+                <button class="btn btn-green" id="copyAllBtn">Copiar todo</button>
+                <button class="btn btn-dark" id="openDirectorBtn">Abrir director</button>
+              </div>
+
+              <div class="toolbar">
+                <button class="mini" id="saveRoomBtn">Guardar sala</button>
+                <button class="mini" id="resetBtn">Limpiar</button>
+              </div>
+            </div>
+
+            <div class="summary">
+              <div class="line">Enlace del director</div>
+              <code id="directorLinkBox">—</code>
+              <div class="footer-note">
+                Cada invitado recibe su propia entrada en <b>call.html</b>. Desde allí entra a la sala final.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h2>Invitados generados</h2>
+            <span id="guestListCount">0 enlaces</span>
+          </div>
+          <div class="panel-body">
+            <div id="guestList" class="list"></div>
+
+            <div style="margin-top:16px;">
+              <div class="panel-head" style="padding:0 0 10px;border:0;background:transparent;">
+                <h2 style="font-size:15px;margin:0;">Salas recientes</h2>
+                <span>Acceso rápido</span>
+              </div>
+              <div id="recentRooms" class="recent"></div>
+            </div>
+
+            <div class="footer-note">
+              Puedes cambiar sala, cantidad de invitados y nombres cuando quieras. Al guardar, todo queda listo para la próxima sesión.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
+
+  <script>
+    const STORAGE_KEY = "streamjav_hub_v2";
+    const $ = (id) => document.getElementById(id);
+
+    const CALL_PAGE = new URL("call.html", window.location.href).href;
+    const DIRECTOR_PAGE = new URL("director.html", window.location.href).href;
+
+    const defaultState = () => ({
+      room: "PROINKASWITCH",
+      directorName: "PRESENTADOR",
+      guestCount: 4,
+      language: "es",
+      cameraMode: "auto",
+      mute: true,
+      guests: Array.from({ length: 4 }, (_, i) => ({
+        slot: `INV${i + 1}`,
+        name: `Invitado ${i + 1}`
+      })),
+      recentRooms: []
+    });
+
+    let state = loadState();
+
+    function clampCount(n){
+      const value = Number.parseInt(n, 10);
+      if (Number.isNaN(value)) return 1;
+      return Math.max(1, Math.min(12, value));
+    }
+
+    function loadState(){
+      try{
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return defaultState();
+        const saved = JSON.parse(raw);
+        const base = defaultState();
+
+        const merged = {
+          ...base,
+          ...saved,
+          guests: Array.isArray(saved.guests) && saved.guests.length
+            ? saved.guests
+            : base.guests,
+          recentRooms: Array.isArray(saved.recentRooms) ? saved.recentRooms : []
+        };
+
+        merged.guestCount = clampCount(merged.guestCount || merged.guests.length || 1);
+        merged.guests = normalizeGuests(merged.guests, merged.guestCount);
+        return merged;
+      } catch (e) {
+        return defaultState();
+      }
+    }
+
+    function saveState(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function normalizeGuests(list, count){
+      const out = [];
+      for (let i = 0; i < count; i++){
+        const existing = list[i] || {};
+        out.push({
+          slot: String(existing.slot || `INV${i + 1}`).trim() || `INV${i + 1}`,
+          name: String(existing.name || `Invitado ${i + 1}`).trim() || `Invitado ${i + 1}`
+        });
+      }
+      return out;
+    }
+
+    function updatePreview(){
+      $("roomPreview").textContent = state.room || "PROINKASWITCH";
+      $("guestCountPreview").textContent = String(state.guestCount);
+      $("directorPreview").textContent = state.directorName || "PRESENTADOR";
+      $("cameraPreview").textContent =
+        state.cameraMode === "front" ? "Frontal" :
+        state.cameraMode === "back" ? "Trasera" : "Automática";
+      $("guestListCount").textContent = `${state.guestCount} enlace${state.guestCount === 1 ? "" : "s"}`;
+      $("directorLinkBox").textContent = buildDirectorUrl();
+    }
+
+    function buildGuestUrl(slot, name){
+      const url = new URL(CALL_PAGE);
+      url.searchParams.set("room", state.room || "PROINKASWITCH");
+      url.searchParams.set("slot", slot || "INV1");
+      url.searchParams.set("name", name || slot || "Invitado");
+      url.searchParams.set("language", state.language || "es");
+      if (state.cameraMode) url.searchParams.set("camera", state.cameraMode);
+      if (state.mute) url.searchParams.set("mute", "1");
+      return url.toString();
+    }
+
+    function buildDirectorUrl(){
+      const url = new URL(DIRECTOR_PAGE);
+      url.searchParams.set("room", state.room || "PROINKASWITCH");
+      url.searchParams.set("director", state.directorName || "PRESENTADOR");
+      url.searchParams.set("language", state.language || "es");
+      return url.toString();
+    }
+
+    function setSwitch(on){
+      state.mute = on;
+      $("muteSwitch").classList.toggle("on", on);
+      $("muteSwitch").setAttribute("aria-checked", on ? "true" : "false");
+      updatePreview();
+      saveState();
+    }
+
+    function syncInputs(){
+      $("room").value = state.room;
+      $("directorName").value = state.directorName;
+      $("guestCount").value = state.guestCount;
+      $("language").value = state.language;
+      $("cameraMode").value = state.cameraMode;
+      setSwitch(Boolean(state.mute));
+    }
+
+    function renderGuests(){
+      const container = $("guestList");
+      container.innerHTML = "";
+
+      state.guests.forEach((guest, idx) => {
+        const card = document.createElement("div");
+        card.className = "guest-card";
+        const guestUrl = buildGuestUrl(guest.slot, guest.name);
+
+        card.innerHTML = `
+          <div class="guest-top">
+            <div class="badge">Invitado ${idx + 1}</div>
+            <div class="badge">${escapeHtml(guest.slot)}</div>
+          </div>
+
+          <div class="guest-grid">
+            <div class="field">
+              <label>Slot</label>
+              <input data-index="${idx}" data-field="slot" value="${escapeAttr(guest.slot)}" />
+            </div>
+            <div class="field">
+              <label>Nombre</label>
+              <input data-index="${idx}" data-field="name" value="${escapeAttr(guest.name)}" />
+            </div>
+          </div>
+
+          <div class="guest-link">
+            <code>${escapeHtml(guestUrl)}</code>
+          </div>
+
+          <div class="mini-actions">
+            <button class="mini" data-action="copy" data-index="${idx}">Copiar enlace</button>
+            <button class="mini" data-action="open" data-index="${idx}">Abrir acceso</button>
+          </div>
+        `;
+
+        container.appendChild(card);
+      });
+
+      container.querySelectorAll("input[data-field]").forEach(input => {
+        input.addEventListener("input", (e) => {
+          const index = Number(e.target.dataset.index);
+          const field = e.target.dataset.field;
+          state.guests[index][field] = e.target.value;
+          updatePreview();
+          saveState();
+          renderGuests();
+        });
+      });
+
+      container.querySelectorAll("button[data-action]").forEach(btn => {
+        btn.addEventListener("click", async () => {
+          const index = Number(btn.dataset.index);
+          const guest = state.guests[index];
+          const url = buildGuestUrl(guest.slot, guest.name);
+
+          if (btn.dataset.action === "copy") {
+            await copyText(url);
+            toast("Enlace del invitado copiado");
+          } else {
+            window.open(url, "_blank", "noopener,noreferrer");
+          }
+        });
+      });
+    }
+
+    function renderRecentRooms(){
+      const recent = $("recentRooms");
+      recent.innerHTML = "";
+
+      const rooms = state.recentRooms.slice(0, 8);
+      if (!rooms.length){
+        recent.innerHTML = `<div class="footer-note">Aún no hay salas recientes guardadas.</div>`;
+        return;
+      }
+
+      rooms.forEach(room => {
+        const chip = document.createElement("button");
+        chip.className = "chip";
+        chip.textContent = room;
+        chip.onclick = () => {
+          state.room = room;
+          refreshFromState();
+          toast(`Sala cargada: ${room}`);
+        };
+        recent.appendChild(chip);
+      });
+    }
+
+    function refreshFromState(){
+      state.guestCount = clampCount(state.guestCount);
+      state.guests = normalizeGuests(state.guests, state.guestCount);
+
+      syncInputs();
+      updatePreview();
+      renderGuests();
+      renderRecentRooms();
+      saveState();
+    }
+
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+      } catch (e) {
+        const ta = document.createElement("textarea");
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+      }
+    }
+
+    function toast(message){
+      $("stateText").textContent = message;
+      $("stateDot").style.background = "var(--green)";
+      setTimeout(() => {
+        $("stateText").textContent = "Listo";
+      }, 1400);
+    }
+
+    function escapeHtml(value){
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#39;");
+    }
+
+    function escapeAttr(value){
+      return String(value ?? "").replaceAll('"', "&quot;");
+    }
+
+    $("room").addEventListener("input", () => {
+      state.room = $("room").value.trim() || "PROINKASWITCH";
+      updatePreview();
+      renderGuests();
+      renderRecentRooms();
+      saveState();
+    });
+
+    $("directorName").addEventListener("input", () => {
+      state.directorName = $("directorName").value.trim() || "PRESENTADOR";
+      updatePreview();
+      saveState();
+    });
+
+    $("guestCount").addEventListener("input", () => {
+      state.guestCount = clampCount($("guestCount").value);
+      state.guests = normalizeGuests(state.guests, state.guestCount);
+      refreshFromState();
+    });
+
+    $("language").addEventListener("change", () => {
+      state.language = $("language").value;
+      updatePreview();
+      renderGuests();
+      saveState();
+    });
+
+    $("cameraMode").addEventListener("change", () => {
+      state.cameraMode = $("cameraMode").value;
+      updatePreview();
+      renderGuests();
+      saveState();
+    });
+
+    $("muteSwitch").addEventListener("click", () => setSwitch(!state.mute));
+    $("muteSwitch").addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        setSwitch(!state.mute);
+      }
+    });
+
+    $("generateBtn").addEventListener("click", () => {
+      state.guests = normalizeGuests(state.guests, state.guestCount);
+      refreshFromState();
+      toast("Enlaces actualizados");
+    });
+
+    $("copyAllBtn").addEventListener("click", async () => {
+      const lines = [
+        `Sala: ${state.room}`,
+        `Director: ${state.directorName}`,
+        `Director link: ${buildDirectorUrl()}`,
+        "",
+        ...state.guests.map((guest, idx) => {
+          return `Invitado ${idx + 1} (${guest.slot} - ${guest.name}): ${buildGuestUrl(guest.slot, guest.name)}`;
+        })
+      ].join("\n");
+
+      await copyText(lines);
+      toast("Todo copiado al portapapeles");
+    });
+
+    $("openDirectorBtn").addEventListener("click", () => {
+      window.open(buildDirectorUrl(), "_blank", "noopener,noreferrer");
+    });
+
+    $("saveRoomBtn").addEventListener("click", () => {
+      const room = (state.room || "").trim();
+      if (!room) return;
+      state.recentRooms = [room, ...state.recentRooms.filter(r => r !== room)].slice(0, 8);
+      saveState();
+      renderRecentRooms();
+      toast("Sala guardada");
+    });
+
+    $("resetBtn").addEventListener("click", () => {
+      if (!confirm("¿Limpiar la configuración actual?")) return;
+      state = defaultState();
+      saveState();
+      syncInputs();
+      refreshFromState();
+      toast("Configuración reiniciada");
+    });
+
+    function init(){
+      state.room = state.room || "PROINKASWITCH";
+      state.directorName = state.directorName || "PRESENTADOR";
+      state.guestCount = clampCount(state.guestCount || 4);
+      state.language = state.language || "es";
+      state.cameraMode = state.cameraMode || "auto";
+      state.mute = Boolean(state.mute);
+      state.guests = normalizeGuests(state.guests || [], state.guestCount);
+      state.recentRooms = Array.isArray(state.recentRooms) ? state.recentRooms : [];
+
+      syncInputs();
+      refreshFromState();
+      $("stateText").textContent = "Listo para crear una sala";
+      $("stateDot").style.background = "var(--green)";
+    }
+
+    init();
+  </script>
 </body>
 </html>
