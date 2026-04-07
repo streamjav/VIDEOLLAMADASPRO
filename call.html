@@ -1,808 +1,135 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>StreamJav | Invitado</title>
-  <style>
-    :root{
-      --bg:#0b1020;
-      --bg2:#10182a;
-      --card:rgba(18,26,43,.96);
-      --line:rgba(255,255,255,.08);
-      --text:#eef4ff;
-      --muted:#8ea3c7;
-      --accent:#37e28f;
-      --accent2:#70f2b1;
-      --shadow:0 20px 60px rgba(0,0,0,.35);
-      --radius:24px;
-    }
-    *{box-sizing:border-box}
-    html,body{
-      margin:0;
-      min-height:100%;
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(900px 500px at 20% 0%, rgba(55,226,143,.10), transparent 55%),
-        radial-gradient(700px 420px at 100% 15%, rgba(78,161,255,.10), transparent 50%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Invitado</title>
 
-    body.session-live .app{
-      display:none;
-    }
+<style>
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#0b0f1a;
+  color:#fff;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
 
-    .app{
-      width:min(980px, calc(100% - 20px));
-      margin:0 auto;
-      padding:14px 0 24px;
-      padding-top:calc(14px + env(safe-area-inset-top));
-      padding-bottom:calc(24px + env(safe-area-inset-bottom));
-    }
+.container{
+  width:90%;
+  max-width:380px;
+  text-align:center;
+}
 
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:16px 18px;
-      border:1px solid var(--line);
-      border-radius:22px;
-      background:rgba(8,13,23,.78);
-      backdrop-filter:blur(14px);
-      box-shadow:var(--shadow);
-    }
+h1{
+  font-size:22px;
+  margin-bottom:5px;
+}
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-    }
+.sala{
+  color:#6c7aa0;
+  margin-bottom:20px;
+}
 
-    .logo{
-      width:46px;
-      height:46px;
-      border-radius:16px;
-      display:grid;
-      place-items:center;
-      background:linear-gradient(135deg, var(--accent), var(--accent2));
-      color:#04140c;
-      font-weight:900;
-      flex:0 0 auto;
-      box-shadow:0 12px 22px rgba(55,226,143,.16);
-    }
+video{
+  width:100%;
+  border-radius:16px;
+  background:#000;
+  margin-bottom:15px;
+}
 
-    .brand h1{
-      margin:0;
-      font-size:clamp(18px,2vw,26px);
-      line-height:1.1;
-      letter-spacing:.2px;
-    }
+select{
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  margin-bottom:15px;
+  background:#1a2135;
+  color:#fff;
+}
 
-    .brand p{
-      margin:4px 0 0;
-      color:var(--muted);
-      font-size:12px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-
-    .status{
-      padding:10px 14px;
-      border-radius:999px;
-      background:rgba(255,255,255,.05);
-      border:1px solid var(--line);
-      color:var(--muted);
-      font-size:12px;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      white-space:nowrap;
-      flex:0 0 auto;
-    }
-
-    .dot{
-      width:9px;
-      height:9px;
-      border-radius:50%;
-      background:var(--accent);
-      box-shadow:0 0 0 5px rgba(55,226,143,.12);
-    }
-
-    .hero{
-      margin-top:16px;
-      padding:18px;
-      border:1px solid var(--line);
-      border-radius:28px;
-      background:linear-gradient(180deg, rgba(17,24,39,.96), rgba(12,17,28,.92));
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(16px);
-    }
-
-    .grid{
-      display:grid;
-      grid-template-columns: 1fr;
-      gap:16px;
-    }
-
-    .panel{
-      border:1px solid var(--line);
-      border-radius:22px;
-      background:rgba(255,255,255,.03);
-      overflow:hidden;
-    }
-
-    .panel-head{
-      padding:16px 18px;
-      border-bottom:1px solid var(--line);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      background:rgba(255,255,255,.02);
-    }
-
-    .panel-head h2{
-      margin:0;
-      font-size:16px;
-      letter-spacing:.2px;
-    }
-
-    .panel-head span{
-      color:var(--muted);
-      font-size:12px;
-    }
-
-    .panel-body{padding:18px}
-
-    .title{
-      margin:0 0 8px;
-      font-size:clamp(24px,3vw,38px);
-      line-height:1.02;
-      letter-spacing:.2px;
-    }
-
-    .subtitle{
-      margin:0;
-      color:var(--muted);
-      line-height:1.55;
-      font-size:14px;
-      max-width:60ch;
-    }
-
-    .stats{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:12px;
-      margin-top:16px;
-    }
-
-    .stat{
-      padding:14px;
-      border-radius:18px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-      min-height:84px;
-    }
-
-    .stat .k{
-      color:var(--muted);
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      margin-bottom:8px;
-    }
-
-    .stat .v{
-      font-size:14px;
-      font-weight:800;
-      line-height:1.35;
-      word-break:break-word;
-    }
-
-    .form{
-      display:grid;
-      gap:12px;
-      margin-top:16px;
-    }
-
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-
-    label{
-      color:var(--muted);
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-    }
-
-    input,select{
-      width:100%;
-      background:rgba(7,11,18,.86);
-      color:var(--text);
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:13px 14px;
-      outline:none;
-      font-size:14px;
-    }
-
-    input[readonly]{
-      background:rgba(9,14,24,.98);
-      cursor:default;
-      color:#dfeaff;
-    }
-
-    input:focus,select:focus{
-      border-color:rgba(78,161,255,.75);
-      box-shadow:0 0 0 4px rgba(78,161,255,.10);
-    }
-
-    .buttons{
-      display:flex;
-      gap:10px;
-      margin-top:14px;
-      flex-wrap:wrap;
-    }
-
-    .btn{
-      border:0;
-      border-radius:16px;
-      min-height:56px;
-      padding:13px 18px;
-      font-weight:900;
-      font-size:14px;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      transition:transform .15s ease, opacity .15s ease, filter .15s ease;
-      flex:1 1 220px;
-    }
-
-    .btn:active{transform:translateY(1px)}
-
-    .btn-green{
-      background:linear-gradient(135deg, var(--accent), var(--accent2));
-      color:#06140d;
-      box-shadow:0 14px 28px rgba(55,226,143,.18);
-    }
-
-    .chips{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:2px;
-    }
-
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:10px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.04);
-      border:1px solid var(--line);
-      color:var(--text);
-      font-size:12px;
-      font-weight:700;
-      white-space:nowrap;
-    }
-
-    .summary{
-      margin-top:12px;
-      padding:14px;
-      border-radius:18px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-    }
-
-    .summary .line{
-      font-size:13px;
-      color:var(--muted);
-      line-height:1.45;
-      margin-bottom:10px;
-    }
-
-    .summary code{
-      display:block;
-      padding:12px;
-      border-radius:14px;
-      background:#050a12;
-      border:1px solid var(--line);
-      color:#d7e7ff;
-      overflow:auto;
-      white-space:pre-wrap;
-      word-break:break-word;
-      font-size:12px;
-    }
-
-    .preview-wrap{
-      border:1px solid var(--line);
-      border-radius:22px;
-      overflow:hidden;
-      background:#000;
-      box-shadow:var(--shadow);
-      min-height:420px;
-      display:flex;
-      flex-direction:column;
-    }
-
-    .preview-head{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      padding:12px 16px;
-      background:rgba(255,255,255,.03);
-      border-bottom:1px solid var(--line);
-      flex-wrap:wrap;
-    }
-
-    .preview-head strong{font-size:14px}
-    .preview-head span{color:var(--muted);font-size:12px}
-
-    .preview-body{
-      padding:16px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      flex:1 1 auto;
-      min-height:0;
-    }
-
-    video{
-      width:100%;
-      max-width:520px;
-      aspect-ratio:16/9;
-      border-radius:20px;
-      background:#000;
-      border:1px solid rgba(255,255,255,.12);
-      object-fit:cover;
-      transform:scaleX(1);
-    }
-
-    .mirror{transform:scaleX(-1)}
-
-    .hint{
-      margin-top:12px;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.45;
-    }
-
-    .error{
-      margin-top:12px;
-      padding:12px 14px;
-      border-radius:16px;
-      border:1px solid rgba(255,95,120,.25);
-      background:rgba(255,95,120,.08);
-      color:#ffd8df;
-      font-size:13px;
-      display:none;
-    }
-
-    #iframeContainer{
-      display:none;
-      position:fixed;
-      inset:0;
-      z-index:200;
-      background:#000;
-    }
-
-    #vdoFrame{
-      width:100%;
-      height:100%;
-      border:none;
-      display:block;
-      background:#000;
-    }
-
-    @media (max-width: 900px){
-      .stats{grid-template-columns:1fr}
-      .btn{flex-basis:100%}
-    }
-
-    @media (max-width: 760px){
-      .topbar{flex-direction:column;align-items:flex-start}
-      .status{width:100%;justify-content:center}
-      .preview-wrap{min-height:340px}
-    }
-  </style>
+button{
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:14px;
+  background:#3be28f;
+  color:#000;
+  font-weight:bold;
+  font-size:16px;
+}
+</style>
 </head>
+
 <body>
-  <div class="app" id="app">
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo">S</div>
-        <div style="min-width:0">
-          <h1 id="mainTitle">Bienvenido Invitado 1</h1>
-          <p id="mainSubtitle">Acceso limpio para la sala del director</p>
-        </div>
-      </div>
-      <div class="status">
-        <span class="dot" id="stateDot"></span>
-        <span id="stateText">Listo para configurar</span>
-      </div>
-    </div>
 
-    <section class="hero">
-      <div class="grid">
-        <div class="panel">
-          <div class="panel-head">
-            <h2>Acceso del invitado</h2>
-            <span>Interfaz minimalista</span>
-          </div>
-          <div class="panel-body">
-            <h2 class="title" id="titleText">Bienvenido Invitado 1</h2>
-            <p class="subtitle">
-              Selecciona la cámara frontal o trasera y presiona comenzar.
-              La pantalla interna se abre limpia y sin mostrar la interfaz completa de VDO.Ninja.
-            </p>
+<div class="container">
+  <h1 id="title">Bienvenido Invitado 1</h1>
+  <div class="sala">PROINKASWITCH</div>
 
-            <div class="stats">
-              <div class="stat">
-                <div class="k">Sala</div>
-                <div class="v" id="roomPreview">PROINKASWITCH</div>
-              </div>
-              <div class="stat">
-                <div class="k">Invitado</div>
-                <div class="v" id="guestPreview">Invitado 1</div>
-              </div>
-              <div class="stat">
-                <div class="k">Fuente de video</div>
-                <div class="v" id="cameraPreview">Frontal</div>
-              </div>
-            </div>
+  <video id="preview" autoplay muted playsinline></video>
 
-            <div class="form">
-              <div class="field">
-                <label for="room">Sala</label>
-                <input id="room" readonly value="PROINKASWITCH" />
-              </div>
+  <select id="cameraSelect">
+    <option value="user">Cámara frontal</option>
+    <option value="environment">Cámara trasera</option>
+  </select>
 
-              <div class="field">
-                <label for="videoSource">Fuente de video</label>
-                <select id="videoSource">
-                  <option value="front">Cámara frontal</option>
-                  <option value="rear">Cámara trasera</option>
-                </select>
-              </div>
+  <button onclick="entrar()">COMENZAR</button>
+</div>
 
-              <div class="chips">
-                <div class="chip" id="guestChip">Bienvenido Invitado 1</div>
-                <div class="chip" id="roomChip">Sala protegida</div>
-              </div>
+<!-- VDO NINJA OCULTO -->
+<iframe id="frame" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;border:none;"></iframe>
 
-              <div class="buttons">
-                <button class="btn btn-green" id="startBtn" disabled>COMENZAR</button>
-              </div>
+<script>
+let stream;
+let facing = "user";
 
-              <div class="error" id="errorBox"></div>
-            </div>
+async function iniciarCamara(){
+  if(stream){
+    stream.getTracks().forEach(t=>t.stop());
+  }
 
-            <div class="summary">
-              <div class="line">Enlace final preparado</div>
-              <code id="roomLinkBox">—</code>
-              <div class="hint">
-                Se oculta la vista local al entrar y se abre la conexión con la cámara ya seleccionada.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel">
-          <div class="panel-head">
-            <h2>Vista previa</h2>
-            <span id="previewHeadState">Esperando cámara</span>
-          </div>
-          <div class="panel-body">
-            <div class="preview-wrap">
-              <div class="preview-head">
-                <div>
-                  <strong>Cámara activa</strong><br />
-                  <span>Previsualización antes de entrar</span>
-                </div>
-                <div class="chip" id="facingChip">Frontal</div>
-              </div>
-              <div class="preview-body">
-                <video id="localPreview" autoplay muted playsinline></video>
-              </div>
-            </div>
-            <div class="hint">
-              Si cambias la cámara, la vista previa se reinicia para aplicar el cambio de forma correcta.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <div id="iframeContainer">
-    <iframe
-      id="vdoFrame"
-      allow="camera *; microphone *; fullscreen; autoplay; picture-in-picture"
-      allowfullscreen
-      referrerpolicy="no-referrer"
-    ></iframe>
-  </div>
-
-  <script>
-    const $ = (id) => document.getElementById(id);
-
-    const roomInput = $("room");
-    const videoSource = $("videoSource");
-    const localPreview = $("localPreview");
-    const startBtn = $("startBtn");
-    const iframeContainer = $("iframeContainer");
-    const vdoFrame = $("vdoFrame");
-    const errorBox = $("errorBox");
-    const stateText = $("stateText");
-    const stateDot = $("stateDot");
-    const roomLinkBox = $("roomLinkBox");
-    const previewHeadState = $("previewHeadState");
-    const cameraPreview = $("cameraPreview");
-    const facingChip = $("facingChip");
-    const mainTitle = $("mainTitle");
-    const mainSubtitle = $("mainSubtitle");
-    const guestPreview = $("guestPreview");
-    const guestChip = $("guestChip");
-    const roomChip = $("roomChip");
-    const titleText = $("titleText");
-
-    const params = new URLSearchParams(location.search);
-    const roomName = (params.get("room") || "PROINKASWITCH").trim();
-    const slotName = (params.get("slot") || "INV1").trim();
-    const slotNumber = (slotName.match(/\d+/)?.[0]) || "1";
-    const guestName = `Invitado ${slotNumber}`;
-
-    let currentStream = null;
-    let currentFacing = "front";
-    let previewReady = false;
-
-    roomInput.value = roomName;
-    mainTitle.textContent = `Bienvenido ${guestName}`;
-    mainSubtitle.textContent = `Acceso preparado para ${roomName}`;
-    titleText.textContent = `Bienvenido ${guestName}`;
-    guestPreview.textContent = guestName;
-    guestChip.textContent = `Bienvenido ${guestName}`;
-    roomChip.textContent = roomName;
-    roomLinkBox.textContent = buildRoomURL();
-    updateFacingUI();
-
-    function setStatus(message, tone = "neutral"){
-      stateText.textContent = message;
-      previewHeadState.textContent = message;
-      stateDot.style.background =
-        tone === "good" ? "var(--accent)" :
-        tone === "bad" ? "#ff5d6c" :
-        "var(--accent)";
-    }
-
-    function showError(message){
-      errorBox.textContent = message;
-      errorBox.style.display = "block";
-      setStatus(message, "bad");
-    }
-
-    function clearError(){
-      errorBox.textContent = "";
-      errorBox.style.display = "none";
-    }
-
-    function stopStream(stream){
-      if (!stream) return;
-      stream.getTracks().forEach(track => {
-        try { track.stop(); } catch {}
-      });
-    }
-
-    function facingLabel(mode){
-      return mode === "rear" ? "Trasera" : "Frontal";
-    }
-
-    function vdoFacing(mode){
-      return mode === "rear" ? "rear" : "front";
-    }
-
-    function updateFacingUI(){
-      const label = facingLabel(currentFacing);
-      cameraPreview.textContent = label;
-      facingChip.textContent = label;
-      localPreview.classList.toggle("mirror", currentFacing === "front");
-      roomLinkBox.textContent = buildRoomURL();
-    }
-
-    function buildDisguiseJS(){
-      return `
-(function(){
-  const guestName = ${JSON.stringify(guestName)};
-  const roomName = ${JSON.stringify(roomName)};
-  const welcome = "Bienvenido " + guestName;
-
-  const apply = () => {
-    document.title = "StreamJav | Invitado";
-
-    const texts = [...document.querySelectorAll("h1,h2,h3,p,span,strong,label,button,small,div")];
-    texts.forEach(el => {
-      const t = (el.textContent || "").trim().toLowerCase();
-      if (t === "join room with camera") el.textContent = welcome;
-      if (t.includes("screenshare with room")) el.style.display = "none";
-      if (t.includes("select audio source")) el.style.display = "none";
-      if (t.includes("destination of output")) el.style.display = "none";
-      if (t.includes("audio source")) el.style.display = "none";
-      if (t.includes("output destination")) el.style.display = "none";
-      if (t.includes("vdo.ninja")) el.style.display = "none";
+  try{
+    stream = await navigator.mediaDevices.getUserMedia({
+      video:{facingMode:facing},
+      audio:true
     });
 
-    const nodes = [...document.querySelectorAll("*")];
-    nodes.forEach(el => {
-      const text = ((el.textContent || "") + " " + (el.getAttribute("aria-label") || "") + " " + (el.getAttribute("title") || "")).toLowerCase();
+    document.getElementById("preview").srcObject = stream;
 
-      if (text.includes("screenshare with room")) el.style.display = "none";
-      if (text.includes("select audio source")) el.style.display = "none";
-      if (text.includes("destination of output")) el.style.display = "none";
-      if (text.includes("audio source")) el.style.display = "none";
-      if (text.includes("output destination")) el.style.display = "none";
-      if (text.includes("vdo.ninja")) el.style.display = "none";
-      if (text.includes("join room with camera")) el.textContent = welcome;
-    });
+  }catch(e){
+    alert("No se pudo acceder a la cámara");
+  }
+}
 
-    const buttons = [...document.querySelectorAll("button")];
-    buttons.forEach(btn => {
-      const t = (btn.textContent || "").trim().toLowerCase();
-      if (t === "join" || t === "enter" || t.includes("join room")) btn.textContent = "COMENZAR";
-      if (t.includes("screenshare")) btn.style.display = "none";
-    });
-  };
+document.getElementById("cameraSelect").onchange = (e)=>{
+  facing = e.target.value;
+  iniciarCamara();
+};
 
-  const observer = new MutationObserver(apply);
-  observer.observe(document.documentElement, { childList:true, subtree:true, characterData:true });
-  apply();
-  setTimeout(apply, 150);
-  setTimeout(apply, 700);
-})();
-      `.trim();
-    }
+function entrar(){
 
-    function buildDisguiseCSS(){
-      return `
-html,body{background:#050812 !important;color:#eef4ff !important;}
-body{overflow:hidden !important;}
-a[href*="vdo.ninja"], header, nav{display:none !important;}
-      `.trim();
-    }
+  // detener preview
+  if(stream){
+    stream.getTracks().forEach(t=>t.stop());
+  }
 
-    function b64(str){
-      return btoa(unescape(encodeURIComponent(str)));
-    }
+  // URL limpia VDO NINJA
+  const url = `https://vdo.ninja/?room=PROINKASWITCH&push=INV1&webcam&clean&nopreview&facing=${facing}`;
 
-    function buildRoomURL(){
-      const url = new URL("https://vdo.ninja/");
-      url.searchParams.set("room", roomName);
-      url.searchParams.set("push", slotName);
-      url.searchParams.set("webcam", "");
-      url.searchParams.set("language", "es");
-      url.searchParams.set("header", "SALA");
-      url.searchParams.set("btntxt", "ENTRAR");
-      url.searchParams.set("clean", "");
-      url.searchParams.set("nopreview", "");
-      url.searchParams.set("noaudio", "");
-      url.searchParams.set("facing", vdoFacing(currentFacing));
-      url.searchParams.set("base64js", b64(buildDisguiseJS()));
-      url.searchParams.set("base64css", b64(buildDisguiseCSS()));
-      return url.toString();
-    }
+  const frame = document.getElementById("frame");
 
-    async function pickBestVideoConstraints(mode){
-      const facingMode = mode === "rear" ? "environment" : "user";
+  frame.src = url;
+  frame.style.display = "block";
 
-      if (!navigator.mediaDevices?.enumerateDevices) {
-        return { video: { facingMode: { ideal: facingMode } }, audio: true };
-      }
+  document.querySelector(".container").style.display = "none";
+}
 
-      try{
-        const devices = await navigator.mediaDevices.enumerateDevices();
-        const cams = devices.filter(d => d.kind === "videoinput");
+// iniciar al cargar
+iniciarCamara();
+</script>
 
-        const keywords = mode === "rear"
-          ? ["back", "rear", "environment", "trasera", "posterior"]
-          : ["front", "frontal", "user", "anterior"];
-
-        const matched = cams.find(d => {
-          const label = (d.label || "").toLowerCase();
-          return keywords.some(k => label.includes(k));
-        });
-
-        if (matched) {
-          return { video: { deviceId: { exact: matched.deviceId } }, audio: true };
-        }
-      } catch {}
-
-      return { video: { facingMode: { ideal: facingMode } }, audio: true };
-    }
-
-    async function startCamera(mode){
-      clearError();
-      setStatus("Solicitando cámara...", "neutral");
-
-      stopStream(currentStream);
-      currentStream = null;
-      localPreview.srcObject = null;
-
-      try{
-        const constraints = await pickBestVideoConstraints(mode);
-        const stream = await navigator.mediaDevices.getUserMedia(constraints);
-        currentStream = stream;
-        localPreview.srcObject = stream;
-
-        const videoTrack = stream.getVideoTracks()[0];
-        const settings = videoTrack?.getSettings?.() || {};
-        currentFacing = settings.facingMode === "environment" ? "rear" : mode;
-
-        updateFacingUI();
-        setStatus("Vista previa activa", "good");
-        previewReady = true;
-        startBtn.disabled = false;
-      } catch (err){
-        console.error(err);
-        previewReady = false;
-        startBtn.disabled = true;
-        showError("No se pudo acceder a la cámara. Revisa permisos o cambia la fuente de video.");
-      }
-    }
-
-    function enterLive(){
-      clearError();
-
-      if (!previewReady) {
-        showError("Primero activa la cámara antes de comenzar.");
-        return;
-      }
-
-      const url = buildRoomURL();
-
-      stopStream(currentStream);
-      currentStream = null;
-      localPreview.srcObject = null;
-
-      document.body.classList.add("session-live");
-      iframeContainer.style.display = "block";
-      vdoFrame.src = url;
-      setStatus("Conectando a la sala...", "good");
-    }
-
-    videoSource.addEventListener("change", async () => {
-      currentFacing = videoSource.value;
-      updateFacingUI();
-      await startCamera(currentFacing);
-      roomLinkBox.textContent = buildRoomURL();
-    });
-
-    startBtn.addEventListener("click", enterLive);
-
-    window.addEventListener("beforeunload", () => stopStream(currentStream));
-
-    async function init(){
-      updateFacingUI();
-      startBtn.disabled = true;
-
-      if (!navigator.mediaDevices?.getUserMedia) {
-        showError("Este navegador no soporta cámara.");
-        return;
-      }
-
-      await startCamera(currentFacing);
-    }
-
-    init();
-  </script>
 </body>
 </html>
