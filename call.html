@@ -86,11 +86,12 @@
 
         .btn-start:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4); }
         .btn-start:active { transform: translateY(0); }
+        .btn-start:disabled { background: #30363d; cursor: not-allowed; box-shadow: none; color: #94a3b8; }
 
         #vdo-frame {
             display: none;
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             border: none; background: #000; z-index: 9999;
         }
     </style>
@@ -110,7 +111,7 @@
         <select id="cam-select"></select>
     </div>
 
-    <button class="btn-start" onclick="iniciarStream()">COMENZAR TRANSMISIÓN</button>
+    <button class="btn-start" id="btn-start" onclick="iniciarStream()">COMENZAR TRANSMISIÓN</button>
 </div>
 
 <iframe id="vdo-frame" allow="camera; microphone; autoplay; display-capture; fullscreen"></iframe>
@@ -126,9 +127,9 @@
 
     const camSelect = document.getElementById('cam-select');
     const preview = document.getElementById('local-preview');
+    const btnStart = document.getElementById('btn-start');
     let currentStream = null;
 
-    // Función para traducir nombres de cámaras
     function traducirNombreCamara(label, index) {
         label = label.toLowerCase();
         if (label.includes('front') || label.includes('frontal') || label.includes('user')) {
@@ -139,7 +140,6 @@
         return `Cámara ${index + 1}`;
     }
 
-    // Obtener lista de cámaras
     async function cargarDispositivos() {
         try {
             await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
@@ -173,15 +173,37 @@
     camSelect.onchange = actualizarPreview;
 
     function iniciarStream() {
-        if (currentStream) currentStream.getTracks().forEach(t => t.stop());
+        // 1. Identificar si es cámara frontal o trasera por el texto
+        let facingParam = "";
+        const selectedText = camSelect.options[camSelect.selectedIndex].text.toLowerCase();
+        if (selectedText.includes('frontal')) {
+            facingParam = "&facing=front";
+        } else if (selectedText.includes('trasera')) {
+            facingParam = "&facing=back";
+        }
 
-        // Construcción de la URL de VDO.Ninja con autostart
-        const ninjaUrl = `https://vdo.ninja/?room=${room}&push=${push}&label=${name}&vdev=${camSelect.value}&autostart&webcam&clean&nopreview&nochat`;
+        // 2. Apagar la cámara y liberar el hardware INMEDIATAMENTE
+        if (currentStream) {
+            currentStream.getTracks().forEach(track => track.stop());
+            preview.srcObject = null;
+        }
 
-        const frame = document.getElementById('vdo-frame');
-        frame.src = ninjaUrl;
-        frame.style.display = "block";
-        document.getElementById('setup-ui').style.display = "none";
+        // 3. Cambiar el botón para dar feedback al usuario
+        btnStart.innerText = "CONECTANDO...";
+        btnStart.disabled = true;
+
+        // 4. Retrasar la carga del iframe para que el celular libere la cámara (800ms)
+        setTimeout(() => {
+            const ninjaUrl = `https://vdo.ninja/?room=${room}&push=${push}&label=${encodeURIComponent(name)}&autostart=1&webcam=1${facingParam}&clean=1&nopreview=1&nochat=1`;
+            
+            const frame = document.getElementById('vdo-frame');
+            frame.src = ninjaUrl;
+            
+            // Ocultar nuestra interfaz y mostrar el iframe
+            document.getElementById('setup-ui').style.display = "none";
+            frame.style.display = "block";
+            
+        }, 800);
     }
 
     cargarDispositivos();
