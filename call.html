@@ -1,134 +1,158 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Invitado</title>
-
-<style>
-body{
-  margin:0;
-  font-family: Arial, sans-serif;
-  background:#0b0f1a;
-  color:#fff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100vh;
-}
-
-.container{
-  width:90%;
-  max-width:380px;
-  text-align:center;
-}
-
-h1{
-  font-size:22px;
-  margin-bottom:5px;
-}
-
-.sala{
-  color:#6c7aa0;
-  margin-bottom:20px;
-}
-
-video{
-  width:100%;
-  border-radius:16px;
-  background:#000;
-  margin-bottom:15px;
-}
-
-select{
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:none;
-  margin-bottom:15px;
-  background:#1a2135;
-  color:#fff;
-}
-
-button{
-  width:100%;
-  padding:14px;
-  border:none;
-  border-radius:14px;
-  background:#3be28f;
-  color:#000;
-  font-weight:bold;
-  font-size:16px;
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StreamJav | Invitado</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', Arial, sans-serif;
+      background: #07111f;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .container {
+      width: 90%;
+      max-width: 380px;
+      text-align: center;
+      z-index: 10;
+    }
+    h1 { font-size: 22px; margin-bottom: 5px; color: #eef4ff; }
+    .sala { color: #4ea1ff; margin-bottom: 20px; font-weight: bold; text-transform: uppercase; }
+    video {
+      width: 100%;
+      aspect-ratio: 16/9;
+      border-radius: 16px;
+      background: #000;
+      margin-bottom: 15px;
+      object-fit: cover;
+      border: 2px solid rgba(255,255,255,0.1);
+    }
+    select {
+      width: 100%;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+      margin-bottom: 15px;
+      background: #1a2135;
+      color: #fff;
+      outline: none;
+    }
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #2ddc86, #80ffbf);
+      color: #05130a;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    button:active { transform: scale(0.98); }
+    
+    /* Iframe de VDO.Ninja pantalla completa al activar */
+    #frame {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: #000;
+      z-index: 100;
+    }
+  </style>
 </head>
-
 <body>
 
-<div class="container">
-  <h1 id="title">Bienvenido Invitado 1</h1>
-  <div class="sala">PROINKASWITCH</div>
+<div class="container" id="ui-setup">
+  <h1 id="displayName">Preparando conexión...</h1>
+  <div class="sala" id="displayRoom">---</div>
 
   <video id="preview" autoplay muted playsinline></video>
 
+  <label style="font-size: 12px; color: #a4b7d5; display: block; margin-bottom: 8px;">SELECCIONAR CÁMARA</label>
   <select id="cameraSelect">
-    <option value="user">Cámara frontal</option>
-    <option value="environment">Cámara trasera</option>
+    <option value="user">Cámara Frontal</option>
+    <option value="environment">Cámara Trasera</option>
   </select>
 
-  <button onclick="entrar()">COMENZAR</button>
+  <button onclick="entrar()">COMENZAR TRANSMISIÓN</button>
 </div>
 
-<!-- VDO NINJA OCULTO -->
-<iframe id="frame" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;border:none;"></iframe>
+<iframe 
+  id="frame" 
+  allow="camera *; microphone *; autoplay; fullscreen; display-capture; picture-in-picture"
+  referrerpolicy="no-referrer">
+</iframe>
 
 <script>
-let stream;
-let facing = "user";
+  const params = new URLSearchParams(window.location.search);
+  const room = params.get("room") || "PROINKASWITCH";
+  const slot = params.get("slot") || "INV1";
+  const name = params.get("name") || "Invitado";
+  
+  document.getElementById("displayName").textContent = `Hola, ${name}`;
+  document.getElementById("displayRoom").textContent = `Sala: ${room}`;
 
-async function iniciarCamara(){
-  if(stream){
-    stream.getTracks().forEach(t=>t.stop());
+  let stream;
+  let facing = "user";
+
+  async function iniciarCamara() {
+    if (stream) {
+      stream.getTracks().forEach(t => t.stop());
+    }
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({
+        video: { facingMode: facing },
+        audio: true
+      });
+      document.getElementById("preview").srcObject = stream;
+    } catch (e) {
+      console.error(e);
+      alert("Error: Asegúrate de dar permisos de cámara y micrófono.");
+    }
   }
 
-  try{
-    stream = await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:facing},
-      audio:true
-    });
+  document.getElementById("cameraSelect").onchange = (e) => {
+    facing = e.target.value;
+    iniciarCamara();
+  };
 
-    document.getElementById("preview").srcObject = stream;
+  function entrar() {
+    // Detenemos la preview local para liberar el hardware para el iframe
+    if (stream) {
+      stream.getTracks().forEach(t => t.stop());
+    }
 
-  }catch(e){
-    alert("No se pudo acceder a la cámara");
+    // Construcción de URL con autostart y parámetros dinámicos
+    const vdoUrl = new URL("https://vdo.ninja/");
+    vdoUrl.searchParams.set("room", room);
+    vdoUrl.searchParams.set("push", slot);
+    vdoUrl.searchParams.set("label", name);
+    vdoUrl.searchParams.set("webcam", "");
+    vdoUrl.searchParams.set("autostart", ""); // Salta la configuración de Ninja
+    vdoUrl.searchParams.set("clean", "");
+    vdoUrl.searchParams.set("nopreview", "");
+    vdoUrl.searchParams.set("facing", facing);
+    vdoUrl.searchParams.set("nochat", "");
+
+    const frame = document.getElementById("frame");
+    frame.src = vdoUrl.toString();
+    frame.style.display = "block";
+    document.getElementById("ui-setup").style.display = "none";
   }
-}
 
-document.getElementById("cameraSelect").onchange = (e)=>{
-  facing = e.target.value;
+  // Inicializar al cargar
   iniciarCamara();
-};
-
-function entrar(){
-
-  // detener preview
-  if(stream){
-    stream.getTracks().forEach(t=>t.stop());
-  }
-
-  // URL limpia VDO NINJA
-  const url = `https://vdo.ninja/?room=PROINKASWITCH&push=INV1&webcam&clean&nopreview&facing=${facing}`;
-
-  const frame = document.getElementById("frame");
-
-  frame.src = url;
-  frame.style.display = "block";
-
-  document.querySelector(".container").style.display = "none";
-}
-
-// iniciar al cargar
-iniciarCamara();
 </script>
 
 </body>
