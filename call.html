@@ -185,35 +185,6 @@
             box-shadow: 0 10px 24px rgba(59, 130, 246, 0.12);
         }
 
-        .control-group {
-            text-align: left;
-            margin-bottom: 14px;
-        }
-
-        label {
-            display: block;
-            font-size: 11px;
-            color: var(--text-muted);
-            font-weight: 800;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: .08em;
-        }
-
-        select {
-            width: 100%;
-            min-height: 54px;
-            padding: 14px 14px;
-            background: #0d1117;
-            border: 1px solid #30363d;
-            border-radius: 14px;
-            color: #fff;
-            font-size: 15px;
-            outline: none;
-            appearance: none;
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.02);
-        }
-
         .btn-start {
             width: 100%;
             min-height: 58px;
@@ -325,11 +296,6 @@
         <button type="button" class="cam-btn" id="btn-back" onclick="seleccionarCamara('back')">Cámara Trasera</button>
     </div>
 
-    <div class="control-group">
-        <label>Fuente de video</label>
-        <select id="cam-select"></select>
-    </div>
-
     <button class="btn-start" id="btn-start" onclick="iniciarStream()">COMENZAR TRANSMISIÓN</button>
 
     <div class="helper-row">
@@ -349,7 +315,11 @@
     document.getElementById('user-title').innerText = `Bienvenido ${name}`;
     document.getElementById('room-name').innerText = `SALA: ${room}`;
 
-    const camSelect = document.getElementById('cam-select');
+    const camSelect = document.getElementById('cam-select') || document.createElement('select');
+    if (!camSelect.id) camSelect.id = 'cam-select';
+    camSelect.style.display = 'none';
+    if (!camSelect.parentNode) document.body.appendChild(camSelect);
+
     const preview = document.getElementById('local-preview');
     const btnStart = document.getElementById('btn-start');
     const btnFront = document.getElementById('btn-front');
@@ -380,7 +350,11 @@
                 camSelect.appendChild(option);
             });
 
-            actualizarPreview();
+            if (camSelect.options.length > 0) {
+                seleccionarCamara('front');
+            } else {
+                actualizarPreview();
+            }
         } catch (e) {
             alert("Acceso a cámara denegado.");
         }
@@ -420,6 +394,9 @@
 
         if (idx >= 0) {
             camSelect.selectedIndex = idx;
+            actualizarPreview();
+        } else if (camSelect.options.length > 0) {
+            camSelect.selectedIndex = 0;
             actualizarPreview();
         }
     }
