@@ -1,584 +1,545 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>StreamJav | Director</title>
-  <style>
-    :root{
-      --bg:#07111f;
-      --bg2:#0b1728;
-      --line:rgba(255,255,255,.10);
-      --text:#eef4ff;
-      --muted:#a4b7d5;
-      --blue:#4ea1ff;
-      --green:#2ddc86;
-      --shadow:0 18px 50px rgba(0,0,0,.35);
-    }
-    *{box-sizing:border-box}
-    html,body{
-      margin:0;
-      min-height:100%;
-      color:var(--text);
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:
-        radial-gradient(900px 520px at 15% 0%, rgba(78,161,255,.18), transparent 58%),
-        radial-gradient(700px 420px at 100% 10%, rgba(45,220,134,.12), transparent 50%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-      overflow:hidden;
-    }
-    .shell{
-      position:fixed;
-      inset:0;
-      display:flex;
-      flex-direction:column;
-    }
-    .topbar{
-      height:64px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:0 16px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      background:rgba(6,10,18,.72);
-      backdrop-filter:blur(14px);
-      z-index:20;
-      flex:0 0 auto;
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-    }
-    .logo{
-      width:38px;height:38px;border-radius:13px;
-      background:linear-gradient(135deg, #4ea1ff, #2ddc86);
-      color:#03111d;
-      display:grid;
-      place-items:center;
-      font-weight:900;
-      flex:0 0 auto;
-      box-shadow:0 10px 20px rgba(78,161,255,.15);
-    }
-    .brand .text{min-width:0}
-    .brand h1{
-      margin:0;
-      font-size:15px;
-      letter-spacing:.5px;
-      text-transform:uppercase;
-    }
-    .brand p{
-      margin:2px 0 0;
-      color:var(--muted);
-      font-size:12px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .status{
-      display:flex;
-      align-items:center;
-      gap:8px;
-      color:var(--muted);
-      font-size:12px;
-      white-space:nowrap;
-    }
-    .dot{
-      width:9px;height:9px;border-radius:50%;
-      background:var(--green);
-      box-shadow:0 0 0 5px rgba(45,220,134,.12);
-    }
-    .main{
-      flex:1 1 auto;
-      display:grid;
-      grid-template-columns: 370px 1fr;
-      min-height:0;
-    }
-    .side{
-      border-right:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.02);
-      padding:18px;
-      overflow:auto;
-    }
-    .stage{
-      position:relative;
-      min-width:0;
-      min-height:0;
-      overflow:hidden;
-      background:#000;
-    }
-    .panel{
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:22px;
-      background:rgba(255,255,255,.03);
-      box-shadow:var(--shadow);
-      overflow:hidden;
-      margin-bottom:14px;
-    }
-    .card-head{
-      padding:14px 16px;
-      border-bottom:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.02);
-      display:flex;
-      justify-content:space-between;
-      gap:10px;
-      align-items:center;
-    }
-    .card-head strong{font-size:14px}
-    .card-head span{color:var(--muted);font-size:12px}
-    .card-body{padding:16px}
-    .title{
-      margin:0 0 10px;
-      font-size:clamp(22px,2.8vw,34px);
-      line-height:1.02;
-    }
-    .subtitle{
-      margin:0;
-      color:var(--muted);
-      line-height:1.6;
-      font-size:14px;
-    }
-    .stats{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-      margin-top:14px;
-    }
-    .stat{
-      padding:12px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(255,255,255,.03);
-      min-height:76px;
-    }
-    .stat .k{
-      color:var(--muted);
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      margin-bottom:6px;
-    }
-    .stat .v{
-      font-size:13px;
-      font-weight:800;
-      line-height:1.4;
-      word-break:break-word;
-    }
-    .form{
-      display:grid;
-      gap:12px;
-      margin-top:14px;
-    }
-    .row{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
-    .field{display:flex;flex-direction:column;gap:8px}
-    label{
-      color:var(--muted);
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-    }
-    input,select{
-      width:100%;
-      background:rgba(7,11,18,.86);
-      color:var(--text);
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:16px;
-      padding:13px 14px;
-      outline:none;
-      font-size:14px;
-    }
-    input:focus,select:focus{
-      border-color:rgba(78,161,255,.75);
-      box-shadow:0 0 0 4px rgba(78,161,255,.10);
-    }
-    .buttons{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-top:14px;
-    }
-    .btn{
-      border:0;
-      border-radius:16px;
-      min-height:52px;
-      padding:13px 16px;
-      font-weight:800;
-      font-size:14px;
-      cursor:pointer;
-      flex:1 1 180px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-    }
-    .btn-green{background:linear-gradient(135deg,var(--green),#80ffbf);color:#05130a}
-    .btn-blue{background:linear-gradient(135deg,var(--blue),#7287ff);color:#05111d}
-    .btn-dark{background:rgba(255,255,255,.06);color:var(--text);border:1px solid rgba(255,255,255,.10)}
-    .summary{
-      margin-top:12px;
-      padding:14px;
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.03);
-    }
-    .summary .line{
-      font-size:13px;
-      color:var(--muted);
-      line-height:1.45;
-      margin-bottom:10px;
-    }
-    .summary code{
-      display:block;
-      padding:12px;
-      border-radius:14px;
-      background:#050a12;
-      border:1px solid rgba(255,255,255,.10);
-      color:#d7e7ff;
-      overflow:auto;
-      white-space:pre-wrap;
-      word-break:break-word;
-      font-size:12px;
-    }
-    .iframe-wrap{
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:22px;
-      overflow:hidden;
-      background:#000;
-      box-shadow:var(--shadow);
-      height:100%;
-      display:flex;
-      flex-direction:column;
-      min-height:0;
-    }
-    .iframe-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      padding:12px 16px;
-      background:rgba(255,255,255,.03);
-      border-bottom:1px solid rgba(255,255,255,.08);
-      flex-wrap:wrap;
-    }
-    .iframe-top strong{font-size:14px}
-    .iframe-top span{color:var(--muted);font-size:12px}
-    iframe{
-      width:100%;
-      flex:1 1 auto;
-      border:0;
-      display:block;
-      background:#000;
-      min-height:0;
-    }
-    .guest-list{
-      display:grid;
-      gap:12px;
-      margin-top:14px;
-    }
-    .guest-card{
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:20px;
-      background:rgba(255,255,255,.03);
-      padding:14px;
-    }
-    .guest-top{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-bottom:12px;
-    }
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:7px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.10);
-      color:var(--muted);
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      white-space:nowrap;
-    }
-    .guest-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:10px;
-    }
-    .mini-actions{
-      display:flex;
-      gap:10px;
-      margin-top:12px;
-      flex-wrap:wrap;
-    }
-    .mini{
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(255,255,255,.05);
-      color:var(--text);
-      border-radius:14px;
-      min-height:42px;
-      padding:10px 12px;
-      font-size:13px;
-      font-weight:800;
-      cursor:pointer;
-      flex:1 1 120px;
-    }
-    .footer-note{
-      margin-top:14px;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.45;
-    }
-    @media (max-width: 1080px){
-      .main{grid-template-columns:1fr}
-      .side{border-right:0;border-bottom:1px solid rgba(255,255,255,.08)}
-      .iframe-wrap{height:70vh}
-    }
-    @media (max-width: 760px){
-      .topbar{height:auto;min-height:64px;padding:12px 14px;flex-wrap:wrap}
-      .row,.guest-grid,.stats{grid-template-columns:1fr}
-      .btn,.mini{flex-basis:100%}
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<meta name="theme-color" content="#0b0f1a" />
+<title>StreamJav | Director</title>
+<style>
+  :root{
+    --bg:#0b0f1a;
+    --bg2:#10182a;
+    --card:#121a2b;
+    --line:rgba(255,255,255,.08);
+    --text:#eef4ff;
+    --muted:#8ea3c7;
+    --accent:#37e28f;
+    --accent2:#70f2b1;
+    --blue:#4ea1ff;
+    --shadow:0 20px 60px rgba(0,0,0,.35);
+    --radius:24px;
+  }
+
+  *{box-sizing:border-box}
+  html,body{
+    margin:0;
+    min-height:100%;
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    color:var(--text);
+    background:
+      radial-gradient(900px 500px at 20% 0%, rgba(55,226,143,.10), transparent 55%),
+      radial-gradient(700px 420px at 100% 15%, rgba(78,161,255,.10), transparent 50%),
+      linear-gradient(180deg, var(--bg), var(--bg2));
+  }
+
+  .app{
+    width:min(980px, calc(100% - 20px));
+    margin:0 auto;
+    padding:14px 0 24px;
+    padding-top:calc(14px + env(safe-area-inset-top));
+    padding-bottom:calc(24px + env(safe-area-inset-bottom));
+  }
+
+  .topbar{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:12px;
+    padding:16px 18px;
+    border:1px solid var(--line);
+    border-radius:22px;
+    background:rgba(8,13,23,.78);
+    backdrop-filter:blur(14px);
+    box-shadow:var(--shadow);
+  }
+
+  .brand{
+    display:flex;
+    align-items:center;
+    gap:12px;
+    min-width:0;
+  }
+
+  .logo{
+    width:46px;
+    height:46px;
+    border-radius:16px;
+    display:grid;
+    place-items:center;
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    color:#04140c;
+    font-weight:900;
+    flex:0 0 auto;
+    box-shadow:0 12px 22px rgba(55,226,143,.16);
+  }
+
+  .brand h1{
+    margin:0;
+    font-size:clamp(18px,2vw,26px);
+    line-height:1.1;
+    letter-spacing:.2px;
+  }
+
+  .brand p{
+    margin:4px 0 0;
+    color:var(--muted);
+    font-size:12px;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+
+  .status{
+    padding:10px 14px;
+    border-radius:999px;
+    background:rgba(255,255,255,.05);
+    border:1px solid var(--line);
+    color:var(--muted);
+    font-size:12px;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    white-space:nowrap;
+    flex:0 0 auto;
+  }
+
+  .dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 5px rgba(55,226,143,.12);
+  }
+
+  .hero{
+    margin-top:16px;
+    padding:18px;
+    border:1px solid var(--line);
+    border-radius:28px;
+    background:linear-gradient(180deg, rgba(17,24,39,.96), rgba(12,17,28,.92));
+    box-shadow:var(--shadow);
+    backdrop-filter:blur(16px);
+  }
+
+  .panel{
+    border:1px solid var(--line);
+    border-radius:22px;
+    background:rgba(255,255,255,.03);
+    overflow:hidden;
+  }
+
+  .panel-head{
+    padding:16px 18px;
+    border-bottom:1px solid var(--line);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    background:rgba(255,255,255,.02);
+  }
+
+  .panel-head h2{
+    margin:0;
+    font-size:16px;
+    letter-spacing:.2px;
+  }
+
+  .panel-head span{
+    color:var(--muted);
+    font-size:12px;
+  }
+
+  .panel-body{padding:18px}
+
+  .title{
+    margin:0 0 8px;
+    font-size:clamp(24px,3vw,38px);
+    line-height:1.02;
+    letter-spacing:.2px;
+  }
+
+  .subtitle{
+    margin:0;
+    color:var(--muted);
+    line-height:1.55;
+    font-size:14px;
+    max-width:60ch;
+  }
+
+  .stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-top:16px;
+  }
+
+  .stat{
+    padding:14px;
+    border-radius:18px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,.03);
+    min-height:84px;
+  }
+
+  .stat .k{
+    color:var(--muted);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    margin-bottom:8px;
+  }
+
+  .stat .v{
+    font-size:14px;
+    font-weight:800;
+    line-height:1.35;
+    word-break:break-word;
+  }
+
+  .form{
+    display:grid;
+    gap:12px;
+    margin-top:16px;
+  }
+
+  .row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+  }
+
+  .field{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+
+  label{
+    color:var(--muted);
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+  }
+
+  input,select{
+    width:100%;
+    background:rgba(7,11,18,.86);
+    color:var(--text);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:13px 14px;
+    outline:none;
+    font-size:14px;
+  }
+
+  input[readonly]{
+    background:rgba(9,14,24,.98);
+    cursor:default;
+    color:#dfeaff;
+  }
+
+  input:focus,select:focus{
+    border-color:rgba(78,161,255,.75);
+    box-shadow:0 0 0 4px rgba(78,161,255,.10);
+  }
+
+  .buttons{
+    display:flex;
+    gap:10px;
+    margin-top:14px;
+    flex-wrap:wrap;
+  }
+
+  .btn{
+    border:0;
+    border-radius:16px;
+    min-height:56px;
+    padding:13px 18px;
+    font-weight:900;
+    font-size:14px;
+    cursor:pointer;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    transition:transform .15s ease, opacity .15s ease, filter .15s ease;
+    flex:1 1 220px;
+  }
+
+  .btn:active{transform:translateY(1px)}
+
+  .btn-green{
+    background:linear-gradient(135deg, var(--accent), var(--accent2));
+    color:#06140d;
+    box-shadow:0 14px 28px rgba(55,226,143,.18);
+  }
+
+  .btn-dark{
+    background:rgba(255,255,255,.06);
+    color:var(--text);
+    border:1px solid var(--line);
+  }
+
+  .chips{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+    margin-top:2px;
+  }
+
+  .chip{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    padding:10px 12px;
+    border-radius:999px;
+    background:rgba(255,255,255,.04);
+    border:1px solid var(--line);
+    color:var(--text);
+    font-size:12px;
+    font-weight:700;
+    white-space:nowrap;
+  }
+
+  .hint{
+    margin-top:12px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.45;
+  }
+
+  .iframe-shell{
+    display:none;
+    position:fixed;
+    inset:0;
+    z-index:200;
+    background:#000;
+  }
+
+  #directorFrame{
+    width:100%;
+    height:100%;
+    border:none;
+    display:block;
+    background:#000;
+  }
+
+  @media (max-width: 900px){
+    .stats{grid-template-columns:1fr}
+    .row{grid-template-columns:1fr}
+    .btn{flex-basis:100%}
+  }
+
+  @media (max-width: 760px){
+    .topbar{flex-direction:column;align-items:flex-start}
+    .status{width:100%;justify-content:center}
+  }
+</style>
 </head>
 <body>
-  <div class="shell">
+  <div class="app" id="setupUI">
     <div class="topbar">
       <div class="brand">
-        <div class="logo">D</div>
-        <div class="text">
-          <h1>STREAMJAV DIRECTOR</h1>
-          <p id="headerSub">Control de sala con invitados, enlaces y vista directa</p>
+        <div class="logo">S</div>
+        <div style="min-width:0">
+          <h1>StreamJav Director</h1>
+          <p id="subtitleTop">Control limpio para producción en vivo</p>
         </div>
       </div>
-      <div class="status"><span class="dot" id="stateDot"></span><span id="stateText">Sala lista</span></div>
+      <div class="status">
+        <span class="dot" id="stateDot"></span>
+        <span id="stateText">Listo para entrar</span>
+      </div>
     </div>
 
-    <div class="main">
-      <aside class="side">
-        <div class="panel">
-          <div class="card-head">
-            <strong>Panel del director</strong>
-            <span>Control de acceso</span>
+    <section class="hero">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Panel del director</h2>
+          <span>Modo minimalista</span>
+        </div>
+        <div class="panel-body">
+          <h2 class="title" id="mainTitle">Sala preparada</h2>
+          <p class="subtitle">
+            Esta pantalla queda como portada y al comenzar abre la sesión real dentro de tu dominio,
+            sin mostrar el enlace final en pantalla.
+          </p>
+
+          <div class="stats">
+            <div class="stat">
+              <div class="k">Sala</div>
+              <div class="v" id="roomPreview">PROINKASWITCH</div>
+            </div>
+            <div class="stat">
+              <div class="k">Fuente</div>
+              <div class="v" id="modePreview">Pantalla de vMix</div>
+            </div>
+            <div class="stat">
+              <div class="k">Audio</div>
+              <div class="v" id="audioPreview">Line 1 (Virtual Audio Cable)</div>
+            </div>
           </div>
-          <div class="card-body">
-            <h2 class="title">Sala y enlaces listos para producción</h2>
-            <p class="subtitle">
-              Este panel te permite abrir la sala del director y generar rápidamente
-              los accesos de invitados de forma ordenada, con tu propia interfaz.
-            </p>
 
-            <div class="stats">
-              <div class="stat"><div class="k">Sala</div><div class="v" id="roomPreview">PROINKASWITCH</div></div>
-              <div class="stat"><div class="k">Director</div><div class="v" id="directorPreview">PRESENTADOR</div></div>
-              <div class="stat"><div class="k">Invitados</div><div class="v" id="guestPreview">4</div></div>
-              <div class="stat"><div class="k">Idioma</div><div class="v" id="langPreview">Español</div></div>
-            </div>
-
-            <div class="form">
-              <div class="row">
-                <div class="field">
-                  <label for="room">Sala</label>
-                  <input id="room" value="PROINKASWITCH" />
-                </div>
-                <div class="field">
-                  <label for="directorName">Director / presentador</label>
-                  <input id="directorName" value="PRESENTADOR" />
-                </div>
+          <div class="form">
+            <div class="row">
+              <div class="field">
+                <label for="room">Sala</label>
+                <input id="room" readonly />
               </div>
 
-              <div class="row">
-                <div class="field">
-                  <label for="guestCount">Cantidad de invitados</label>
-                  <input id="guestCount" type="number" min="1" max="12" value="4" />
-                </div>
-                <div class="field">
-                  <label for="language">Idioma</label>
-                  <select id="language">
-                    <option value="es">Español</option>
-                    <option value="en">English</option>
-                    <option value="pt">Português</option>
-                  </select>
-                </div>
-              </div>
-
-              <div class="buttons">
-                <button class="btn btn-blue" id="reloadBtn">Actualizar sala</button>
-                <button class="btn btn-green" id="copyDirectorBtn">Copiar link director</button>
-                <button class="btn btn-dark" id="openDirectorBtn">Abrir en pestaña</button>
-              </div>
-
-              <div class="mini-actions">
-                <button class="mini" id="copyAllGuestsBtn">Copiar invitados</button>
-                <button class="mini" id="saveBtn">Guardar</button>
+              <div class="field">
+                <label for="captureMode">Fuente de captura</label>
+                <select id="captureMode">
+                  <option value="screen">Pantalla de vMix</option>
+                  <option value="camera">Cámara</option>
+                </select>
               </div>
             </div>
 
-            <div class="summary">
-              <div class="line">Enlace del director</div>
-              <code id="directorLinkBox">—</code>
-              <div class="footer-note">
-                Aquí cargas la sala principal. Los invitados se abren desde <b>call.html</b>, con el mismo nombre de sala.
+            <div class="row">
+              <div class="field">
+                <label for="labelName">Nombre visible</label>
+                <input id="labelName" value="vMix Video" />
               </div>
+
+              <div class="field">
+                <label for="pushId">ID de salida</label>
+                <input id="pushId" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label for="audioDevice">Dispositivo de audio</label>
+              <input id="audioDevice" value="Line 1 (Virtual Audio Cable)" />
+            </div>
+
+            <div class="chips">
+              <div class="chip" id="chipTitle">Bienvenido</div>
+              <div class="chip" id="chipRoom">Sala protegida</div>
+            </div>
+
+            <div class="buttons">
+              <button class="btn btn-green" id="startBtn">COMENZAR</button>
+              <button class="btn btn-dark" id="copyBtn" type="button">Copiar enlace</button>
+            </div>
+
+            <div class="hint">
+              Si eliges pantalla, la sesión se abre como captura de display; si eliges cámara, se abre como webcam.
             </div>
           </div>
         </div>
-      </aside>
+      </div>
+    </section>
+  </div>
 
-      <section class="stage">
-        <div class="iframe-wrap">
-          <div class="iframe-top">
-            <div>
-              <strong>Vista directa del director</strong><br>
-              <span>La sesión se mantiene dentro de StreamJav</span>
-            </div>
-            <div class="badge" id="iframeBadge">Sincronizado</div>
-          </div>
-          <iframe
-            id="directorFrame"
-            allow="camera *; microphone *; fullscreen; display-capture; autoplay; picture-in-picture"
-            allowfullscreen
-            referrerpolicy="no-referrer"
-          ></iframe>
-        </div>
-
-        <div class="panel" style="margin-top:16px;">
-          <div class="card-head">
-            <strong>Invitados rápidos</strong>
-            <span>Acceso directo</span>
-          </div>
-          <div class="card-body">
-            <div id="guestList" class="guest-list"></div>
-            <div class="footer-note">
-              Cada invitado tiene su propia pantalla de acceso. Aquí puedes editar nombre y slot antes de copiar.
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+  <div class="iframe-shell" id="iframeShell">
+    <iframe
+      id="directorFrame"
+      allow="camera *; microphone *; fullscreen; display-capture; autoplay; picture-in-picture"
+      allowfullscreen
+      referrerpolicy="no-referrer"
+    ></iframe>
   </div>
 
   <script>
     const $ = (id) => document.getElementById(id);
-    const CALL_PAGE = new URL("call.html", window.location.href).href;
-    const STORAGE_KEY = "streamjav_director_v2";
+
     const params = new URLSearchParams(window.location.search);
 
-    const initialRoom = params.get("room") || "PROINKASWITCH";
-    const initialDirector = params.get("director") || "PRESENTADOR";
-    const initialLanguage = params.get("language") || "es";
+    const room = (params.get("room") || "PROINKASWITCH").trim();
+    const pushId = (params.get("push") || "2dj5BAw").trim();
+    const labelName = (params.get("name") || "vMix Video").trim();
+    const audioDevice = (params.get("audio") || "Line 1 (Virtual Audio Cable)").trim();
+    const modeFromUrl = (params.get("mode") || "screen").trim().toLowerCase();
 
-    const defaultState = () => ({
-      room: initialRoom,
-      directorName: initialDirector,
-      guestCount: 4,
-      language: initialLanguage,
-      guests: Array.from({ length: 4 }, (_, i) => ({
-        slot: `INV${i + 1}`,
-        name: `Invitado ${i + 1}`
-      }))
-    });
+    const roomInput = $("room");
+    const captureMode = $("captureMode");
+    const labelInput = $("labelName");
+    const pushInput = $("pushId");
+    const audioInput = $("audioDevice");
+    const roomPreview = $("roomPreview");
+    const modePreview = $("modePreview");
+    const audioPreview = $("audioPreview");
+    const chipTitle = $("chipTitle");
+    const chipRoom = $("chipRoom");
+    const mainTitle = $("mainTitle");
+    const subtitleTop = $("subtitleTop");
+    const stateText = $("stateText");
+    const stateDot = $("stateDot");
+    const startBtn = $("startBtn");
+    const copyBtn = $("copyBtn");
+    const setupUI = $("setupUI");
+    const iframeShell = $("iframeShell");
+    const directorFrame = $("directorFrame");
 
-    let state = loadState();
+    roomInput.value = room;
+    pushInput.value = pushId;
+    labelInput.value = labelName;
+    audioInput.value = audioDevice;
+    captureMode.value = modeFromUrl === "camera" ? "camera" : "screen";
 
-    function loadState(){
-      try{
-        const raw = localStorage.getItem(STORAGE_KEY);
-        if (!raw) return defaultState();
-        const saved = JSON.parse(raw);
-        const base = defaultState();
-        const merged = {
-          ...base,
-          ...saved,
-          guests: Array.isArray(saved.guests) && saved.guests.length ? saved.guests : base.guests
-        };
-        merged.guestCount = clampCount(merged.guestCount || merged.guests.length || 1);
-        merged.guests = normalizeGuests(merged.guests, merged.guestCount);
-        return merged;
-      } catch {
-        return defaultState();
-      }
+    mainTitle.textContent = `Sala ${room}`;
+    subtitleTop.textContent = "Control limpio para producción en vivo";
+    roomPreview.textContent = room;
+    chipRoom.textContent = room;
+    chipTitle.textContent = labelName;
+
+    function setStatus(text, good = true){
+      stateText.textContent = text;
+      stateDot.style.background = good ? "var(--accent)" : "#ff5d6c";
     }
 
-    function clampCount(n){
-      const value = Number.parseInt(n, 10);
-      if (Number.isNaN(value)) return 1;
-      return Math.max(1, Math.min(12, value));
+    function normalizeAudioValue(value){
+      return String(value || "")
+        .trim()
+        .replaceAll(/\s+/g, "_")
+        .replaceAll(/[^\w.-]/g, "_");
     }
 
-    function normalizeGuests(list, count){
-      const out = [];
-      for (let i = 0; i < count; i++){
-        const existing = list[i] || {};
-        out.push({
-          slot: String(existing.slot || `INV${i + 1}`).trim() || `INV${i + 1}`,
-          name: String(existing.name || `Invitado ${i + 1}`).trim() || `Invitado ${i + 1}`
-        });
-      }
-      return out;
+    function currentModeLabel(){
+      return captureMode.value === "camera" ? "Cámara" : "Pantalla de vMix";
     }
 
-    function saveState(){
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-    }
-
-    function buildDirectorUrl(){
+    function buildNinjaUrl(){
       const url = new URL("https://vdo.ninja/");
-      url.searchParams.set("director", state.room || "PROINKASWITCH");
-      url.searchParams.set("push", state.directorName || "PRESENTADOR");
-      url.searchParams.set("webcam", "");
-      url.searchParams.set("autostart", "");
+      url.searchParams.set("director", room);
+      url.searchParams.set("push", pushInput.value.trim() || "2dj5BAw");
+      url.searchParams.set("label", labelInput.value.trim() || "vMix Video");
+      url.searchParams.set("language", "es");
       url.searchParams.set("cleanoutput", "");
+      url.searchParams.set("cleandirector", "");
       url.searchParams.set("nochat", "");
       url.searchParams.set("nodashboard", "");
-      url.searchParams.set("quality", "high");
+      url.searchParams.set("autostart", "");
+
+      if (captureMode.value === "screen") {
+        url.searchParams.set("screenshare", "");
+        url.searchParams.set("screensharetype", "1");
+        url.searchParams.set("displaysurface", "monitor");
+      } else {
+        url.searchParams.set("webcam", "");
+      }
+
+      const audioValue = normalizeAudioValue(audioInput.value);
+      if (audioValue) {
+        url.searchParams.set("audiodevice", audioValue);
+      }
+
       return url.toString();
     }
 
-    function buildGuestUrl(slot, name){
-      const url = new URL(CALL_PAGE);
-      url.searchParams.set("room", state.room || "PROINKASWITCH");
-      url.searchParams.set("slot", slot || "INV1");
-      url.searchParams.set("name", name || slot || "Invitado");
-      url.searchParams.set("language", state.language || "es");
-      return url.toString();
-    }
-
-    function updatePreviews(){
-      $("roomPreview").textContent = state.room || "PROINKASWITCH";
-      $("directorPreview").textContent = state.directorName || "PRESENTADOR";
-      $("guestPreview").textContent = String(state.guestCount);
-      $("langPreview").textContent =
-        state.language === "en" ? "English" :
-        state.language === "pt" ? "Português" : "Español";
-      $("directorLinkBox").textContent = buildDirectorUrl();
-      $("directorFrame").src = buildDirectorUrl();
-    }
-
-    function escapeHtml(value){
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#39;");
-    }
-
-    function escapeAttr(value){
-      return String(value ?? "").replaceAll('"', "&quot;");
+    function refreshPreviews(){
+      roomPreview.textContent = roomInput.value.trim() || "PROINKASWITCH";
+      modePreview.textContent = currentModeLabel();
+      audioPreview.textContent = audioInput.value.trim() || "—";
+      chipTitle.textContent = labelInput.value.trim() || "vMix Video";
+      chipRoom.textContent = roomInput.value.trim() || "PROINKASWITCH";
     }
 
     async function copyText(text){
       try{
         await navigator.clipboard.writeText(text);
+        setStatus("Enlace copiado");
       } catch {
         const ta = document.createElement("textarea");
         ta.value = text;
@@ -586,171 +547,33 @@
         ta.select();
         document.execCommand("copy");
         ta.remove();
+        setStatus("Enlace copiado");
       }
+      setTimeout(() => setStatus("Listo para entrar"), 1500);
     }
 
-    function toast(message){
-      $("stateText").textContent = message;
-      $("stateDot").style.background = "var(--green)";
-      setTimeout(() => {
-        $("stateText").textContent = "Sala lista";
-        $("stateDot").style.background = "var(--green)";
-      }, 1500);
+    function startSession(){
+      const url = buildNinjaUrl();
+
+      iframeShell.style.display = "block";
+      directorFrame.src = url;
+      setupUI.style.display = "none";
+      setStatus("Conectando...", true);
     }
 
-    function renderGuests(){
-      const container = $("guestList");
-      container.innerHTML = "";
-
-      state.guests.forEach((guest, idx) => {
-        const card = document.createElement("div");
-        card.className = "guest-card";
-        const link = buildGuestUrl(guest.slot, guest.name);
-
-        card.innerHTML = `
-          <div class="guest-top">
-            <div class="badge">Invitado ${idx + 1}</div>
-            <div class="badge">${escapeHtml(guest.slot)}</div>
-          </div>
-
-          <div class="guest-grid">
-            <div class="field">
-              <label>Slot</label>
-              <input data-index="${idx}" data-field="slot" value="${escapeAttr(guest.slot)}" />
-            </div>
-            <div class="field">
-              <label>Nombre</label>
-              <input data-index="${idx}" data-field="name" value="${escapeAttr(guest.name)}" />
-            </div>
-          </div>
-
-          <div class="guest-link"><code>${escapeHtml(link)}</code></div>
-
-          <div class="mini-actions">
-            <button class="mini" data-action="copy" data-index="${idx}">Copiar enlace</button>
-            <button class="mini" data-action="open" data-index="${idx}">Abrir acceso</button>
-          </div>
-        `;
-
-        container.appendChild(card);
-      });
-
-      container.querySelectorAll("input[data-field]").forEach(input => {
-        input.addEventListener("input", e => {
-          const index = Number(e.target.dataset.index);
-          const field = e.target.dataset.field;
-          state.guests[index][field] = e.target.value;
-          saveState();
-          renderGuests();
-        });
-      });
-
-      container.querySelectorAll("button[data-action]").forEach(btn => {
-        btn.addEventListener("click", async () => {
-          const index = Number(btn.dataset.index);
-          const guest = state.guests[index];
-          const link = buildGuestUrl(guest.slot, guest.name);
-
-          if (btn.dataset.action === "copy") {
-            await copyText(link);
-            toast("Enlace del invitado copiado");
-          } else {
-            window.open(link, "_blank", "noopener,noreferrer");
-          }
-        });
-      });
-    }
-
-    function refreshAll(){
-      state.guestCount = clampCount(state.guestCount);
-      state.guests = normalizeGuests(state.guests, state.guestCount);
-      $("room").value = state.room;
-      $("directorName").value = state.directorName;
-      $("guestCount").value = state.guestCount;
-      $("language").value = state.language;
-      updatePreviews();
-      renderGuests();
-      saveState();
-    }
-
-    $("room").addEventListener("input", () => {
-      state.room = $("room").value.trim() || "PROINKASWITCH";
-      updatePreviews();
-      renderGuests();
-      saveState();
+    captureMode.addEventListener("change", () => {
+      refreshPreviews();
+      setStatus(captureMode.value === "screen" ? "Pantalla de vMix" : "Cámara", true);
     });
 
-    $("directorName").addEventListener("input", () => {
-      state.directorName = $("directorName").value.trim() || "PRESENTADOR";
-      updatePreviews();
-      saveState();
-    });
+    labelInput.addEventListener("input", refreshPreviews);
+    audioInput.addEventListener("input", refreshPreviews);
 
-    $("guestCount").addEventListener("input", () => {
-      state.guestCount = clampCount($("guestCount").value);
-      state.guests = normalizeGuests(state.guests, state.guestCount);
-      refreshAll();
-    });
+    startBtn.addEventListener("click", startSession);
+    copyBtn.addEventListener("click", () => copyText(buildNinjaUrl()));
 
-    $("language").addEventListener("change", () => {
-      state.language = $("language").value;
-      updatePreviews();
-      renderGuests();
-      saveState();
-    });
-
-    $("reloadBtn").addEventListener("click", () => {
-      updatePreviews();
-      toast("Sala actualizada");
-      $("iframeBadge").textContent = "Sincronizado";
-    });
-
-    $("copyDirectorBtn").addEventListener("click", async () => {
-      await copyText(buildDirectorUrl());
-      toast("Link del director copiado");
-    });
-
-    $("openDirectorBtn").addEventListener("click", () => {
-      window.open(buildDirectorUrl(), "_blank", "noopener,noreferrer");
-    });
-
-    $("copyAllGuestsBtn").addEventListener("click", async () => {
-      const lines = [
-        `Sala: ${state.room}`,
-        `Director: ${state.directorName}`,
-        `Director: ${buildDirectorUrl()}`,
-        "",
-        ...state.guests.map((g, i) => `Invitado ${i + 1} (${g.slot} - ${g.name}): ${buildGuestUrl(g.slot, g.name)}`)
-      ].join("\n");
-      await copyText(lines);
-      toast("Invitados copiados");
-    });
-
-    $("saveBtn").addEventListener("click", () => {
-      saveState();
-      toast("Configuración guardada");
-    });
-
-    function init(){
-      state.room = state.room || "PROINKASWITCH";
-      state.directorName = state.directorName || "PRESENTADOR";
-      state.guestCount = clampCount(state.guestCount || 4);
-      state.language = state.language || "es";
-      state.guests = normalizeGuests(state.guests || [], state.guestCount);
-
-      $("room").value = state.room;
-      $("directorName").value = state.directorName;
-      $("guestCount").value = state.guestCount;
-      $("language").value = state.language;
-
-      updatePreviews();
-      renderGuests();
-
-      $("stateText").textContent = "Sala lista";
-      $("stateDot").style.background = "var(--green)";
-    }
-
-    init();
+    refreshPreviews();
+    setStatus("Listo para entrar", true);
   </script>
 </body>
 </html>
