@@ -1,523 +1,122 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#0b0f1a" />
-  <title>StreamJav | Director</title>
-  <style>
-    :root{
-      --bg:#0b0f1a;
-      --bg2:#10182a;
-      --card:#121a2b;
-      --line:rgba(255,255,255,.08);
-      --text:#eef4ff;
-      --muted:#8ea3c7;
-      --accent:#37e28f;
-      --accent2:#70f2b1;
-      --shadow:0 20px 60px rgba(0,0,0,.35);
-    }
-    *{box-sizing:border-box}
-    html,body{
-      margin:0;
-      min-height:100%;
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(900px 500px at 20% 0%, rgba(55,226,143,.10), transparent 55%),
-        radial-gradient(700px 420px at 100% 15%, rgba(78,161,255,.10), transparent 50%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
-    }
-    .app{
-      width:min(980px, calc(100% - 20px));
-      margin:0 auto;
-      padding:14px 0 24px;
-      padding-top:calc(14px + env(safe-area-inset-top));
-      padding-bottom:calc(24px + env(safe-area-inset-bottom));
-    }
-    .topbar{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:16px 18px;
-      border:1px solid var(--line);
-      border-radius:22px;
-      background:rgba(8,13,23,.78);
-      backdrop-filter:blur(14px);
-      box-shadow:var(--shadow);
-    }
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      min-width:0;
-    }
-    .logo{
-      width:46px;
-      height:46px;
-      border-radius:16px;
-      display:grid;
-      place-items:center;
-      background:linear-gradient(135deg, var(--accent), var(--accent2));
-      color:#04140c;
-      font-weight:900;
-      flex:0 0 auto;
-      box-shadow:0 12px 22px rgba(55,226,143,.16);
-    }
-    .brand h1{
-      margin:0;
-      font-size:clamp(18px,2vw,26px);
-      line-height:1.1;
-      letter-spacing:.2px;
-    }
-    .brand p{
-      margin:4px 0 0;
-      color:var(--muted);
-      font-size:12px;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .status{
-      padding:10px 14px;
-      border-radius:999px;
-      background:rgba(255,255,255,.05);
-      border:1px solid var(--line);
-      color:var(--muted);
-      font-size:12px;
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      white-space:nowrap;
-      flex:0 0 auto;
-    }
-    .dot{
-      width:9px;
-      height:9px;
-      border-radius:50%;
-      background:var(--accent);
-      box-shadow:0 0 0 5px rgba(55,226,143,.12);
-    }
-    .hero{
-      margin-top:16px;
-      padding:18px;
-      border:1px solid var(--line);
-      border-radius:28px;
-      background:linear-gradient(180deg, rgba(17,24,39,.96), rgba(12,17,28,.92));
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(16px);
-    }
-    .panel{
-      border:1px solid var(--line);
-      border-radius:22px;
-      background:rgba(255,255,255,.03);
-      overflow:hidden;
-    }
-    .panel-head{
-      padding:16px 18px;
-      border-bottom:1px solid var(--line);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:12px;
-      background:rgba(255,255,255,.02);
-    }
-    .panel-head h2{
-      margin:0;
-      font-size:16px;
-      letter-spacing:.2px;
-    }
-    .panel-head span{
-      color:var(--muted);
-      font-size:12px;
-    }
-    .panel-body{padding:18px}
-    .title{
-      margin:0 0 8px;
-      font-size:clamp(24px,3vw,38px);
-      line-height:1.02;
-      letter-spacing:.2px;
-    }
-    .subtitle{
-      margin:0;
-      color:var(--muted);
-      line-height:1.55;
-      font-size:14px;
-      max-width:60ch;
-    }
-    .stats{
-      display:grid;
-      grid-template-columns:repeat(3,1fr);
-      gap:12px;
-      margin-top:16px;
-    }
-    .stat{
-      padding:14px;
-      border-radius:18px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-      min-height:84px;
-    }
-    .stat .k{
-      color:var(--muted);
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-      margin-bottom:8px;
-    }
-    .stat .v{
-      font-size:14px;
-      font-weight:800;
-      line-height:1.35;
-      word-break:break-word;
-    }
-    .form{
-      display:grid;
-      gap:12px;
-      margin-top:16px;
-    }
-    .row{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
-    .field{
-      display:flex;
-      flex-direction:column;
-      gap:8px;
-    }
-    label{
-      color:var(--muted);
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.08em;
-    }
-    input,select{
-      width:100%;
-      background:rgba(7,11,18,.86);
-      color:var(--text);
-      border:1px solid var(--line);
-      border-radius:16px;
-      padding:13px 14px;
-      outline:none;
-      font-size:14px;
-    }
-    input[readonly]{
-      background:rgba(9,14,24,.98);
-      cursor:default;
-      color:#dfeaff;
-    }
-    input:focus,select:focus{
-      border-color:rgba(78,161,255,.75);
-      box-shadow:0 0 0 4px rgba(78,161,255,.10);
-    }
-    .buttons{
-      display:flex;
-      gap:10px;
-      margin-top:14px;
-      flex-wrap:wrap;
-    }
-    .btn{
-      border:0;
-      border-radius:16px;
-      min-height:56px;
-      padding:13px 18px;
-      font-weight:900;
-      font-size:14px;
-      cursor:pointer;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap:8px;
-      flex:1 1 220px;
-    }
-    .btn:active{transform:translateY(1px)}
-    .btn-green{
-      background:linear-gradient(135deg, var(--accent), var(--accent2));
-      color:#06140d;
-      box-shadow:0 14px 28px rgba(55,226,143,.18);
-    }
-    .btn-dark{
-      background:rgba(255,255,255,.06);
-      color:var(--text);
-      border:1px solid var(--line);
-    }
-    .chips{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-top:2px;
-    }
-    .chip{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      padding:10px 12px;
-      border-radius:999px;
-      background:rgba(255,255,255,.04);
-      border:1px solid var(--line);
-      color:var(--text);
-      font-size:12px;
-      font-weight:700;
-      white-space:nowrap;
-    }
-    .hint{
-      margin-top:12px;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.45;
-    }
-    .iframe-shell{
-      display:none;
-      position:fixed;
-      inset:0;
-      z-index:200;
-      background:#000;
-    }
-    #directorFrame{
-      width:100%;
-      height:100%;
-      border:none;
-      display:block;
-      background:#000;
-    }
-    @media (max-width: 900px){
-      .stats{grid-template-columns:1fr}
-      .row{grid-template-columns:1fr}
-      .btn{flex-basis:100%}
-    }
-    @media (max-width: 760px){
-      .topbar{flex-direction:column;align-items:flex-start}
-      .status{width:100%;justify-content:center}
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>StreamJav Director</title>
+
+<style>
+body{
+  margin:0;
+  background:#0b0f1a;
+  font-family:Arial;
+  color:white;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
+
+.card{
+  background:#121a2b;
+  padding:30px;
+  border-radius:20px;
+  width:320px;
+  text-align:center;
+  box-shadow:0 10px 40px rgba(0,0,0,.4);
+}
+
+h1{
+  margin:0 0 10px;
+  font-size:22px;
+}
+
+p{
+  color:#8ea3c7;
+  font-size:13px;
+}
+
+button{
+  margin-top:20px;
+  width:100%;
+  padding:15px;
+  border:none;
+  border-radius:12px;
+  font-weight:bold;
+  background:#37e28f;
+  color:#04140c;
+  font-size:15px;
+  cursor:pointer;
+}
+
+iframe{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  border:none;
+  display:none;
+  background:black;
+}
+</style>
 </head>
+
 <body>
-  <div class="app" id="setupUI">
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo">S</div>
-        <div style="min-width:0">
-          <h1>StreamJav Director</h1>
-          <p id="subtitleTop">Control limpio para producción en vivo</p>
-        </div>
-      </div>
-      <div class="status">
-        <span class="dot" id="stateDot"></span>
-        <span id="stateText">Listo para entrar</span>
-      </div>
-    </div>
 
-    <section class="hero">
-      <div class="panel">
-        <div class="panel-head">
-          <h2>Panel del director</h2>
-          <span>Modo minimalista</span>
-        </div>
-        <div class="panel-body">
-          <h2 class="title" id="mainTitle">Sala preparada</h2>
-          <p class="subtitle">
-            Esta pantalla queda como portada y al comenzar abre la sesión real dentro de tu dominio,
-            sin mostrar el enlace final en pantalla.
-          </p>
+<div class="card" id="ui">
+  <h1 id="title">Preparando señal...</h1>
+  <p id="subtitle">Conectando a la sala</p>
+  <button onclick="start()">COMENZAR</button>
+</div>
 
-          <div class="stats">
-            <div class="stat">
-              <div class="k">Sala</div>
-              <div class="v" id="roomPreview">PROINKASWITCH</div>
-            </div>
-            <div class="stat">
-              <div class="k">Fuente</div>
-              <div class="v" id="modePreview">Cámara / webcam</div>
-            </div>
-            <div class="stat">
-              <div class="k">Audio</div>
-              <div class="v" id="audioPreview">Line 1 (Virtual Audio Cable)</div>
-            </div>
-          </div>
+<iframe id="frame" allow="camera; microphone; autoplay; display-capture"></iframe>
 
-          <div class="form">
-            <div class="row">
-              <div class="field">
-                <label for="room">Sala</label>
-                <input id="room" readonly />
-              </div>
+<script>
+const params = new URLSearchParams(location.search);
 
-              <div class="field">
-                <label for="captureMode">Fuente de captura</label>
-                <select id="captureMode">
-                  <option value="camera">Cámara / webcam</option>
-                  <option value="screen">Pantalla de vMix</option>
-                </select>
-              </div>
-            </div>
+const room = params.get("room") || "PROINKASWITCH";
+const push = params.get("push") || "2dj5BAw";
+const name = params.get("name") || "vMix Video";
+const audio = params.get("audio") || "Line 1 (Virtual Audio Cable)";
+const mode = params.get("mode") || "camera"; // 👈 clave
 
-            <div class="row">
-              <div class="field">
-                <label for="labelName">Nombre visible</label>
-                <input id="labelName" value="vMix Video" />
-              </div>
+document.getElementById("title").innerText = "Sala " + room;
 
-              <div class="field">
-                <label for="pushId">ID de salida</label>
-                <input id="pushId" />
-              </div>
-            </div>
+function buildURL(){
+  let url = new URL("https://vdo.ninja/");
 
-            <div class="field">
-              <label for="audioDevice">Dispositivo de audio</label>
-              <input id="audioDevice" value="Line 1 (Virtual Audio Cable)" />
-            </div>
+  url.searchParams.set("director", room);
+  url.searchParams.set("push", push);
+  url.searchParams.set("label", name);
+  url.searchParams.set("vlabel", name);
+  url.searchParams.set("alabel", audio);
 
-            <div class="chips">
-              <div class="chip" id="chipTitle">Bienvenido</div>
-              <div class="chip" id="chipRoom">Sala protegida</div>
-            </div>
+  url.searchParams.set("autostart","1");
+  url.searchParams.set("autoplay","1");
+  url.searchParams.set("directorstfu","1");
+  url.searchParams.set("clean","1");
+  url.searchParams.set("nochat","1");
+  url.searchParams.set("nodashboard","1");
 
-            <div class="buttons">
-              <button class="btn btn-green" id="startBtn">COMENZAR</button>
-              <button class="btn btn-dark" id="copyBtn" type="button">Copiar enlace</button>
-            </div>
+  if(mode === "screen"){
+    url.searchParams.set("screenshare","1");
+    url.searchParams.set("screensharetype","1");
+  } else {
+    url.searchParams.set("webcam","1"); // 👈 ESTO ARREGLA TU PROBLEMA
+  }
 
-            <div class="hint">
-              Si eliges cámara, Chrome debe pedir video y audio. Si eliges pantalla, abrirá la captura de display.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </div>
+  return url.toString();
+}
 
-  <div class="iframe-shell" id="iframeShell">
-    <iframe
-      id="directorFrame"
-      allow="camera; microphone; autoplay; fullscreen; display-capture"
-      allowfullscreen
-      referrerpolicy="no-referrer"
-    ></iframe>
-  </div>
+function start(){
+  const frame = document.getElementById("frame");
+  frame.src = buildURL();
 
-  <script>
-    const $ = (id) => document.getElementById(id);
+  document.getElementById("ui").style.display = "none";
+  frame.style.display = "block";
+}
+</script>
 
-    const params = new URLSearchParams(window.location.search);
-    const room = (params.get("room") || "PROINKASWITCH").trim();
-    const pushId = (params.get("push") || "2dj5BAw").trim();
-    const labelName = (params.get("name") || "vMix Video").trim();
-    const audioDevice = (params.get("audio") || "Line 1 (Virtual Audio Cable)").trim();
-    const modeFromUrl = (params.get("mode") || "camera").trim().toLowerCase();
-
-    const roomInput = $("room");
-    const captureMode = $("captureMode");
-    const labelInput = $("labelName");
-    const pushInput = $("pushId");
-    const audioInput = $("audioDevice");
-    const roomPreview = $("roomPreview");
-    const modePreview = $("modePreview");
-    const audioPreview = $("audioPreview");
-    const chipTitle = $("chipTitle");
-    const chipRoom = $("chipRoom");
-    const mainTitle = $("mainTitle");
-    const subtitleTop = $("subtitleTop");
-    const stateText = $("stateText");
-    const stateDot = $("stateDot");
-    const startBtn = $("startBtn");
-    const copyBtn = $("copyBtn");
-    const setupUI = $("setupUI");
-    const iframeShell = $("iframeShell");
-    const directorFrame = $("directorFrame");
-
-    roomInput.value = room;
-    pushInput.value = pushId;
-    labelInput.value = labelName;
-    audioInput.value = audioDevice;
-    captureMode.value = modeFromUrl === "screen" ? "screen" : "camera";
-
-    mainTitle.textContent = `Sala ${room}`;
-    subtitleTop.textContent = "Control limpio para producción en vivo";
-    roomPreview.textContent = room;
-    chipRoom.textContent = room;
-    chipTitle.textContent = labelName;
-
-    function setStatus(text, good = true){
-      stateText.textContent = text;
-      stateDot.style.background = good ? "var(--accent)" : "#ff5d6c";
-    }
-
-    function currentModeLabel(){
-      return captureMode.value === "screen" ? "Pantalla de vMix" : "Cámara / webcam";
-    }
-
-    function buildNinjaUrl(){
-      const url = new URL("https://vdo.ninja/");
-      url.searchParams.set("director", roomInput.value.trim() || "PROINKASWITCH");
-      url.searchParams.set("push", pushInput.value.trim() || "2dj5BAw");
-      url.searchParams.set("label", labelInput.value.trim() || "vMix Video");
-      url.searchParams.set("vlabel", labelInput.value.trim() || "vMix Video");
-      url.searchParams.set("alabel", audioInput.value.trim() || "Line 1 (Virtual Audio Cable)");
-      url.searchParams.set("autostart", "1");
-      url.searchParams.set("autoplay", "1");
-      url.searchParams.set("directorstfu", "1");
-      url.searchParams.set("clean", "1");
-      url.searchParams.set("nochat", "1");
-      url.searchParams.set("nodashboard", "1");
-
-      if (captureMode.value === "screen") {
-        url.searchParams.set("screenshare", "1");
-        url.searchParams.set("screensharetype", "1");
-      } else {
-        url.searchParams.set("webcam", "1");
-      }
-
-      return url.toString();
-    }
-
-    function refreshPreviews(){
-      roomPreview.textContent = roomInput.value.trim() || "PROINKASWITCH";
-      modePreview.textContent = currentModeLabel();
-      audioPreview.textContent = audioInput.value.trim() || "—";
-      chipTitle.textContent = labelInput.value.trim() || "vMix Video";
-      chipRoom.textContent = roomInput.value.trim() || "PROINKASWITCH";
-    }
-
-    async function copyText(text){
-      try{
-        await navigator.clipboard.writeText(text);
-        setStatus("Enlace copiado");
-      } catch {
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        ta.remove();
-        setStatus("Enlace copiado");
-      }
-      setTimeout(() => setStatus("Listo para entrar"), 1500);
-    }
-
-    function startSession(){
-      const url = buildNinjaUrl();
-      iframeShell.style.display = "block";
-      directorFrame.src = url;
-      setupUI.style.display = "none";
-      setStatus("Conectando...", true);
-    }
-
-    captureMode.addEventListener("change", () => {
-      refreshPreviews();
-      setStatus(captureMode.value === "screen" ? "Pantalla de vMix" : "Cámara / webcam", true);
-    });
-
-    labelInput.addEventListener("input", refreshPreviews);
-    audioInput.addEventListener("input", refreshPreviews);
-
-    startBtn.addEventListener("click", startSession);
-    copyBtn.addEventListener("click", () => copyText(buildNinjaUrl()));
-
-    refreshPreviews();
-    setStatus("Listo para entrar", true);
-  </script>
 </body>
 </html>
