@@ -21,20 +21,18 @@
     font-family: 'Inter', system-ui, sans-serif;
   }
   
-  /* Contenedor del Iframe */
+  /* Contenedor del Iframe (Restaurado a su tamaño normal para no cortar ajustes) */
   iframe {
     position: fixed;
-    /* TRUCO VISUAL: Empujamos el iframe hacia arriba para esconder la caja de links */
-    top: -260px; 
+    top: 0;
     left: 0;
     width: 100%;
-    /* TRUCO VISUAL: Compensamos la altura para que la barra inferior de botones siga en su lugar */
-    height: calc(100% + 260px); 
+    height: 100%;
     border: none;
     z-index: 1;
   }
 
-  /* Barra Superior StreamJav (Se dibuja sobre el Iframe) */
+  /* Barra Superior StreamJav */
   .streamjav-overlay {
     position: fixed;
     top: 0;
@@ -49,7 +47,7 @@
     padding: 0 20px;
     gap: 15px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    pointer-events: none; /* Permite hacer clic en lo que hay detrás */
+    pointer-events: none;
   }
 
   .logo-mini {
@@ -102,11 +100,37 @@ const push = params.get("push") || "2dj5BAw";
 const name = params.get("name") || "vMix Video";
 const audio = params.get("audio") || "Line 1 (Virtual Audio Cable)";
 
-// Actualizar barra visual
 document.getElementById("room-display").textContent = `SALA: ${room}`;
-
 const audioFormatted = audio.replaceAll(" ", "*");
 
+/* =========================================================
+   1. CREACIÓN DEL CSS INTERNO (Sin archivos externos)
+   ========================================================= */
+const ninjaCSS = `
+  /* Ocultar la caja superior de "LINKS (GUEST INVITES & SCENES)" */
+  #headerLinks, 
+  #invite_links, 
+  .invite-container, 
+  div[style*="border-bottom: 2px solid"] { 
+      display: none !important; 
+  }
+
+  /* Ocultar el "Director's solo link" en el menú de ajustes (Cuadro rojo) */
+  #soloLinkContainer, 
+  #soloLinkBox, 
+  div[data-translate="director_solo_link"] { 
+      display: none !important; 
+  }
+`;
+
+/* =========================================================
+   2. CONVERSIÓN A BASE64 PARA INYECTARLO EN LA URL
+   ========================================================= */
+// Convertimos el texto CSS a código para que la URL lo lea
+const base64CSS = btoa(ninjaCSS);
+const cssInyectado = "data:text/css;base64," + base64CSS;
+
+/* Generamos la URL sumando nuestro CSS inyectado al final */
 const url = `https://vdo.ninja/?director=${room}` +
             `&vlabel=${encodeURIComponent(name)}` +
             `&alabel=${audioFormatted}` +
@@ -114,7 +138,8 @@ const url = `https://vdo.ninja/?director=${room}` +
             `&autoplay=1` +
             `&autostart=1` +
             `&lang=es` + 
-            `&webcam=1&vd=vMix&ad=Line`;
+            `&webcam=1&vd=vMix&ad=Line` +
+            `&css=${cssInyectado}`; /* <-- Aquí entra la magia */
 
 document.getElementById("frame").src = url;
 </script>
