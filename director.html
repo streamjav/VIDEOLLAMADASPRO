@@ -37,8 +37,9 @@ const audio = params.get("audio") || "Line 1 (Virtual Audio Cable)";
 // IMPORTANTE: formateo para VDO.Ninja
 const audioFormatted = audio.replaceAll(" ", "*");
 
-// LINK REAL (EL TUYO ORIGINAL)
-const url = `https://vdo.ninja/?director=${room}&vlabel=${name.replaceAll(" ","*")}&alabel=${audioFormatted}&push=${push}&autoplay=1&autostart=1&directorstfu=1&webcam=1`;
+// LINK REAL CON SELECTORES FORZADOS DE HARDWARE
+// Se añadieron &vd=vMix (Video Device) y &ad=Line (Audio Device) para forzar la selección virtual en el iframe
+const url = `https://vdo.ninja/?director=${room}&vlabel=${name.replaceAll(" ","*")}&alabel=${audioFormatted}&push=${push}&autoplay=1&autostart=1&directorstfu=1&webcam=1&vd=vMix&ad=Line`;
 
 // cargar dentro del iframe (disfraz total)
 document.getElementById("frame").src = url;
