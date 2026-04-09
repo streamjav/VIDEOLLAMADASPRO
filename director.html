@@ -189,24 +189,6 @@
     font-weight:700;
   }
 
-  .btn-connect{
-    margin-top:16px;
-    min-height:52px;
-    padding:0 18px;
-    border:0;
-    border-radius:16px;
-    cursor:pointer;
-    background:linear-gradient(135deg,#22c55e,#16a34a);
-    color:white;
-    font-size:15px;
-    font-weight:800;
-    box-shadow:0 10px 24px rgba(34,197,94,.20);
-  }
-
-  .btn-connect:active{
-    transform:translateY(1px);
-  }
-
   @media (max-width: 640px){
     .topbar{
       height:auto;
@@ -233,18 +215,17 @@
           <p id="uiSub">Preparando sala y controles</p>
         </div>
       </div>
-      <div class="status"><span class="dot"></span><span id="uiStatus">Listo</span></div>
+      <div class="status"><span class="dot"></span><span id="uiStatus">Cargando transmisión</span></div>
     </div>
 
     <div class="main">
       <div class="loading" id="loading">
         <div class="card">
-          <h2>Conectar director</h2>
+          <h2>Conectando sala</h2>
           <p>
-            Pulsa el botón para abrir la sala. Así el navegador pedirá cámara y micrófono de forma correcta,
-            y luego cargará la sesión dentro de esta misma interfaz.
+            La sesión se cargará dentro de esta misma interfaz.
+            Si el navegador ya guardó permisos para este sitio, la conexión debe entrar directo.
           </p>
-          <button class="btn-connect" id="btnConnect">CONECTAR</button>
           <div class="mini">
             <div class="chip">Sala privada</div>
             <div class="chip">Audio virtual</div>
@@ -275,46 +256,20 @@
   const uiStatus = document.getElementById("uiStatus");
   const frame = document.getElementById("frame");
   const loading = document.getElementById("loading");
-  const btnConnect = document.getElementById("btnConnect");
 
   uiTitle.textContent = `Director • ${room}`;
   uiSub.textContent = `${name} / ${audio}`;
-  uiStatus.textContent = "Listo";
+  uiStatus.textContent = "Cargando transmisión";
 
-  function toVdoLabel(value) {
-    return String(value || "")
-      .trim()
-      .replaceAll(" ", "*");
+  function toDeviceValue(value) {
+    return String(value || "").trim().replaceAll(" ", "_");
   }
 
   function buildUrl() {
-    const vlabel = toVdoLabel(name);
-    const alabel = toVdoLabel(audio);
+    const videoDevice = toDeviceValue(name);
+    const audioDevice = toDeviceValue(audio);
 
-    return `https://vdo.ninja/?director=${encodeURIComponent(room)}&vlabel=${encodeURIComponent(vlabel)}&alabel=${encodeURIComponent(alabel)}&push=${encodeURIComponent(push)}&autoplay=1&autostart=1&directorstfu=1&webcam=1&cleanoutput&transparent&nochat&nodashboard`;
-  }
-
-  async function connectDirector() {
-    btnConnect.disabled = true;
-    btnConnect.textContent = "CONECTANDO...";
-    uiStatus.textContent = "Solicitando permisos...";
-
-    try {
-      await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: true
-      });
-
-      uiStatus.textContent = "Cargando transmisión...";
-      frame.src = buildUrl();
-
-    } catch (err) {
-      console.error(err);
-      btnConnect.disabled = false;
-      btnConnect.textContent = "CONECTAR";
-      uiStatus.textContent = "Permisos requeridos";
-      alert("Debes permitir cámara y micrófono para continuar.");
-    }
+    return `https://vdo.ninja/?director=${encodeURIComponent(room)}&push=${encodeURIComponent(push)}&vd=${encodeURIComponent(videoDevice)}&ad=${encodeURIComponent(audioDevice)}&autostart=1&cleanoutput&transparent&cleandirector&nochat&nodashboard`;
   }
 
   frame.addEventListener("load", () => {
@@ -323,7 +278,7 @@
     uiStatus.textContent = "Sala lista";
   });
 
-  btnConnect.addEventListener("click", connectDirector);
+  frame.src = buildUrl();
 </script>
 </body>
 </html>
