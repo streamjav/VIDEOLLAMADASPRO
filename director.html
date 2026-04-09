@@ -31,13 +31,11 @@
     z-index: 1;
   }
 
-  /* Capa superpuesta para disfrazar el header de VDO.Ninja */
   .streamjav-overlay {
     position: fixed;
     top: 0;
     left: 0;
     height: 48px;
-    /* Dejamos espacio a la derecha para no bloquear los botones del director */
     width: calc(100% - 280px); 
     background: linear-gradient(90deg, var(--bg) 0%, var(--bg) 70%, transparent 100%);
     z-index: 10;
@@ -94,12 +92,8 @@
   }
 
   @media (max-width: 768px) {
-    .streamjav-overlay {
-      width: calc(100% - 140px);
-    }
-    .brand-title {
-      display: none;
-    }
+    .streamjav-overlay { width: calc(100% - 140px); }
+    .brand-title { display: none; }
   }
 </style>
 </head>
@@ -120,21 +114,20 @@
 <script>
 const params = new URLSearchParams(location.search);
 
-// Valores dinámicos
 const room = params.get("room") || "PROINKASWITCH";
 const push = params.get("push") || "2dj5BAw";
 const name = params.get("name") || "vMix Video";
 const audio = params.get("audio") || "Line 1 (Virtual Audio Cable)";
 
-// Actualizamos el nombre de la sala en nuestra interfaz
 document.getElementById("display-room").textContent = room;
 
 const audioFormatted = audio.replaceAll(" ", "*");
 
-// LINK REAL CORREGIDO (Incluye el parámetro &css al final de la cadena de texto)
-const url = `https://vdo.ninja/?director=${room}&vlabel=${name.replaceAll(" ","*")}&alabel=${audioFormatted}&push=${push}&autoplay=1&autostart=1&directorstfu=1&webcam=1&vd=vMix&ad=Line&lang=es&css=https://streamjav.github.io/VIDEOLLAMADASPRO/estilos-ninja.css`;
+// AQUÍ ESTÁ EL CAMBIO: Se añadió ?v=1.1 al final del enlace del CSS
+const cssUrl = "https://streamjav.github.io/VIDEOLLAMADASPRO/estilos-ninja.css?v=1.1";
 
-// Cargar dentro del iframe
+const url = `https://vdo.ninja/?director=${room}&vlabel=${name.replaceAll(" ","*")}&alabel=${audioFormatted}&push=${push}&autoplay=1&autostart=1&directorstfu=1&webcam=1&vd=vMix&ad=Line&lang=es&css=${cssUrl}`;
+
 document.getElementById("frame").src = url;
 </script>
 
