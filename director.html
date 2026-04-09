@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StreamJav Director</title>
 
 <style>
@@ -10,41 +9,7 @@ body{
   margin:0;
   background:#000;
   overflow:hidden;
-  font-family:Arial, sans-serif;
 }
-
-/* Barra superior minimal */
-.topbar{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:50px;
-  background:rgba(0,0,0,0.7);
-  backdrop-filter:blur(10px);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 15px;
-  color:#fff;
-  z-index:10;
-  font-size:14px;
-}
-
-.status{
-  display:flex;
-  align-items:center;
-  gap:6px;
-}
-
-.dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:#f59e0b;
-}
-
-/* iframe SIEMPRE visible */
 iframe{
   position:fixed;
   top:0;
@@ -52,62 +17,31 @@ iframe{
   width:100%;
   height:100%;
   border:none;
-  background:#000;
 }
 </style>
 </head>
 
 <body>
 
-<div class="topbar">
-  <div id="title">STREAMJAV DIRECTOR</div>
-  <div class="status">
-    <div class="dot" id="dot"></div>
-    <span id="status">Cargando...</span>
-  </div>
-</div>
-
-<iframe id="directorFrame"
-allow="camera; microphone; display-capture; autoplay; fullscreen">
-</iframe>
+<iframe id="frame"></iframe>
 
 <script>
 const params = new URLSearchParams(location.search);
 
+// valores dinámicos (por si luego quieres usarlos)
 const room = params.get("room") || "PROINKASWITCH";
 const push = params.get("push") || "2dj5BAw";
-const name = (params.get("name") || "vMix Video").replace(/ /g,"*");
-const audio = (params.get("audio") || "Cable Output").replace(/\s+/g,"_");
+const name = params.get("name") || "vMix Video";
+const audio = params.get("audio") || "Line 1 (Virtual Audio Cable)";
 
-// 🔥 URL EXACTA que pediste (corregida)
-let url = `https://vdo.ninja/?director=${room}&push=${push}`;
-url += `&vlabel=${name}&audiodevice=${audio}`;
-url += `&screenshare&screensharetype=1`;
-url += `&cleanoutput&cleandirector&autostart&autoplay&nopreview`;
+// IMPORTANTE: formateo para VDO.Ninja
+const audioFormatted = audio.replaceAll(" ", "*");
 
-const frame = document.getElementById("directorFrame");
+// LINK REAL (EL TUYO ORIGINAL)
+const url = `https://vdo.ninja/?director=${room}&vlabel=${name.replaceAll(" ","*")}&alabel=${audioFormatted}&push=${push}&autoplay=1&autostart=1&directorstfu=1&webcam=1`;
 
-// 🔥 IMPORTANTE: mostrar inmediatamente
-frame.src = url;
-
-// UI
-document.getElementById("title").innerText = `STREAMJAV • ${room}`;
-document.getElementById("status").innerText = "Conectando...";
-
-// Cuando carga
-frame.onload = () => {
-  document.getElementById("status").innerText = "EN VIVO";
-  document.getElementById("dot").style.background = "#22c55e";
-};
-
-// 🔥 TRUCO CLAVE: forzar permisos (soluciona pantalla negra)
-navigator.mediaDevices.getUserMedia({
-  video: true,
-  audio: true
-}).then(stream => {
-  stream.getTracks().forEach(t => t.stop());
-}).catch(()=>{});
-
+// cargar dentro del iframe (disfraz total)
+document.getElementById("frame").src = url;
 </script>
 
 </body>
