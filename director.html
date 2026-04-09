@@ -2,46 +2,141 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StreamJav Director</title>
 
 <style>
-body{
-  margin:0;
-  background:#000;
-  overflow:hidden;
-}
-iframe{
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  border:none;
-}
+  :root {
+    --bg: #07111f;
+    --blue: #4ea1ff;
+    --green: #2ddc86;
+    --text: #eef4ff;
+    --muted: #a4b7d5;
+  }
+  
+  body {
+    margin: 0;
+    background: #000;
+    overflow: hidden;
+    font-family: Inter, system-ui, -apple-system, sans-serif;
+  }
+  
+  iframe {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    z-index: 1;
+  }
+
+  /* Capa superpuesta para disfrazar el header de VDO.Ninja */
+  .streamjav-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 48px;
+    /* Dejamos espacio a la derecha para no bloquear los botones del director */
+    width: calc(100% - 280px); 
+    background: linear-gradient(90deg, var(--bg) 0%, var(--bg) 70%, transparent 100%);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    gap: 12px;
+    pointer-events: auto; /* Evita que el ratón interactúe con el texto oculto */
+  }
+
+  .logo {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--blue), var(--green));
+    color: #03111d;
+    font-weight: 900;
+    font-size: 14px;
+    flex: 0 0 auto;
+    box-shadow: 0 4px 10px rgba(78,161,255,.15);
+  }
+
+  .brand-title {
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+
+  .room-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+
+  .status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 0 3px rgba(45, 220, 134, .12);
+    margin-right: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .streamjav-overlay {
+      width: calc(100% - 140px);
+    }
+    .brand-title {
+      display: none; /* Ocultamos el título en móviles para evitar que choque con botones */
+    }
+  }
 </style>
 </head>
 
 <body>
+
+<div class="streamjav-overlay">
+  <div class="logo">S</div>
+  <div class="brand-title">STREAMJAV STUDIO</div>
+  <div class="room-badge">
+    <div class="status-dot"></div>
+    SALA: <span id="display-room"></span>
+  </div>
+</div>
 
 <iframe id="frame" allow="camera; microphone; display-capture; autoplay; fullscreen"></iframe>
 
 <script>
 const params = new URLSearchParams(location.search);
 
-// valores dinámicos (por si luego quieres usarlos)
+// Valores dinámicos
 const room = params.get("room") || "PROINKASWITCH";
 const push = params.get("push") || "2dj5BAw";
 const name = params.get("name") || "vMix Video";
 const audio = params.get("audio") || "Line 1 (Virtual Audio Cable)";
 
-// IMPORTANTE: formateo para VDO.Ninja
+// Actualizamos el nombre de la sala en nuestra interfaz disfrazada
+document.getElementById("display-room").textContent = room;
+
+// Formateo para VDO.Ninja
 const audioFormatted = audio.replaceAll(" ", "*");
 
-// LINK REAL CON SELECTORES FORZADOS DE HARDWARE
-// Se añadieron &vd=vMix (Video Device) y &ad=Line (Audio Device) para forzar la selección virtual en el iframe
-const url = `https://vdo.ninja/?director=${room}&vlabel=${name.replaceAll(" ","*")}&alabel=${audioFormatted}&push=${push}&autoplay=1&autostart=1&directorstfu=1&webcam=1&vd=vMix&ad=Line`;
+// LINK REAL CON SELECTORES FORZADOS Y TRADUCCIÓN AL ESPAÑOL
+// Se añadió "&lang=es" al final para forzar la traducción nativa de la interfaz
+const url = `https://vdo.ninja/?director=${room}&vlabel=${name.replaceAll(" ","*")}&alabel=${audioFormatted}&push=${push}&autoplay=1&autostart=1&directorstfu=1&webcam=1&vd=vMix&ad=Line&lang=es`;
 
-// cargar dentro del iframe (disfraz total)
+// Cargar dentro del iframe
 document.getElementById("frame").src = url;
 </script>
 
