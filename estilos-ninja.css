@@ -1,0 +1,50 @@
+/* estilos-ninja.css - STREAMJAV CUSTOM SKIN */
+
+/* 1. BAJAR UN POCO LA SECCIÓN DE INVITADOS */
+#inviteAndScenes {
+    margin-top: 20px !important;
+}
+
+/* 2. TRADUCIR TÍTULO: INKS (INVITACIONES Y ESCENAS) */
+#inviteAndScenes h3 {
+    font-size: 0 !important;
+}
+#inviteAndScenes h3::after {
+    content: "INKS (INVITACIONES Y ESCENAS PARA INVITADOS)";
+    font-size: 16px !important;
+    color: #4ea1ff; /* Color azul de tu marca */
+    font-weight: bold;
+}
+
+/* 3. TRADUCIR TEXTOS DE INVITACIÓN */
+#inviteSection h4 { font-size: 0 !important; }
+#inviteSection h4::after { content: "INVITAR A UN INVITADO"; font-size: 14px !important; }
+
+#inviteSection p { font-size: 0 !important; }
+#inviteSection p::after { content: "Los invitados pueden usar el enlace para unirse a la sala grupal."; font-size: 12px !important; color: #a4b7d5; }
+
+/* 4. TRADUCIR TEXTOS DE ESCENA GRUPAL */
+#sceneSection h4 { font-size: 0 !important; }
+#sceneSection h4::after { content: "CAPTURA UNA ESCENA GRUPAL"; font-size: 14px !important; }
+
+#sceneSection p { font-size: 0 !important; }
+#sceneSection p::after { content: "Usa vMix u otro software de edición para capturar la mezcla de video grupal."; font-size: 12px !important; color: #a4b7d5; }
+
+/* 5. CAMBIAR GUEST 1, 2, 3... POR INV 1, 2, 3... */
+.guest-name-label { font-size: 0 !important; }
+.guest-name-label::before { content: "INV "; font-size: 12px !important; }
+
+/* 6. CAMBIAR EL ICONO DE LA SILUETA (Mejor diseño) */
+.guest-placeholder-icon {
+    background-image: url('https://img.icons8.com/ios-filled/100/4ea1ff/user-male-circle.png') !important;
+    background-size: contain !important;
+    background-repeat: no-repeat !important;
+    opacity: 0.6;
+}
+
+/* 7. PERSONALIZAR BOTONES INFERIORES */
+#controlBar {
+    background: #07111f !important;
+    border-top: 1px solid rgba(255,255,255,0.1) !important;
+    padding: 10px !important;
+}
