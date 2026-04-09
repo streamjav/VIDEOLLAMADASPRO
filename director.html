@@ -24,10 +24,12 @@
   /* Contenedor del Iframe */
   iframe {
     position: fixed;
-    top: 0;
+    /* TRUCO VISUAL: Empujamos el iframe hacia arriba para esconder la caja de links */
+    top: -260px; 
     left: 0;
     width: 100%;
-    height: 100%;
+    /* TRUCO VISUAL: Compensamos la altura para que la barra inferior de botones siga en su lugar */
+    height: calc(100% + 260px); 
     border: none;
     z-index: 1;
   }
@@ -105,10 +107,6 @@ document.getElementById("room-display").textContent = `SALA: ${room}`;
 
 const audioFormatted = audio.replaceAll(" ", "*");
 
-/** * CONFIGURACIÓN DE URL
- * Se mantiene lang=es para la interfaz nativa de VDO.Ninja
- * Se ha eliminado la inyección de CSS externo
- */
 const url = `https://vdo.ninja/?director=${room}` +
             `&vlabel=${encodeURIComponent(name)}` +
             `&alabel=${audioFormatted}` +
