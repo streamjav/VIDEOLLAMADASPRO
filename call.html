@@ -478,9 +478,17 @@
     }
 
     function traducirNombre(label, index) {
-        let l = (label || '').toLowerCase();
-        if (l.includes('back') || l.includes('trasera') || l.includes('environment')) return "Cámara Trasera";
-        if (l.includes('front') || l.includes('frontal') || l.includes('user')) return "Cámara Frontal";
+        const cleanLabel = (label || '').trim();
+        const l = cleanLabel.toLowerCase();
+
+        // Conserva el nombre real del dispositivo cuando el navegador ya lo entrega.
+        // Solo cae a un nombre genérico cuando el label viene vacío.
+        if (cleanLabel) {
+            if (l.includes('back') || l.includes('trasera') || l.includes('environment')) return `Cámara Trasera - ${cleanLabel}`;
+            if (l.includes('front') || l.includes('frontal') || l.includes('user')) return `Cámara Frontal - ${cleanLabel}`;
+            return cleanLabel;
+        }
+
         return `Cámara ${index + 1}`;
     }
 
