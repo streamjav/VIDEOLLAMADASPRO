@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+calltest <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -60,7 +60,6 @@
             position: relative;
             z-index: 10;
             backdrop-filter: blur(12px);
-            overflow: hidden; /* Para contener el modal */
         }
 
         .top-row {
@@ -127,41 +126,11 @@
             letter-spacing: .06em;
         }
 
-        /* Modificación: Contenedor para texto y engranaje */
-        .subtext-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin: 0 0 14px;
-        }
-
         .subtext {
-            margin: 0;
+            margin: 0 0 14px;
             color: var(--text-muted);
             font-size: 13px;
             line-height: 1.45;
-        }
-
-        .btn-settings {
-            background: transparent;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-muted);
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            padding: 0;
-        }
-
-        .btn-settings:hover {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text);
-            border-color: rgba(255, 255, 255, 0.2);
         }
 
         .preview-box {
@@ -193,16 +162,19 @@
 
         .cam-btn {
             min-height: 54px;
-            padding: 12px 10px;
+            padding: 12px 6px;
             border-radius: 16px;
             border: 1px solid rgba(255,255,255,0.08);
             background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
             color: #e5eefc;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 800;
             cursor: pointer;
             transition: transform .16s ease, border-color .16s ease, background .16s ease, color .16s ease;
             width: 100%;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .cam-btn:active {
@@ -260,108 +232,6 @@
             transition: opacity 0.35s ease;
         }
 
-        /* --- Estilos del Modal de Configuración --- */
-        .modal-overlay {
-            position: absolute;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(11, 14, 20, 0.95);
-            backdrop-filter: blur(8px);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.2s ease;
-        }
-
-        .modal-overlay.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .modal-content {
-            background: var(--card);
-            border: 1px solid var(--line);
-            border-radius: 20px;
-            padding: 24px;
-            width: 100%;
-            text-align: left;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .modal-header h3 {
-            margin: 0;
-            font-size: 16px;
-            font-weight: 800;
-            color: var(--text);
-        }
-
-        .btn-close-modal {
-            background: transparent;
-            border: none;
-            color: var(--text-muted);
-            font-size: 24px;
-            line-height: 1;
-            cursor: pointer;
-            padding: 0;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-
-        .form-group label {
-            display: block;
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-bottom: 6px;
-            letter-spacing: 0.05em;
-        }
-
-        .adv-select {
-            width: 100%;
-            background: #0b0e14;
-            color: var(--text);
-            border: 1px solid var(--line);
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 14px;
-            outline: none;
-            appearance: none;
-            background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%2394a3b8%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-            background-repeat: no-repeat, repeat;
-            background-position: right .7em top 50%, 0 0;
-            background-size: .65em auto, 100%;
-        }
-
-        .adv-select:focus {
-            border-color: var(--accent);
-        }
-
-        .btn-save {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0.22), rgba(37, 99, 235, 0.16));
-            border: 1px solid rgba(59, 130, 246, 0.45);
-            border-radius: 12px;
-            color: #ffffff;
-            font-weight: 800;
-            cursor: pointer;
-            margin-top: 8px;
-        }
-
         @media (max-width: 420px) {
             body {
                 padding-left: 8px;
@@ -384,7 +254,7 @@
 
             .cam-btn {
                 min-height: 50px;
-                font-size: 13px;
+                font-size: 12px;
             }
         }
     </style>
@@ -399,53 +269,24 @@
 
     <h1 id="user-title">Bienvenido</h1>
     <span class="room-label" id="room-name">SALA: VIDEOLLAMADA</span>
-    
-    <div class="subtext-row">
-        <p class="subtext">Selecciona tu cámara y comienza la transmisión</p>
-        <button class="btn-settings" onclick="toggleConfig()" title="Configuración Avanzada">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="3"></circle>
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-            </svg>
-        </button>
-    </div>
+    <p class="subtext">Elige tu cámara, audio y comienza a transmitir</p>
 
     <div class="preview-box">
         <video id="local-preview" autoplay muted playsinline></video>
     </div>
 
     <div class="camera-row">
-        <button type="button" class="cam-btn active" id="btn-front" onclick="seleccionarCamara('front')">Cámara Frontal</button>
-        <button type="button" class="cam-btn" id="btn-back" onclick="seleccionarCamara('back')">Cámara Trasera</button>
+        <div style="position: relative; width: 100%;">
+            <button type="button" class="cam-btn active" id="btn-video">📹 Fuente de Video</button>
+            <select id="video-select" onchange="cambiarDispositivo('video')" style="position: absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer;"></select>
+        </div>
+        <div style="position: relative; width: 100%;">
+            <button type="button" class="cam-btn" id="btn-audio">🎤 Fuente de Audio</button>
+            <select id="audio-select" onchange="cambiarDispositivo('audio')" style="position: absolute; top:0; left:0; width:100%; height:100%; opacity:0; cursor:pointer;"></select>
+        </div>
     </div>
 
     <button class="btn-start" id="btn-start" onclick="iniciarStream()">COMENZAR TRANSMISIÓN</button>
-
-    <div id="modal-config" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Configuración Avanzada</h3>
-                <button class="btn-close-modal" onclick="toggleConfig()">&times;</button>
-            </div>
-            
-            <div class="form-group">
-                <label>Dispositivo de Video</label>
-                <select id="cam-select" class="adv-select"></select>
-            </div>
-            
-            <div class="form-group">
-                <label>Dispositivo de Audio (Mic)</label>
-                <select id="mic-select" class="adv-select"></select>
-            </div>
-            
-            <div class="form-group">
-                <label>Salida de Audio (Altavoz)</label>
-                <select id="speaker-select" class="adv-select"></select>
-            </div>
-
-            <button class="btn-save" onclick="toggleConfig()">Aceptar y Cerrar</button>
-        </div>
-    </div>
 </div>
 
 <iframe id="vdo-frame" allow="camera *; microphone *; autoplay *; display-capture *; fullscreen" referrerpolicy="no-referrer"></iframe>
@@ -459,91 +300,74 @@
     document.getElementById('user-title').innerText = `Bienvenido ${name}`;
     document.getElementById('room-name').innerText = `SALA: ${room}`;
 
-    // Selectores ahora están en el HTML dentro del modal
-    const camSelect = document.getElementById('cam-select');
-    const micSelect = document.getElementById('mic-select');
-    const speakerSelect = document.getElementById('speaker-select');
-
     const preview = document.getElementById('local-preview');
     const btnStart = document.getElementById('btn-start');
-    const btnFront = document.getElementById('btn-front');
-    const btnBack = document.getElementById('btn-back');
+    const btnVideo = document.getElementById('btn-video');
+    const btnAudio = document.getElementById('btn-audio');
+    const videoSelect = document.getElementById('video-select');
+    const audioSelect = document.getElementById('audio-select');
+    
     let currentStream = null;
-    let cameraMode = 'front';
 
-    // Función para abrir/cerrar el modal
-    function toggleConfig() {
-        const modal = document.getElementById('modal-config');
-        modal.classList.toggle('show');
-    }
-
-    function traducirNombre(label, index) {
-        const cleanLabel = (label || '').trim();
-        const l = cleanLabel.toLowerCase();
-
-        // Conserva el nombre real del dispositivo cuando el navegador ya lo entrega.
-        // Solo cae a un nombre genérico cuando el label viene vacío.
-        if (cleanLabel) {
-            if (l.includes('back') || l.includes('trasera') || l.includes('environment')) return `Cámara Trasera - ${cleanLabel}`;
-            if (l.includes('front') || l.includes('frontal') || l.includes('user')) return `Cámara Frontal - ${cleanLabel}`;
-            return cleanLabel;
+    function traducirNombre(label, index, tipo) {
+        let l = (label || '').toLowerCase();
+        if (tipo === 'video') {
+            if (l.includes('back') || l.includes('trasera') || l.includes('environment')) return "Cámara Trasera";
+            if (l.includes('front') || l.includes('frontal') || l.includes('user')) return "Cámara Frontal";
+            return label || `Cámara ${index + 1}`;
+        } else {
+            return label || `Micrófono ${index + 1}`;
         }
-
-        return `Cámara ${index + 1}`;
     }
 
     async function cargarDispositivos() {
         try {
-            // Pedimos permiso inicial para acceder a los labels de todos los dispositivos
+            // Solicitar permisos primero para obtener los nombres reales
             const temp = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
             temp.getTracks().forEach(t => t.stop());
 
             const devices = await navigator.mediaDevices.enumerateDevices();
             const videoDevices = devices.filter(d => d.kind === 'videoinput');
-            const audioInDevices = devices.filter(d => d.kind === 'audioinput');
-            const audioOutDevices = devices.filter(d => d.kind === 'audiooutput');
+            const audioDevices = devices.filter(d => d.kind === 'audioinput');
 
-            // Cargar Cámaras
-            camSelect.innerHTML = '';
+            videoSelect.innerHTML = '';
             videoDevices.forEach((device, index) => {
                 const option = document.createElement('option');
                 option.value = device.deviceId;
-                option.text = traducirNombre(device.label, index);
-                camSelect.appendChild(option);
+                option.text = traducirNombre(device.label, index, 'video');
+                videoSelect.appendChild(option);
             });
 
-            // Cargar Micrófonos
-            micSelect.innerHTML = '';
-            audioInDevices.forEach((device, index) => {
+            audioSelect.innerHTML = '';
+            audioDevices.forEach((device, index) => {
                 const option = document.createElement('option');
                 option.value = device.deviceId;
-                option.text = device.label || `Micrófono ${index + 1}`;
-                micSelect.appendChild(option);
+                option.text = traducirNombre(device.label, index, 'audio');
+                audioSelect.appendChild(option);
             });
 
-            // Cargar Altavoces
-            speakerSelect.innerHTML = '';
-            if(audioOutDevices.length === 0) {
-                const option = document.createElement('option');
-                option.text = "Predeterminado del sistema";
-                speakerSelect.appendChild(option);
-                speakerSelect.disabled = true;
-            } else {
-                audioOutDevices.forEach((device, index) => {
-                    const option = document.createElement('option');
-                    option.value = device.deviceId;
-                    option.text = device.label || `Altavoz ${index + 1}`;
-                    speakerSelect.appendChild(option);
-                });
-            }
+            // Seleccionar por defecto la cámara frontal si existe
+            let frontIdx = Array.from(videoSelect.options).findIndex(opt => opt.text.includes('Frontal'));
+            if(frontIdx >= 0) videoSelect.selectedIndex = frontIdx;
 
-            if (camSelect.options.length > 0) {
-                seleccionarCamara('front');
-            } else {
-                actualizarPreview();
-            }
+            actualizarNombresBotones();
+            actualizarPreview();
         } catch (e) {
-            alert("Acceso a cámara o micrófono denegado.");
+            alert("Por favor, permite el acceso a la cámara y al micrófono.");
+        }
+    }
+
+    function cambiarDispositivo(tipo) {
+        actualizarNombresBotones();
+        actualizarPreview();
+    }
+
+    function actualizarNombresBotones() {
+        if (videoSelect.options.length > 0) {
+            btnVideo.innerText = "📹 " + videoSelect.options[videoSelect.selectedIndex].text;
+        }
+        if (audioSelect.options.length > 0) {
+            btnAudio.innerText = "🎤 " + audioSelect.options[audioSelect.selectedIndex].text;
         }
     }
 
@@ -552,60 +376,30 @@
             currentStream.getTracks().forEach(t => t.stop());
         }
         try {
+            const vId = videoSelect.value;
+            const aId = audioSelect.value;
+
             const constraints = {
-                video: camSelect.value ? { deviceId: { exact: camSelect.value } } : true,
-                audio: micSelect.value ? { deviceId: { exact: micSelect.value } } : true
+                video: vId ? { deviceId: { exact: vId } } : true,
+                audio: aId ? { deviceId: { exact: aId } } : true
             };
-            
+
             currentStream = await navigator.mediaDevices.getUserMedia(constraints);
             preview.srcObject = currentStream;
-
-            // Aplicar salida de audio si es compatible
-            if (speakerSelect.value && typeof preview.setSinkId !== 'undefined') {
-                await preview.setSinkId(speakerSelect.value);
-            }
         } catch (e) {
+            console.warn("Fallo al aplicar constraints exactos, usando default:", e);
             currentStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
             preview.srcObject = currentStream;
         }
     }
 
-    // Actualizar preview si el usuario cambia algo en configuración avanzada
-    camSelect.onchange = actualizarPreview;
-    micSelect.onchange = actualizarPreview;
-    speakerSelect.onchange = async () => {
-        if (speakerSelect.value && typeof preview.setSinkId !== 'undefined') {
-            try { await preview.setSinkId(speakerSelect.value); } catch(e) { console.error(e); }
-        }
-    };
-
-    function seleccionarCamara(tipo) {
-        cameraMode = tipo;
-        btnFront.classList.toggle('active', tipo === 'front');
-        btnBack.classList.toggle('active', tipo === 'back');
-
-        const txts = Array.from(camSelect.options).map(opt => opt.text.toLowerCase());
-        let idx = -1;
-
-        if (tipo === 'front') {
-            idx = txts.findIndex(t => t.includes('frontal') || t.includes('front') || t.includes('user'));
-        } else if (tipo === 'back') {
-            idx = txts.findIndex(t => t.includes('trasera') || t.includes('back') || t.includes('environment'));
-        }
-
-        if (idx >= 0) {
-            camSelect.selectedIndex = idx;
-            actualizarPreview();
-        } else if (camSelect.options.length > 0) {
-            camSelect.selectedIndex = 0;
-            actualizarPreview();
-        }
-    }
-
     function iniciarStream() {
-        let facing = "front";
-        const txt = (camSelect.options[camSelect.selectedIndex] && camSelect.options[camSelect.selectedIndex].text || '').toLowerCase();
-        if (txt.includes('trasera')) facing = "back";
+        const vText = (videoSelect.options[videoSelect.selectedIndex] && videoSelect.options[videoSelect.selectedIndex].text || '').toLowerCase();
+        const aText = (audioSelect.options[audioSelect.selectedIndex] && audioSelect.options[audioSelect.selectedIndex].text || '');
+        
+        let facing = "";
+        if (vText.includes('trasera')) facing = "back";
+        else if (vText.includes('frontal')) facing = "front";
 
         if (currentStream) {
             currentStream.getTracks().forEach(t => t.stop());
@@ -615,14 +409,20 @@
         btnStart.innerText = "CONECTANDO...";
         btnStart.disabled = true;
 
-        // Añadimos los parámetros avanzados de video, audio y salida a la URL de VDO Ninja
-        let extraParams = '';
-        if (camSelect.value) extraParams += `&vd=${encodeURIComponent(camSelect.value)}`;
-        if (micSelect.value) extraParams += `&ad=${encodeURIComponent(micSelect.value)}`;
-        if (speakerSelect.value) extraParams += `&od=${encodeURIComponent(speakerSelect.value)}`;
+        let ninjaUrl = `https://vdo.ninja/?room=${room}&push=${push}&label=${encodeURIComponent(name)}&autostart=1&webcam=1&clean=1&nochat=1`;
 
-        const ninjaUrl = `https://vdo.ninja/?room=${room}&push=${push}&label=${encodeURIComponent(name)}&autostart=1&webcam=1&facing=${facing}&clean=1&nochat=1${extraParams}`;
-        
+        // Mandar el parámetro correcto de video a VDO Ninja
+        if (facing) {
+            ninjaUrl += `&facing=${facing}`;
+        } else if (vText) {
+            ninjaUrl += `&camera=${encodeURIComponent(vText)}`;
+        }
+
+        // Mandar el parámetro correcto de audio a VDO Ninja
+        if (aText) {
+            ninjaUrl += `&mic=${encodeURIComponent(aText)}`;
+        }
+
         const frame = document.getElementById('vdo-frame');
         frame.src = ninjaUrl;
 
@@ -635,6 +435,5 @@
 
     cargarDispositivos();
 </script>
-
 </body>
 </html>
