@@ -634,8 +634,8 @@
             extraParams += `&videodevice=${encodeURIComponent(camSelect.value)}`;
         }
 
-        if (micSelect.value) extraParams += `&ad=${encodeURIComponent(micSelect.value)}`;
-        if (speakerSelect.value) extraParams += `&od=${encodeURIComponent(speakerSelect.value)}`;
+        if (micSelect.value) extraParams += `&audiodevice=${encodeURIComponent(micSelect.value)}`;
+        if (speakerSelect.value) extraParams += `&sink=${encodeURIComponent(speakerSelect.value)}`;
 
         const ninjaUrl = `https://vdo.ninja/?room=${room}&push=${push}&label=${encodeURIComponent(name)}&autostart=1&webcam=1&clean=1&nochat=1${extraParams}`;
 
