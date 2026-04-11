@@ -60,7 +60,7 @@
             position: relative;
             z-index: 10;
             backdrop-filter: blur(12px);
-            overflow: hidden; /* Para contener el modal */
+            overflow: hidden;
         }
 
         .top-row {
@@ -127,7 +127,6 @@
             letter-spacing: .06em;
         }
 
-        /* Modificación: Contenedor para texto y engranaje */
         .subtext-row {
             display: flex;
             align-items: center;
@@ -459,7 +458,6 @@
     document.getElementById('user-title').innerText = `Bienvenido ${name}`;
     document.getElementById('room-name').innerText = `SALA: ${room}`;
 
-    // Selectores ahora están en el HTML dentro del modal
     const camSelect = document.getElementById('cam-select');
     const micSelect = document.getElementById('mic-select');
     const speakerSelect = document.getElementById('speaker-select');
@@ -471,7 +469,6 @@
     let currentStream = null;
     let cameraMode = 'front';
 
-    // Función para abrir/cerrar el modal
     function toggleConfig() {
         const modal = document.getElementById('modal-config');
         modal.classList.toggle('show');
@@ -481,8 +478,6 @@
         const cleanLabel = (label || '').trim();
         const l = cleanLabel.toLowerCase();
 
-        // Conserva el nombre real del dispositivo cuando el navegador ya lo entrega.
-        // Solo cae a un nombre genérico cuando el label viene vacío.
         if (cleanLabel) {
             if (l.includes('back') || l.includes('trasera') || l.includes('environment')) return `Cámara Trasera - ${cleanLabel}`;
             if (l.includes('front') || l.includes('frontal') || l.includes('user')) return `Cámara Frontal - ${cleanLabel}`;
@@ -494,7 +489,6 @@
 
     async function cargarDispositivos() {
         try {
-            // Pedimos permiso inicial para acceder a los labels de todos los dispositivos
             const temp = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
             temp.getTracks().forEach(t => t.stop());
 
@@ -513,16 +507,17 @@
                 camSelect.appendChild(option);
             });
 
-            // Cargar Micrófonos
+            // Cargar Micrófonos (Corrección: Agregado dataset.label para extraer el nombre exacto)
             micSelect.innerHTML = '';
             audioInDevices.forEach((device, index) => {
                 const option = document.createElement('option');
                 option.value = device.deviceId;
                 option.text = device.label || `Micrófono ${index + 1}`;
+                option.dataset.label = device.label || '';
                 micSelect.appendChild(option);
             });
 
-            // Cargar Altavoces
+            // Cargar Altavoces (Corrección: Agregado dataset.label para extraer el nombre exacto)
             speakerSelect.innerHTML = '';
             if(audioOutDevices.length === 0) {
                 const option = document.createElement('option');
@@ -534,6 +529,7 @@
                     const option = document.createElement('option');
                     option.value = device.deviceId;
                     option.text = device.label || `Altavoz ${index + 1}`;
+                    option.dataset.label = device.label || '';
                     speakerSelect.appendChild(option);
                 });
             }
@@ -561,7 +557,6 @@
             currentStream = await navigator.mediaDevices.getUserMedia(constraints);
             preview.srcObject = currentStream;
 
-            // Aplicar salida de audio si es compatible
             if (speakerSelect.value && typeof preview.setSinkId !== 'undefined') {
                 await preview.setSinkId(speakerSelect.value);
             }
@@ -571,7 +566,6 @@
         }
     }
 
-    // Actualizar preview si el usuario cambia algo en configuración avanzada
     camSelect.onchange = actualizarPreview;
     micSelect.onchange = actualizarPreview;
     speakerSelect.onchange = async () => {
@@ -624,8 +618,9 @@
         btnStart.innerText = "CONECTANDO...";
         btnStart.disabled = true;
 
-        // Añadimos los parámetros avanzados de video, audio y salida a la URL de VDO Ninja
         let extraParams = '';
+        
+        // Video
         if (facing) {
             extraParams += `&facing=${encodeURIComponent(facing)}`;
         } else if (selectedCameraLabel) {
@@ -634,8 +629,26 @@
             extraParams += `&videodevice=${encodeURIComponent(camSelect.value)}`;
         }
 
-        if (micSelect.value) extraParams += `&audiodevice=${encodeURIComponent(micSelect.value)}`;
-        if (speakerSelect.value) extraParams += `&sink=${encodeURIComponent(speakerSelect.value)}`;
+        // CORRECCIÓN AUDIO IN (Microfono): Enviamos el Label (nombre) en vez del ID de dominio
+        const selectedMicOption = micSelect.options[micSelect.selectedIndex];
+        const micLabel = selectedMicOption ? selectedMicOption.dataset.label : '';
+        if (micLabel) {
+            extraParams += `&ad=${encodeURIComponent(micLabel)}`;
+        } else if (micSelect.value) {
+            // Fallback en caso de que el label esté vacío
+            extraParams += `&ad=${encodeURIComponent(micSelect.value)}`;
+        }
+
+        // CORRECCIÓN AUDIO OUT (Altavoz): Enviamos el Label en vez del ID de dominio
+        const selectedSpeakerOption = speakerSelect.options[speakerSelect.selectedIndex];
+        const speakerLabel = selectedSpeakerOption ? selectedSpeakerOption.dataset.label : '';
+        if (!speakerSelect.disabled) {
+            if (speakerLabel) {
+                extraParams += `&od=${encodeURIComponent(speakerLabel)}`;
+            } else if (speakerSelect.value) {
+                extraParams += `&od=${encodeURIComponent(speakerSelect.value)}`;
+            }
+        }
 
         const ninjaUrl = `https://vdo.ninja/?room=${room}&push=${push}&label=${encodeURIComponent(name)}&autostart=1&webcam=1&clean=1&nochat=1${extraParams}`;
 
